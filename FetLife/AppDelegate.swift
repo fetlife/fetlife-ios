@@ -13,6 +13,7 @@ import Crashlytics
 import JWTDecode
 import AlamofireNetworkActivityIndicator
 import RealmSwift
+import JSQMessagesViewController
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

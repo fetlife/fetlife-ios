@@ -9,6 +9,7 @@
 import RealmSwift
 import Freddy
 import DateTools
+import JSQMessagesViewController
 
 private let dateFormatter: NSDateFormatter = NSDateFormatter()
 
@@ -79,7 +80,7 @@ class Conversation: Object, JSONDecodable {
 
 // MARK: - Message
 
-class Message: Object {
+class Message: Object, JSQMessageData {
     dynamic var id = ""
     dynamic var body = ""
     dynamic var createdAt = NSDate()
@@ -102,6 +103,30 @@ class Message: Object {
         memberId = try json.string("member", "id")
         memberNickname = try json.string ("member", "nickname")
         isNew = try json.bool("is_new")
+    }
+    
+    func messageHash() -> UInt {
+        return UInt(abs(id.hash)) ^ UInt(createdAt.timeIntervalSince1970)
+    }
+    
+    func text() -> String! {
+        return body
+    }
+    
+    func senderDisplayName() -> String! {
+        return memberNickname
+    }
+    
+    func senderId() -> String! {
+        return memberId
+    }
+    
+    func date() -> NSDate! {
+        return createdAt
+    }
+    
+    func isMediaMessage() -> Bool {
+        return false
     }
 }
 

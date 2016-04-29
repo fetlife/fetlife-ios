@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		587627DD08426F8F55D1C9A2 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F6F68224A55AA7980436403 /* Pods_FetLife.framework */; };
+		8244BCA51CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8244BCA41CC82F9E00A7E5A5 /* MessagesViewController.swift */; };
+		8244BCA61CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8244BCA41CC82F9E00A7E5A5 /* MessagesViewController.swift */; };
+		8244BCA71CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8244BCA41CC82F9E00A7E5A5 /* MessagesViewController.swift */; };
 		828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A991C656BD900DADA23 /* LoginViewController.swift */; };
 		828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FD51C6D514F000E782B /* MessagesTableViewCellIncoming.swift */; };
 		828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3661C63A630004253FE /* UIColor+FetLife.swift */; };
@@ -81,6 +84,7 @@
 		82329A971C656A6800DADA23 /* OAuth2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OAuth2.framework; path = Carthage/Build/iOS/OAuth2.framework; sourceTree = "<group>"; };
 		82329A991C656BD900DADA23 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82329A9B1C65AFDA00DADA23 /* OAuth2+Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "OAuth2+Alamofire.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		8244BCA41CC82F9E00A7E5A5 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		8256F3581C63A600004253FE /* ConversationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ConversationCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8256F35E1C63A619004253FE /* ConversationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ConversationsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8256F3661C63A630004253FE /* UIColor+FetLife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "UIColor+FetLife.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -201,6 +205,7 @@
 				8256F35E1C63A619004253FE /* ConversationsViewController.swift */,
 				826C5FCD1C6D4D17000E782B /* MessagesTableViewController.swift */,
 				82329A991C656BD900DADA23 /* LoginViewController.swift */,
+				8244BCA41CC82F9E00A7E5A5 /* MessagesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -467,6 +472,7 @@
 				828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */,
 				828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */,
 				828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */,
+				8244BCA51CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */,
 				828D662E1CC1DD3200A6F1D2 /* ConversationCell.swift in Sources */,
 				828D662F1CC1DD3200A6F1D2 /* ConversationsViewController.swift in Sources */,
 				828D66301CC1DD3200A6F1D2 /* Dispatch.swift in Sources */,
@@ -490,6 +496,7 @@
 				82B355971CC52A6400CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */,
 				82B355981CC52A6400CBDAB3 /* UIColor+FetLife.swift in Sources */,
 				82B355991CC52A6400CBDAB3 /* ConversationCell.swift in Sources */,
+				8244BCA61CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */,
 				82B3559A1CC52A6400CBDAB3 /* OAuth2+Alamofire.swift in Sources */,
 				82B3559B1CC52A6400CBDAB3 /* LoginViewController.swift in Sources */,
 				82B3559C1CC52A6400CBDAB3 /* LoadingView.swift in Sources */,
@@ -513,6 +520,7 @@
 				82B355B21CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */,
 				82B355B31CC52AC800CBDAB3 /* LoginViewController.swift in Sources */,
 				82B355B41CC52AC800CBDAB3 /* FetChatUITests.swift in Sources */,
+				8244BCA71CC82F9E00A7E5A5 /* MessagesViewController.swift in Sources */,
 				82B355B51CC52AC800CBDAB3 /* OAuth2+Alamofire.swift in Sources */,
 				82B355B61CC52AC800CBDAB3 /* ConversationsViewController.swift in Sources */,
 				82B355B71CC52AC800CBDAB3 /* LoadingView.swift in Sources */,

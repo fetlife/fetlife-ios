@@ -280,7 +280,7 @@
         <!--Messages View-->
         <scene sceneID="GMh-0m-Geb">
             <objects>
-                <viewController title="Messages View" id="mFM-CK-8FL" customClass="MessagesTableViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Messages View" id="mFM-CK-8FL" customClass="MessagesViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="IT7-yB-Jzl">
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Hkh-Ge-HSy">

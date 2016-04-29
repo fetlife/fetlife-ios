@@ -15,7 +15,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     @IBOutlet var containerView: UIView!
     @IBOutlet weak var tableView: UITableView!
 
-    var detailViewController: MessagesTableViewController?
+    var detailViewController: MessagesViewController?
     var refreshControl = UIRefreshControl()
     
     let conversations: Results<Conversation> = try! Realm()
@@ -43,7 +43,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? MessagesTableViewController
+            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? MessagesViewController
         }
         
         notificationToken = conversations.addNotificationBlock({ [unowned self] results, error in
@@ -72,8 +72,10 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
                 let conversation = conversations[indexPath.row]
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! MessagesTableViewController
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! MessagesViewController
                 controller.conversation = conversation
+                controller.senderDisplayName = API.currentMemberNickname()
+                controller.senderId = API.currentMemberId()
                 controller.navigationItem.title = conversation.member!.nickname
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true

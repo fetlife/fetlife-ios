@@ -1,1 +1,1 @@
-/* Nothing to see here right now */
+#import <JSQMessagesViewController/JSQMessages.h>
