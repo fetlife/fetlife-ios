@@ -4,11 +4,11 @@ PODS:
     - Alamofire (~> 3.2)
   - AlamofireNetworkActivityIndicator (1.0.0):
     - Alamofire (~> 3.2)
-  - Crashlytics (3.7.0):
-    - Fabric (~> 1.6.3)
   - DateTools (1.7.0)
-  - Fabric (1.6.6)
   - Freddy (2.0.2)
+  - HockeySDK (3.8.6):
+    - HockeySDK/AllFeaturesLib (= 3.8.6)
+  - HockeySDK/AllFeaturesLib (3.8.6)
   - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
@@ -29,10 +29,9 @@ DEPENDENCIES:
   - Alamofire (~> 3.0)
   - AlamofireImage (~> 2.0)
   - AlamofireNetworkActivityIndicator (~> 1.0)
-  - Crashlytics
   - DateTools (~> 1.7)
-  - Fabric
   - Freddy (~> 2.0.2)
+  - HockeySDK (~> 3.8.5)
   - JSQMessagesViewController
   - JWTDecode (~> 1.0)
   - p2.OAuth2 (~> 2.2.1)
@@ -45,10 +44,9 @@ SPEC CHECKSUMS:
   Alamofire: 4da478599fccddff361205c8929333d7fe18dceb
   AlamofireImage: e52336282757bbe1644f075d6cb85f19c891f939
   AlamofireNetworkActivityIndicator: 34e6fe7ebb5d8df76cc55fbf83a6087ae6457344
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
-  Fabric: 1abc1e59f11fa39ede6f690ef7309d8563e3ec59
   Freddy: e53713b8d5be02dbf5f4132c44d899d99eb09a6b
+  HockeySDK: ab68303eec6680f6b539de65d747742dd276e934
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JWTDecode: d172edcb1607cc15aed85d58eceedcbb675a4534

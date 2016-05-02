@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import Fabric
-import Crashlytics
 import JWTDecode
 import AlamofireNetworkActivityIndicator
 import RealmSwift
@@ -25,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupAppearance(app)
         
         let config = Realm.Configuration(schemaVersion: 0)
+        
+        let info = NSBundle.mainBundle().infoDictionary!
         
         Realm.Configuration.defaultConfiguration = config
         
@@ -42,7 +42,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window!.rootViewController = storyboard.instantiateViewControllerWithIdentifier("loginView")
         }
         
-        Fabric.with([Crashlytics.self])
+        let hockeyAppID = info["HOCKEYAPP_ID"] as! String
+        
+        BITHockeyManager.sharedHockeyManager().configureWithIdentifier(hockeyAppID)
+        // Do some additional configuration if needed here
+        BITHockeyManager.sharedHockeyManager().startManager()
+        BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation()
         
         return true
     }

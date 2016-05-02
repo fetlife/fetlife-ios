@@ -288,7 +288,7 @@
 				828D663D1CC1DD3200A6F1D2 /* Resources */,
 				828D66471CC1DD3200A6F1D2 /* Embed Pods Frameworks */,
 				828D66481CC1DD3200A6F1D2 /* Copy Pods Resources */,
-				828D66491CC1DD3200A6F1D2 /* Setup Fabric */,
+				8206C4721CCFB262006110EB /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -398,6 +398,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8206C4721CCFB262006110EB /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
+		};
 		828D66291CC1DD3200A6F1D2 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -442,20 +456,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FetLife/Pods-FetLife-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		828D66491CC1DD3200A6F1D2 /* Setup Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Setup Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" c024375c301ff84ebfc74878f8f19fb6ea107da2 3d881bdbd637e8b95e537047904fc664392f6fbec0c0033470a7f3e733caf5d4";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -14,7 +14,6 @@ target 'FetLife' do
   pod 'JWTDecode', '~> 1.0'
   pod 'SnapKit', '~> 0.15.0'
   pod 'RealmSwift'
-  pod 'Fabric'
-  pod 'Crashlytics'
   pod 'JSQMessagesViewController'
+  pod 'HockeySDK', '~> 3.8.5'
 end
