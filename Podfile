@@ -17,4 +17,5 @@ target 'FetLife' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'JSQMessagesViewController'
+  pod '1PasswordExtension', '~> 1.8.2'
 end
