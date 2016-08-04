@@ -1,4 +1,5 @@
 PODS:
+  - 1PasswordExtension (1.8.2)
   - Alamofire (3.4.0)
   - AlamofireImage (2.4.0):
     - Alamofire (~> 3.3)
@@ -26,6 +27,7 @@ PODS:
   - SwiftKeychain (1.0.0)
 
 DEPENDENCIES:
+  - 1PasswordExtension (~> 1.8.2)
   - Alamofire (~> 3.0)
   - AlamofireImage (~> 2.0)
   - AlamofireNetworkActivityIndicator (~> 1.0)
@@ -42,6 +44,7 @@ DEPENDENCIES:
   - StatefulViewController (~> 1.0)
 
 SPEC CHECKSUMS:
+  1PasswordExtension: 303f2b7bbf6dc19ede3090bd6b5987530648d687
   Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
   AlamofireImage: 87408b652e0f5ae5fe364035f15aea8b9b24c77e
   AlamofireNetworkActivityIndicator: 49a6e39afb947136f7b1872bae2d684957c26697
@@ -60,6 +63,6 @@ SPEC CHECKSUMS:
   StatefulViewController: 396f6d25676680a5c0503143cca55be23ab8c362
   SwiftKeychain: fd9ad69f7b3ff7a0c7ba579da508bbaa89a395b2
 
-PODFILE CHECKSUM: 17b001e1d7e84db2c7562e7e646669f0c0786de3
+PODFILE CHECKSUM: 35d77c1616e838a9f59706e789a21a3a8e8461ea
 
 COCOAPODS: 1.0.1
