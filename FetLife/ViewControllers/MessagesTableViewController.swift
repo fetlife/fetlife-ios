@@ -72,7 +72,7 @@ class MessagesTableViewController: SLKTextViewController {
         textView.isDynamicTypeEnabled = false // This should stay false until messages support dynamic type.
         
         if let conversation = conversation {
-            notificationToken = messages.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+			notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
                 guard let tableView = self?.tableView else { return }
                 
                 switch changes {
@@ -106,7 +106,7 @@ class MessagesTableViewController: SLKTextViewController {
     }
     
     deinit {
-        notificationToken?.stop()
+		notificationToken?.invalidate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -168,7 +168,7 @@ class MessagesTableViewController: SLKTextViewController {
         let cellIdent = (message.memberId != conversation.member!.id) ? self.outgoingCellIdentifier : self.incomingCellIdentifier
         
         // Get a cell, and coerce into a base class.
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as! BaseMessagesTableViewCell
+		let cell: BaseMessagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as! BaseMessagesTableViewCell
         
         // SlackTextViewController inverts tables in order to get the layout to work. This means that our table cells needs to
         // apply the same inversion or be upside down.
@@ -181,6 +181,8 @@ class MessagesTableViewController: SLKTextViewController {
             cell.layoutMargins = UIEdgeInsets.zero
             cell.preservesSuperviewLayoutMargins = false
         }
+		
+		
         
         // Force autolayout to apply for the cell before rendering it.
         cell.layoutIfNeeded()

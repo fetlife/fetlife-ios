@@ -46,7 +46,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? MessagesTableViewController
         }
         
-        notificationToken = conversations.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+		notificationToken = conversations.observe({ [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             
             switch changes {
@@ -78,7 +78,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     deinit {
-        notificationToken?.stop()
+		notificationToken?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {

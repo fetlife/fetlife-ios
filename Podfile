@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target 'FetLife' do
@@ -13,7 +13,7 @@ target 'FetLife' do
   pod 'SlackTextViewController', '~> 1.9.5'
   pod 'JWTDecode', '~> 2.0'
   pod 'SnapKit', '~> 3.1.2'
-  pod 'RealmSwift', '~> 2.2.0'
+  pod 'RealmSwift', '~> 3.2.0'
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'JSQMessagesViewController'
