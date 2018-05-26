@@ -66,13 +66,13 @@ final class API {
             "verbose": true
         ] as OAuth2JSON)
         
-        oauthSession.authConfig.ui.useSafariView = false
-        
+        oauthSession.authConfig.ui.useSafariView = true
+		
         if let accessToken = oauthSession.accessToken {
             do {
                 let jwt = try decode(jwt: accessToken)
                 
-                if let userDictionary = jwt.body["user"] as? Dictionary<String, Any> {
+				if let userDictionary: Dictionary<String, Any> = jwt.body["user"] as? Dictionary<String, Any> {
                     self.memberId = userDictionary["id"] as? String
                     self.memberNickname = userDictionary["nick"] as? String
                 }
@@ -85,7 +85,9 @@ final class API {
     func isAuthorized() -> Bool {
         return oauthSession.hasUnexpiredAccessToken()
     }
-    
+	
+	// MARK: - Conversation API
+	
     func loadConversations(_ completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["limit": 100, "order": "-updated_at", "with_archived": true] as [String : Any]
         let url = "\(baseURL)/v2/me/conversations"

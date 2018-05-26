@@ -3,9 +3,9 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'FetLife' do
-  pod 'Alamofire', '~> 4.3'
+  pod 'Alamofire', '~> 4.5'
   pod 'AlamofireNetworkActivityIndicator', '~> 2.1'
-  pod 'AlamofireImage', '~> 3.2'
+  pod 'AlamofireImage', '~> 3.3'
   pod 'DateTools', '~> 1.7'
   pod 'Freddy', '~> 3.0.0'
   pod 'p2.OAuth2', '~> 3.0.1'

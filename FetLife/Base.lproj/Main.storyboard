@@ -123,7 +123,7 @@
         <!--Conversations-->
         <scene sceneID="nqv-yB-6Nt">
             <objects>
-                <viewController id="sF5-6I-wQh" customClass="ConversationsViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="vcConversations" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sF5-6I-wQh" customClass="ConversationsViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="A7z-bb-m4a"/>
                         <viewControllerLayoutGuide type="bottom" id="zsv-9z-8JO"/>
@@ -137,7 +137,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="ConversationCell" rowHeight="70" id="zI0-RN-FSs" customClass="ConversationCell" customModule="FetLife" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" shouldIndentWhileEditing="NO" reuseIdentifier="ConversationCell" rowHeight="70" id="zI0-RN-FSs" customClass="ConversationCell" customModule="FetLife" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="22" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zI0-RN-FSs" id="lCX-7d-CxJ">
@@ -154,7 +154,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="F6h-fD-dgL">
                                                     <rect key="frame" x="19" y="15" width="341" height="38"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zqn-Ea-Etg" userLabel="Author Avatar Image">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="imgAvatar" image="DefaultAvatar" translatesAutoresizingMaskIntoConstraints="NO" id="Zqn-Ea-Etg" userLabel="Author Avatar Image">
                                                             <rect key="frame" x="0.0" y="2.6666666666666679" width="33" height="33"/>
                                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
@@ -286,7 +286,7 @@
         <!--Messages View-->
         <scene sceneID="GMh-0m-Geb">
             <objects>
-                <viewController title="Messages View" id="mFM-CK-8FL" customClass="MessagesTableViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="vcMessagesTable" title="Messages View" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mFM-CK-8FL" customClass="MessagesTableViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="IT7-yB-Jzl">
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Hkh-Ge-HSy">
@@ -303,12 +303,15 @@
         <!--Back-->
         <scene sceneID="8PM-XZ-hNw">
             <objects>
-                <navigationController storyboardIdentifier="UINavigationController-vC3-pB-5Vb" title="Back" hidesBarsWhenVerticallyCompact="YES" id="wMl-ci-xeO" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="UINavigationController-vC3-pB-5Vb" title="Back" useStoryboardIdentifierAsRestorationIdentifier="YES" hidesBarsWhenVerticallyCompact="YES" id="wMl-ci-xeO" sceneMemberID="viewController">
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="u8T-iB-MnS">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xar-ZD-u0O">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="mFM-CK-8FL" kind="relationship" relationship="rootViewController" id="LWC-cZ-bbD"/>
                     </connections>
@@ -319,6 +322,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="DefaultAvatar" width="200" height="200"/>
         <image name="DevilHeart" width="109" height="123"/>
     </resources>
     <inferredMetricsTieBreakers>

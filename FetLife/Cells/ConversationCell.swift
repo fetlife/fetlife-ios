@@ -26,7 +26,11 @@ class ConversationCell: UITableViewCell {
         didSet {
             if let conversation = self.conversation, !conversation.isInvalidated {
                 if let member = conversation.member {
-                    self.authorAvatarImage.af_setImage( withURL: URL(string: member.avatarURL)!, filter: avatarImageFilter)
+					self.authorAvatarImage.af_setImage( withURL: URL(string: member.avatarURL)!, filter: avatarImageFilter)
+					if self.authorAvatarImage.image == nil {
+//						print("Error loading avatar from \(member.avatarURL)")
+						self.authorAvatarImage.af_setImage(withURL: Bundle.main.resourceURL!.appendingPathComponent("DefaultAvatar"))
+					}
                     self.authorNicknameLabel.text = member.nickname
                     self.authorMetaLabel.text = member.metaLine
                 }
