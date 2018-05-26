@@ -17,6 +17,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
 
     var detailViewController: MessagesTableViewController?
     var refreshControl = UIRefreshControl()
+	var updateTimer: Timer = Timer()
     
     let conversations: Results<Conversation> = try! Realm()
         .objects(Conversation.self)
@@ -75,10 +76,16 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
         
         self.fetchConversations()
+		
+		// creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
+		// FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
+		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+		updateTimer.tolerance = 5
     }
     
     deinit {
 		notificationToken?.invalidate()
+		updateTimer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +99,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 let conversation = conversations[indexPath.row]
-                let controller = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
+				let controller: MessagesTableViewController = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
                 controller.conversation = conversation
                 controller.navigationItem.title = conversation.member!.nickname
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem

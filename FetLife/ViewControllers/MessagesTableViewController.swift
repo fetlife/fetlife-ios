@@ -18,6 +18,7 @@ class MessagesTableViewController: SLKTextViewController {
     
     let incomingCellIdentifier = "MessagesTableViewCellIncoming"
     let outgoingCellIdentifier = "MessagesTableViewCellOutgoing"
+	var updateTimer: Timer = Timer()
     
     lazy var loadingView: LoadingView = {
         let lv = LoadingView(frame: self.view.frame)
@@ -69,8 +70,11 @@ class MessagesTableViewController: SLKTextViewController {
         textView.textColor = UIColor.white
         textView.layer.borderWidth = 0.0
         textView.layer.cornerRadius = 2.0
-        textView.isDynamicTypeEnabled = false // This should stay false until messages support dynamic type.
-        
+        textView.isDynamicTypeEnabled = true // This should stay false until messages support dynamic type.
+		textView.keyboardType = .default
+		textView.keyboardAppearance = .dark
+		textView.returnKeyType = .default
+		
         if let conversation = conversation {
 			notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
                 guard let tableView = self?.tableView else { return }
@@ -103,11 +107,20 @@ class MessagesTableViewController: SLKTextViewController {
                 self?.hideLoadingView()
             })
         }
+		// creates timer to check for new messages every 10 seconds ± 5 seconds
+		// FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
+		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchMessages), userInfo: nil, repeats: true)
+		updateTimer.tolerance = 5
     }
     
     deinit {
 		notificationToken?.invalidate()
+		updateTimer.invalidate()
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		updateTimer.invalidate()
+	}
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -202,9 +215,11 @@ class MessagesTableViewController: SLKTextViewController {
     // MARK: - Methods
     
     func fetchMessages() {
+		print("Checking for new messages in Messages View...")
         if let conversation = conversation, let messages = messages {
             let conversationId = conversation.id
             
+			guard conversation.hasNewMessages else { self.hideLoadingView(); return }
             if let lastMessage = messages.first {
                 let parameters: Dictionary<String, Any> = [
                     "since": Int(lastMessage.createdAt.timeIntervalSince1970),
@@ -213,6 +228,9 @@ class MessagesTableViewController: SLKTextViewController {
                 
                 Dispatch.asyncOnUserInitiatedQueue() {
                     API.sharedInstance.loadMessages(conversationId, parameters: parameters) { error in
+						if let e = error {
+							print(e)
+						}
                         self.hideLoadingView()
                     }
                 }

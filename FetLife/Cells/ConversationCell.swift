@@ -26,10 +26,10 @@ class ConversationCell: UITableViewCell {
         didSet {
             if let conversation = self.conversation, !conversation.isInvalidated {
                 if let member = conversation.member {
-					self.authorAvatarImage.af_setImage( withURL: URL(string: member.avatarURL)!, filter: avatarImageFilter)
+					self.authorAvatarImage.af_setImage(withURL: URL(string: member.avatarURL)!, placeholderImage: #imageLiteral(resourceName: "DefaultAvatar"), filter: avatarImageFilter, progress: nil, progressQueue: .main, imageTransition: .noTransition, runImageTransitionIfCached: false, completion: nil)
 					if self.authorAvatarImage.image == nil {
-//						print("Error loading avatar from \(member.avatarURL)")
-						self.authorAvatarImage.af_setImage(withURL: Bundle.main.resourceURL!.appendingPathComponent("DefaultAvatar"))
+						print("Error loading avatar from \(member.avatarURL)")
+						self.authorAvatarImage.af_setImage(withURL: Bundle.main.resourceURL!.appendingPathComponent("DefaultAvatar"), filter: avatarImageFilter)
 					}
                     self.authorNicknameLabel.text = member.nickname
                     self.authorMetaLabel.text = member.metaLine
