@@ -181,8 +181,6 @@ class MessagesTableViewController: SLKTextViewController {
             cell.layoutMargins = UIEdgeInsets.zero
             cell.preservesSuperviewLayoutMargins = false
         }
-		
-		
         
         // Force autolayout to apply for the cell before rendering it.
         cell.layoutIfNeeded()
