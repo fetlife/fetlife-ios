@@ -67,6 +67,7 @@
 		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
 		C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9968A0820B8CD9800653283 /* MessageTextView.swift */; };
 		C9968A0A20B9466900653283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82B55AC61C60FB060035D45E /* Assets.xcassets */; };
+		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
 		DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,7 @@
 		907CB49BDF4A4BD580D53BDB /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
 		C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
 		C9968A0820B8CD9800653283 /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
+		C9968A0B20B9505B00653283 /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */,
+				C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +156,7 @@
 		82329A941C65256A00DADA23 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C9968A0B20B9505B00653283 /* AlamofireImage.framework */,
 				82329A971C656A6800DADA23 /* OAuth2.framework */,
 				82CE55711C6306C600E12101 /* DateTools.framework */,
 				82CE556D1C62D79F00E12101 /* SlackTextViewController.framework */,

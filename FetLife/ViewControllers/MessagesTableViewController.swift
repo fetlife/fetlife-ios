@@ -218,8 +218,6 @@ class MessagesTableViewController: SLKTextViewController {
 		print("Checking for new messages in Messages View...")
         if let conversation = conversation, let messages = messages {
             let conversationId = conversation.id
-            
-			guard conversation.hasNewMessages else { self.hideLoadingView(); return }
             if let lastMessage = messages.first {
                 let parameters: Dictionary<String, Any> = [
                     "since": Int(lastMessage.createdAt.timeIntervalSince1970),

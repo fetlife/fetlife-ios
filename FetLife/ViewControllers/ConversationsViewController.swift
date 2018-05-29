@@ -82,6 +82,10 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
 		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
 		updateTimer.tolerance = 5
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		updateTimer.invalidate()
+	}
     
     deinit {
 		notificationToken?.invalidate()
@@ -111,15 +115,31 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     func refresh(_ refreshControl: UIRefreshControl) {
         fetchConversations()
     }
-    
-    func fetchConversations() {
-        Dispatch.asyncOnUserInitiatedQueue() {
-            API.sharedInstance.loadConversations() { error in
-                self.endLoading(error: error)
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
+	
+	func fetchConversations() {
+		Dispatch.asyncOnUserInitiatedQueue() {
+			API.sharedInstance.loadConversations() { error in
+				self.endLoading(error: error)
+				self.refreshControl.endRefreshing()
+			}
+		}
+	}
+	
+	func fetchConversationsInBackground() {
+		print("Checking for new messages in Conversation View in the background...")
+		let lastMessageDate: Date = (conversations[0]).lastMessageCreated
+		Dispatch.asyncOnUserInitiatedQueue() {
+			API.sharedInstance.loadConversations() { error in
+				if let e = error {
+					print("Error loading conversations: \(e)")
+				}
+				let newLastDate: Date = (self.conversations[0]).lastMessageCreated
+				if lastMessageDate != newLastDate {
+					self.endLoading(error: error)
+				}
+			}
+		}
+	}
     
     func setupStateViews() {
         let noConvoView = NoConversationsView(frame: view.frame)
@@ -173,20 +193,15 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let archive = UITableViewRowAction(style: .default, title: "Archive") { action, index in
+        let archive = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
             let conversationToArchive = self.conversations[indexPath.row]
-            
             let realm = try! Realm()
-            
             try! realm.write {
                 conversationToArchive.isArchived = true
             }
-            
             API.sharedInstance.archiveConversation(conversationToArchive.id, completion: nil)
         }
-        
         archive.backgroundColor = UIColor.brickColor()
-        
         return [archive]
     }
     

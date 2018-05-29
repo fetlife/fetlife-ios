@@ -14,7 +14,7 @@
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
             <objects>
-                <splitViewController storyboardIdentifier="chatSplitView" id="H1p-Uh-vWS" sceneMemberID="viewController">
+                <splitViewController storyboardIdentifier="chatSplitView" useStoryboardIdentifierAsRestorationIdentifier="YES" id="H1p-Uh-vWS" sceneMemberID="viewController">
                     <toolbarItems/>
                     <connections>
                         <segue destination="G86-Si-xHC" kind="relationship" relationship="masterViewController" id="dcE-Oi-Kvh"/>
@@ -326,6 +326,6 @@
         <image name="DevilHeart" width="109" height="123"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ib0-IR-G0Q"/>
+        <segue reference="t5f-6O-CFK"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -67,6 +67,7 @@ final class API {
         ] as OAuth2JSON)
         
         oauthSession.authConfig.ui.useSafariView = true
+		oauthSession.authConfig.authorizeEmbeddedAutoDismiss = true
 		
         if let accessToken = oauthSession.accessToken {
             do {
@@ -97,14 +98,12 @@ final class API {
             case .success(let value):
                 do {
                     let json = try JSON(data: value).getArray()
-                    
                     if json.isEmpty {
                         completion?(nil)
                         return
                     }
                     
                     let realm = try! Realm()
-                    
                     realm.beginWrite()
                     
                     for c in json {
@@ -113,7 +112,6 @@ final class API {
                     }
                     
                     try! realm.commitWrite()
-                    
                     completion?(nil)
                 } catch(let error) {
                     completion?(error)
@@ -253,6 +251,10 @@ final class API {
         oauthSession.forgetTokens();
         let storage = HTTPCookieStorage.shared
         storage.cookies?.forEach() { storage.deleteCookie($0) }
+		let realm: Realm = try! Realm()
+		try! realm.write {
+			realm.deleteAll()
+		}
     }
     
     // Extremely useful for making app store screenshots, keeping this around for now.
