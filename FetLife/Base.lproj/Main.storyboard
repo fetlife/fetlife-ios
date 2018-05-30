@@ -209,6 +209,8 @@
                                                                     <rect key="frame" x="0.0" y="18" width="300" height="20"/>
                                                                     <subviews>
                                                                         <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IncomingMessage" translatesAutoresizingMaskIntoConstraints="NO" id="2dD-d5-Lif">
+                                                                            <rect key="frame" x="0.0" y="4" width="12" height="12"/>
+                                                                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="12" id="YXm-Oz-36a"/>
                                                                                 <constraint firstAttribute="width" constant="12" id="tIN-ND-HV3"/>

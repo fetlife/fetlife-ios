@@ -76,12 +76,14 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
         
         self.fetchConversations()
-		
+    }
+	
+	override func viewDidAppear(_ animated: Bool) {
 		// creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
 		// FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
 		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
 		updateTimer.tolerance = 5
-    }
+	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		updateTimer.invalidate()
@@ -121,6 +123,9 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
 			API.sharedInstance.loadConversations() { error in
 				self.endLoading(error: error)
 				self.refreshControl.endRefreshing()
+				if !self.hasContent() {
+					// TODO: show empty view if in split screen
+				}
 			}
 		}
 	}
