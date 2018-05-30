@@ -8,6 +8,7 @@
 
 import UIKit
 import AlamofireImage
+import RealmSwift
 
 class ConversationCell: UITableViewCell {
     
@@ -19,6 +20,7 @@ class ConversationCell: UITableViewCell {
     @IBOutlet weak var messageTimestampLabel: UILabel!
     @IBOutlet weak var messageSummaryLabel: UILabel!
     @IBOutlet weak var unreadMarkerView: UIView!
+	@IBOutlet weak var messageDirectionImage: UIImageView!
     
     var avatarImageFilter: AspectScaledToFillSizeWithRoundedCornersFilter?
     
@@ -30,6 +32,10 @@ class ConversationCell: UITableViewCell {
 					if self.authorAvatarImage.image == nil {
 						print("Error loading avatar from \(member.avatarURL)")
 						self.authorAvatarImage.af_setImage(withURL: Bundle.main.resourceURL!.appendingPathComponent("DefaultAvatar"), filter: avatarImageFilter)
+					}
+					let messages: Results<Message> = try! Realm().objects(Message.self).filter("conversationId == %@", conversation.id).sorted(byKeyPath: "createdAt", ascending: false) as Results<Message>
+					if let m: Message = messages.first {
+						self.messageDirectionImage.image = (m.memberId != conversation.member!.id) ? #imageLiteral(resourceName: "OutgoingMessage") : #imageLiteral(resourceName: "IncomingMessage")
 					}
                     self.authorNicknameLabel.text = member.nickname
                     self.authorMetaLabel.text = member.metaLine
@@ -56,5 +62,6 @@ class ConversationCell: UITableViewCell {
         self.authorAvatarImage.layer.cornerRadius = 3.0
         self.authorAvatarImage.layer.borderWidth = 0.5
         self.authorAvatarImage.layer.borderColor = UIColor.borderColor().cgColor
+		self.messageDirectionImage.tintColor = UIColor.messageTextColor()
     }
 }

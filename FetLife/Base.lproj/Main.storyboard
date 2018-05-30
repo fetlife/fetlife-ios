@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -205,11 +205,17 @@
                                                                         </mask>
                                                                     </variation>
                                                                 </stackView>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="EIC-M7-hOA">
+                                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="EIC-M7-hOA">
                                                                     <rect key="frame" x="0.0" y="18" width="300" height="20"/>
                                                                     <subviews>
+                                                                        <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IncomingMessage" translatesAutoresizingMaskIntoConstraints="NO" id="2dD-d5-Lif">
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="12" id="YXm-Oz-36a"/>
+                                                                                <constraint firstAttribute="width" constant="12" id="tIN-ND-HV3"/>
+                                                                            </constraints>
+                                                                        </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What an incredible message. Seriously it could not be any better. :-|" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XkI-uc-dUF" userLabel="Message Summary Label">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="300" height="19.333333333333332"/>
+                                                                            <rect key="frame" x="16" y="0.3333333333333357" width="284" height="19.333333333333332"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                             <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
@@ -240,6 +246,7 @@
                                             <outlet property="authorAvatarImage" destination="Zqn-Ea-Etg" id="d8q-Yo-1bu"/>
                                             <outlet property="authorMetaLabel" destination="hFd-kD-ZhS" id="5X8-pi-pvD"/>
                                             <outlet property="authorNicknameLabel" destination="GdQ-og-yDJ" id="J7i-ML-vBn"/>
+                                            <outlet property="messageDirectionImage" destination="2dD-d5-Lif" id="mqn-nC-wvr"/>
                                             <outlet property="messageSummaryLabel" destination="XkI-uc-dUF" id="ayS-P8-P7G"/>
                                             <outlet property="messageTimestampLabel" destination="hhT-8Q-q6y" id="fgl-Q6-bhY"/>
                                             <outlet property="unreadMarkerView" destination="hpE-Jb-vUB" id="Sok-Ad-tst"/>
@@ -324,8 +331,9 @@
     <resources>
         <image name="DefaultAvatar" width="200" height="200"/>
         <image name="DevilHeart" width="109" height="123"/>
+        <image name="IncomingMessage" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="t5f-6O-CFK"/>
+        <segue reference="ib0-IR-G0Q"/>
     </inferredMetricsTieBreakers>
 </document>

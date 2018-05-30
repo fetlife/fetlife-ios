@@ -15,7 +15,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var devilHeartImage: UIImageView!
     @IBOutlet weak var loginButton: UIButton!
-    
+	
     // MARK: - View lifecycle
     
     override func viewDidLoad() {
@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
             print("Failed to auth with error: \(error)")
         }
         
-        loginButton.setTitle("Login with your FetLife account", for: UIControlState())
+        loginButton.setTitle("Login to Fetlife", for: UIControlState())
         loginButton.isEnabled = true
     }
 }
