@@ -66,13 +66,14 @@ final class API {
             "verbose": true
         ] as OAuth2JSON)
         
-        oauthSession.authConfig.ui.useSafariView = false
-        
+        oauthSession.authConfig.ui.useSafariView = true
+		oauthSession.authConfig.authorizeEmbeddedAutoDismiss = true
+		
         if let accessToken = oauthSession.accessToken {
             do {
                 let jwt = try decode(jwt: accessToken)
                 
-                if let userDictionary = jwt.body["user"] as? Dictionary<String, Any> {
+				if let userDictionary: Dictionary<String, Any> = jwt.body["user"] as? Dictionary<String, Any> {
                     self.memberId = userDictionary["id"] as? String
                     self.memberNickname = userDictionary["nick"] as? String
                 }
@@ -85,7 +86,9 @@ final class API {
     func isAuthorized() -> Bool {
         return oauthSession.hasUnexpiredAccessToken()
     }
-    
+	
+	// MARK: - Conversation API
+	
     func loadConversations(_ completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["limit": 100, "order": "-updated_at", "with_archived": true] as [String : Any]
         let url = "\(baseURL)/v2/me/conversations"
@@ -95,14 +98,12 @@ final class API {
             case .success(let value):
                 do {
                     let json = try JSON(data: value).getArray()
-                    
                     if json.isEmpty {
                         completion?(nil)
                         return
                     }
                     
                     let realm = try! Realm()
-                    
                     realm.beginWrite()
                     
                     for c in json {
@@ -111,7 +112,6 @@ final class API {
                     }
                     
                     try! realm.commitWrite()
-                    
                     completion?(nil)
                 } catch(let error) {
                     completion?(error)
@@ -251,6 +251,10 @@ final class API {
         oauthSession.forgetTokens();
         let storage = HTTPCookieStorage.shared
         storage.cookies?.forEach() { storage.deleteCookie($0) }
+		let realm: Realm = try! Realm()
+		try! realm.write {
+			realm.deleteAll()
+		}
     }
     
     // Extremely useful for making app store screenshots, keeping this around for now.

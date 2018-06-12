@@ -10,7 +10,7 @@ import UIKit
 
 class BaseMessagesTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var bodyLabel: UILabel!
+    @IBOutlet weak var bodyLabel: MessageTextView!
     @IBOutlet weak var unreadMarkerView: UIView!
     @IBOutlet weak var messageContainerView: UIView!
     

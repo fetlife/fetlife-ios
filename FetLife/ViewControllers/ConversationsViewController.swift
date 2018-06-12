@@ -17,6 +17,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
 
     var detailViewController: MessagesTableViewController?
     var refreshControl = UIRefreshControl()
+	var updateTimer: Timer = Timer()
     
     let conversations: Results<Conversation> = try! Realm()
         .objects(Conversation.self)
@@ -46,7 +47,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? MessagesTableViewController
         }
         
-        notificationToken = conversations.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+		notificationToken = conversations.observe({ [weak self] (changes: RealmCollectionChange) in
             guard let tableView = self?.tableView else { return }
             
             switch changes {
@@ -75,10 +76,20 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
         
         self.fetchConversations()
+		
+		// creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
+		// FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
+		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+		updateTimer.tolerance = 5
     }
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		updateTimer.invalidate()
+	}
     
     deinit {
-        notificationToken?.stop()
+		notificationToken?.invalidate()
+		updateTimer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,7 +103,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 let conversation = conversations[indexPath.row]
-                let controller = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
+				let controller: MessagesTableViewController = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
                 controller.conversation = conversation
                 controller.navigationItem.title = conversation.member!.nickname
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
@@ -104,15 +115,31 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     func refresh(_ refreshControl: UIRefreshControl) {
         fetchConversations()
     }
-    
-    func fetchConversations() {
-        Dispatch.asyncOnUserInitiatedQueue() {
-            API.sharedInstance.loadConversations() { error in
-                self.endLoading(error: error)
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
+	
+	func fetchConversations() {
+		Dispatch.asyncOnUserInitiatedQueue() {
+			API.sharedInstance.loadConversations() { error in
+				self.endLoading(error: error)
+				self.refreshControl.endRefreshing()
+			}
+		}
+	}
+	
+	func fetchConversationsInBackground() {
+		print("Checking for new messages in Conversation View in the background...")
+		let lastMessageDate: Date = (conversations[0]).lastMessageCreated
+		Dispatch.asyncOnUserInitiatedQueue() {
+			API.sharedInstance.loadConversations() { error in
+				if let e = error {
+					print("Error loading conversations: \(e)")
+				}
+				let newLastDate: Date = (self.conversations[0]).lastMessageCreated
+				if lastMessageDate != newLastDate {
+					self.endLoading(error: error)
+				}
+			}
+		}
+	}
     
     func setupStateViews() {
         let noConvoView = NoConversationsView(frame: view.frame)
@@ -166,20 +193,15 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let archive = UITableViewRowAction(style: .default, title: "Archive") { action, index in
+        let archive = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
             let conversationToArchive = self.conversations[indexPath.row]
-            
             let realm = try! Realm()
-            
             try! realm.write {
                 conversationToArchive.isArchived = true
             }
-            
             API.sharedInstance.archiveConversation(conversationToArchive.id, completion: nil)
         }
-        
         archive.backgroundColor = UIColor.brickColor()
-        
         return [archive]
     }
     

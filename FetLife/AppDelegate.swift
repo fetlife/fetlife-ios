@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
         
         if "fetlifeapp" == url.scheme {
-            print("Received redirect")
+			print("Received redirect: \(url)")
             API.sharedInstance.oauthSession.handleRedirectURL(url)
             return true
         }

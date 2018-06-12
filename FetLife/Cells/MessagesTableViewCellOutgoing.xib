@@ -1,43 +1,47 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="MessagesTableViewCellOutgoing" rowHeight="50" id="w8c-WR-1A3" customClass="MessagesTableViewCellOutgoing" customModule="FetLife" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="MessagesTableViewCellOutgoing" rowHeight="50" id="w8c-WR-1A3" customClass="MessagesTableViewCellOutgoing" customModule="FetLife" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w8c-WR-1A3" id="XN0-Xp-NPN">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
-                        <rect key="frame" x="161" y="0.0" width="153" height="43"/>
+                    <view clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
+                        <rect key="frame" x="141" y="11" width="163" height="28"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Beu-bj-bRw" userLabel="Unread Marker">
-                                <rect key="frame" x="0.0" y="0.0" width="4" height="43"/>
-                                <color key="backgroundColor" red="0.46666666670000001" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <view hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Beu-bj-bRw" userLabel="Unread Marker">
+                                <rect key="frame" x="0.0" y="0.0" width="4" height="28"/>
+                                <color key="backgroundColor" red="0.46666666670000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="4" id="ehl-nH-yf8"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Outgoing Message" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body">
-                                <rect key="frame" x="8" y="11" width="137" height="20"/>
+                            <textView opaque="NO" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" bouncesZoom="NO" editable="NO" text="Outgoing Message" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body" customClass="MessageTextView" customModule="FetLife" customModuleProvider="target">
+                                <rect key="frame" x="8" y="4" width="147" height="20"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <textInputTraits key="textInputTraits"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
+                            </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.019607843137254902" green="0.019607843137254902" blue="0.019607843137254902" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.019607843137254902" green="0.019607843137254902" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="DvJ-iB-hF2" secondAttribute="bottom" constant="12" id="CEP-gm-fjJ"/>
+                            <constraint firstAttribute="bottom" secondItem="DvJ-iB-hF2" secondAttribute="bottom" constant="4" id="CEP-gm-fjJ"/>
                             <constraint firstItem="Beu-bj-bRw" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="top" id="O3X-zH-9OG"/>
                             <constraint firstAttribute="bottom" secondItem="Beu-bj-bRw" secondAttribute="bottom" id="bpR-0X-cMY"/>
-                            <constraint firstItem="DvJ-iB-hF2" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="top" constant="11" id="eBg-B1-m3C"/>
+                            <constraint firstItem="DvJ-iB-hF2" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="top" constant="4" id="eBg-B1-m3C"/>
                             <constraint firstItem="Beu-bj-bRw" firstAttribute="leading" secondItem="jjj-Su-iWq" secondAttribute="leading" id="gD2-MB-mkV"/>
                             <constraint firstAttribute="trailing" secondItem="DvJ-iB-hF2" secondAttribute="trailing" constant="8" id="t5P-I2-fpf"/>
                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="xNK-B9-dkg"/>
@@ -45,20 +49,20 @@
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="jjj-Su-iWq" secondAttribute="trailing" constant="-2" id="hkY-J6-m8U"/>
-                    <constraint firstItem="jjj-Su-iWq" firstAttribute="top" secondItem="XN0-Xp-NPN" secondAttribute="topMargin" constant="-8" id="kM9-s9-7Kn"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="jjj-Su-iWq" secondAttribute="bottom" constant="-2" id="wiV-hn-KCs"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="jjj-Su-iWq" secondAttribute="trailing" id="hkY-J6-m8U"/>
+                    <constraint firstItem="jjj-Su-iWq" firstAttribute="top" secondItem="XN0-Xp-NPN" secondAttribute="topMargin" id="kM9-s9-7Kn"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="jjj-Su-iWq" secondAttribute="bottom" id="wiV-hn-KCs"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
                 <outlet property="bodyLabel" destination="DvJ-iB-hF2" id="fii-Kf-rmQ"/>
                 <outlet property="messageContainerView" destination="jjj-Su-iWq" id="3xr-1k-aPA"/>
                 <outlet property="unreadMarkerView" destination="Beu-bj-bRw" id="rnI-H6-NBa"/>
             </connections>
-            <point key="canvasLocation" x="569" y="405"/>
+            <point key="canvasLocation" x="8" y="-48"/>
         </tableViewCell>
     </objects>
 </document>
