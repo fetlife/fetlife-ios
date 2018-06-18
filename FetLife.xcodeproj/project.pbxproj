@@ -68,8 +68,20 @@
 		C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9968A0820B8CD9800653283 /* MessageTextView.swift */; };
 		C9968A0A20B9466900653283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82B55AC61C60FB060035D45E /* Assets.xcassets */; };
 		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
+		C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */; };
+		C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */; };
 		DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C9CEBA8D20D1E42D009BD594 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 82B55AB21C60FB060035D45E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 828D66281CC1DD3200A6F1D2;
+			remoteInfo = FetLife;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FetLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +126,8 @@
 		C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
 		C9968A0820B8CD9800653283 /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
 		C9968A0B20B9505B00653283 /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FriendProfileViewController.swift; path = FetLife/ViewControllers/FriendProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +220,8 @@
 				826C5FCD1C6D4D17000E782B /* MessagesTableViewController.swift */,
 				82329A991C656BD900DADA23 /* LoginViewController.swift */,
 				C9968A0820B8CD9800653283 /* MessageTextView.swift */,
+				C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */,
+				C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -315,6 +331,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C9CEBA8E20D1E42D009BD594 /* PBXTargetDependency */,
 			);
 			name = FetLifeTests;
 			productName = FetChatTests;
@@ -455,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */,
+				C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */,
 				828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */,
 				828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */,
 				828D662E1CC1DD3200A6F1D2 /* ConversationCell.swift in Sources */,
@@ -466,10 +484,12 @@
 				828D66341CC1DD3200A6F1D2 /* AppDelegate.swift in Sources */,
 				828D66351CC1DD3200A6F1D2 /* OAuth2+Alamofire.swift in Sources */,
 				828D66361CC1DD3200A6F1D2 /* ErrorView.swift in Sources */,
+				C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */,
 				828D66371CC1DD3200A6F1D2 /* NoConversationsView.swift in Sources */,
 				C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */,
 				828D66381CC1DD3200A6F1D2 /* Models.swift in Sources */,
 				828D66391CC1DD3200A6F1D2 /* BaseMessagesTableViewCell.swift in Sources */,
+				C9B27E7F20BF39250005C837 /* FriendActionsViewController.swift in Sources */,
 				828D663A1CC1DD3200A6F1D2 /* MessagesTableViewCellIOutgoing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,6 +541,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C9CEBA8E20D1E42D009BD594 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 828D66281CC1DD3200A6F1D2 /* FetLife */;
+			targetProxy = C9CEBA8D20D1E42D009BD594 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		82B55AC31C60FB060035D45E /* Main.storyboard */ = {

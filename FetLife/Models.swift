@@ -15,13 +15,41 @@ private let dateFormatter: DateFormatter = DateFormatter()
 // MARK: - Member
 
 class Member: Object, JSONDecodable {
-    let defaultAvatarURL = "https://ass3.fetlife.com/images/avatar_missing_200x200.gif"
+    static let defaultAvatarURL = "https://ass3.fetlife.com/images/avatar_missing_200x200.gif"
 
     dynamic var id = ""
     dynamic var nickname = ""
     dynamic var metaLine = ""
     dynamic var avatarURL = ""
-
+	dynamic var avatarImageData: Data?
+	dynamic var orientation = ""
+	dynamic var aboutMe = ""
+	dynamic var age: Int = 0
+	dynamic var city = ""
+	dynamic var state = ""
+	dynamic var country = ""
+	dynamic var genderName = ""
+	dynamic var canFollow = true
+	dynamic var contentType = ""
+	dynamic var fetProfileURL = ""
+	dynamic var isSupporter = false
+	dynamic var relationWithMe = ""
+	dynamic var friendCount: Int = 0
+	dynamic var lookingFor: [String] { // we're using this complicated mess because Realm doesn't support primitive arrays 😑
+		get {
+			return _lookingFor.map { $0.stringValue }
+		}
+		set {
+			_lookingFor.removeAll()
+			_lookingFor.append(objectsIn: newValue.map({ RealmString(value: [$0]) }))
+		}
+	}
+	let _lookingFor = List<RealmString>()
+	
+	override static func ignoredProperties() -> [String] {
+		return ["lookingFor"]
+	}
+	
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -33,11 +61,75 @@ class Member: Object, JSONDecodable {
         nickname = try json.getString(at: "nickname")
         metaLine = try json.getString(at: "meta_line")
         do {
-            avatarURL = try json.getString(at: "avatar", "variants", "medium", or: defaultAvatarURL)
+			avatarURL = try json.getString(at: "avatar", "variants", "medium", or: Member.defaultAvatarURL)
+			if let aURL = URL(string: avatarURL) {
+				avatarImageData = try? Data(contentsOf: aURL)
+			}
         } catch {
-            avatarURL = defaultAvatarURL
+			avatarURL = Member.defaultAvatarURL
         }
+		orientation = (try? json.getString(at: "sexual_orientation")) ?? ""
+		aboutMe = (try? json.getString(at: "about")) ?? ""
+		age = (try? json.getInt(at: "age")) ?? 0
+		city = (try? json.getString(at: "city")) ?? ""
+		state = (try? json.getString(at: "administrative_area")) ?? ""
+		country = (try? json.getString(at: "country")) ?? ""
+		genderName = (try? json.getString(at: "gender", "name")) ?? ""
+		canFollow = (try? json.getBool(at: "is_followable")) ?? true
+		contentType = (try? json.getString(at: "content_type")) ?? ""
+		fetProfileURL = (try? json.getString(at: "url")) ?? ""
+		isSupporter = (try? json.getBool(at: "is_supporter")) ?? false
+		relationWithMe = (try? json.getString(at: "relation_with_me")) ?? ""
+		friendCount = (try? json.getInt(at: "friend_count")) ?? 0
+		var lf: [String] = []
+		if let ljson = try? json.getArray(at: "looking_for") as [AnyObject] {
+			for j in ljson {
+				lf.append((j.description) ?? "")
+			}
+		}
+		lookingFor = lf
     }
+	
+	func updateMemberInfo(_ json: JSON) throws {
+		let realm = try! Realm()
+		realm.refresh() // make sure Realm instance is the most recent version
+		realm.beginWrite() // Realm write operation required because we're updating an existing Realm object
+		nickname = (try? json.getString(at: "nickname")) ?? nickname
+		metaLine = (try? json.getString(at: "meta_line")) ?? metaLine
+		do {
+			avatarURL = try json.getString(at: "avatar", "variants", "medium", or: Member.defaultAvatarURL)
+			if let aURL = URL(string: avatarURL) {
+				avatarImageData = try? Data(contentsOf: aURL)
+			}
+		} catch {
+			avatarURL = Member.defaultAvatarURL
+		}
+		orientation = (try? json.getString(at: "sexual_orientation")) ?? ""
+		aboutMe = (try? json.getString(at: "about")) ?? ""
+		age = (try? json.getInt(at: "age")) ?? 0
+		city = (try? json.getString(at: "city")) ?? ""
+		state = (try? json.getString(at: "administrative_area")) ?? ""
+		country = (try? json.getString(at: "country")) ?? ""
+		genderName = (try? json.getString(at: "gender", "name")) ?? ""
+		canFollow = (try? json.getBool(at: "is_followable")) ?? true
+		contentType = (try? json.getString(at: "content_type")) ?? ""
+		fetProfileURL = (try? json.getString(at: "url")) ?? ""
+		isSupporter = (try? json.getBool(at: "is_supporter")) ?? false
+		relationWithMe = (try? json.getString(at: "relation_with_me")) ?? ""
+		friendCount = (try? json.getInt(at: "friend_count")) ?? 0
+		var lf: [String] = []
+				if let ljson = try? json.getArray(at: "looking_for") as [AnyObject] {
+					for j in ljson {
+						lf.append((j.description) ?? "")
+					}
+				}
+		lookingFor = lf
+		try! realm.commitWrite()
+	}
+}
+
+class RealmString: Object { // using this to be able to store arrays of strings
+	dynamic var stringValue = ""
 }
 
 // MARK: - Conversation
@@ -51,6 +143,7 @@ class Conversation: Object, JSONDecodable {
 
     dynamic var lastMessageBody = ""
     dynamic var lastMessageCreated = Date()
+	dynamic var lastMessageIsIncoming = false
 
     override static func primaryKey() -> String? {
         return "id"
@@ -68,6 +161,8 @@ class Conversation: Object, JSONDecodable {
         if let lastMessage = json["last_message"] {
             lastMessageBody = try decodeHTML(lastMessage.getString(at: "body"))
             lastMessageCreated = try dateStringToNSDate(lastMessage.getString(at: "created_at"))!
+			let lastMessageMemberID: String = try lastMessage.getString(at: "member", "id")
+			lastMessageIsIncoming = lastMessageMemberID == member!.id
         }
     }
 
@@ -109,6 +204,7 @@ class Message: Object {
     }
 }
 
+// MARK: - Story
 // MARK: - Util
 
 // Convert from a JSON format datastring to an NSDate instance.

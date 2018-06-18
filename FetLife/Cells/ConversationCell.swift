@@ -33,10 +33,7 @@ class ConversationCell: UITableViewCell {
 						print("Error loading avatar from \(member.avatarURL)")
 						self.authorAvatarImage.af_setImage(withURL: Bundle.main.resourceURL!.appendingPathComponent("DefaultAvatar"), filter: avatarImageFilter)
 					}
-					let messages: Results<Message> = try! Realm().objects(Message.self).filter("conversationId == %@", conversation.id).sorted(byKeyPath: "createdAt", ascending: false) as Results<Message>
-					if let m: Message = messages.first {
-						self.messageDirectionImage.image = (m.memberId != conversation.member!.id) ? #imageLiteral(resourceName: "OutgoingMessage") : #imageLiteral(resourceName: "IncomingMessage")
-					}
+					self.messageDirectionImage.image = conversation.lastMessageIsIncoming ? #imageLiteral(resourceName: "IncomingMessage") : #imageLiteral(resourceName: "OutgoingMessage")
                     self.authorNicknameLabel.text = member.nickname
                     self.authorMetaLabel.text = member.metaLine
                 }
@@ -47,6 +44,7 @@ class ConversationCell: UITableViewCell {
             }
         }
     }
+	var index: Int = -1
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -62,6 +60,9 @@ class ConversationCell: UITableViewCell {
         self.authorAvatarImage.layer.cornerRadius = 3.0
         self.authorAvatarImage.layer.borderWidth = 0.5
         self.authorAvatarImage.layer.borderColor = UIColor.borderColor().cgColor
-		self.messageDirectionImage.tintColor = UIColor.messageTextColor()
-    }
+		if let c = conversation {
+			self.messageDirectionImage.image = c.lastMessageIsIncoming ? #imageLiteral(resourceName: "IncomingMessage") : #imageLiteral(resourceName: "OutgoingMessage")
+			self.messageDirectionImage.tintColor = UIColor.messageTextColor()
+		}
+	}
 }

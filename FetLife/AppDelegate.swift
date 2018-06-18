@@ -14,21 +14,82 @@ import JWTDecode
 import AlamofireNetworkActivityIndicator
 import RealmSwift
 
+
+// MARK: - Global Variables
+let REALM_SCHEMA_VERSION: UInt64 = 1 // Increment upon updating Realm object models between releases
+let defaults = UserDefaults.standard // The UserDefaults object for storing preferences and persistent variables
+
+// MARK: - Globally Shared Functions
+
+/// Creates an Ok/Cancel message box with optional completion handlers.
+///
+/// - Parameters:
+///   - sender: UIViewController presenting the dialog
+///   - title: Title of the dialog box
+///   - message: Main body of the dialog box
+///   - onOk: Optional completion handler for when "Ok" is pressed
+///   - onCancel: Optional completion handler for when "Cancel" is pressed
+func dlgOKCancel(_ sender: UIViewController, title: String, message: String, onOk: ((UIAlertAction) -> Void)?, onCancel: ((UIAlertAction) -> Void)?) {
+	let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+	let okAction = UIAlertAction(title: "Ok", style: .default) { (action) -> Void in
+		onOk?(action)
+	}
+	let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
+		onCancel?(action)
+	}
+	alertController.addAction(okAction)
+	alertController.addAction(cancelAction)
+	
+	sender.present(alertController, animated: true, completion: nil)
+}
+
+// MARK: - User Default Variables
+// Setting up user defaults as variables simplifies the process of reading and writing to the UserDefaults store.
+
+/// The index of the UISegmentedControl indicating which mailbox should be shown.
+///
+/// **Possible Values:**
+/// - `0` : Inbox
+/// - `1` : Archived Mail
+var optLastSelectedMailbox: Int { get { return defaults.integer(forKey: "optLastSelectedMailbox") } set(val) { defaults.set(val, forKey: "optLastSelectedMailbox") } }
+
+// MARK: -
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+	
     func application(_ app: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         NetworkActivityIndicatorManager.shared.isEnabled = true
-        
         setupAppearance(app)
-        
-        let config = Realm.Configuration(schemaVersion: 0)
-        
+		
+		Fabric.with([Crashlytics.self])
+		
+		let config = Realm.Configuration(
+			// Set the new schema version. This must be greater than the previously used
+			// version (if you've never set a schema version before, the version is 0).
+			schemaVersion: REALM_SCHEMA_VERSION,
+			
+			// Set the block which will be called automatically when opening a Realm with
+			// a schema version lower than the one set above
+			migrationBlock: { migration, oldSchemaVersion in
+				print("Old schema version: \(oldSchemaVersion)")
+				print("New schema version: \(REALM_SCHEMA_VERSION)")
+				if (oldSchemaVersion < REALM_SCHEMA_VERSION) {
+					print("Performing migration...")
+					// Nothing to do!
+					// Realm will automatically detect new properties and removed properties
+					// And will update the schema on disk automatically
+				}
+		})
         Realm.Configuration.defaultConfiguration = config
-        
-        let _ = try! Realm() // Get a realm instance early on to force migrations and configuration.
+		do {
+			let _ = try Realm() // Get a realm instance early on to force migrations and configuration.
+		} catch let e {
+			print("Error initializing Realm instance! \(e.localizedDescription)")
+			print("This application will now exit.")
+			fatalError(e.localizedDescription)
+		}
         
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
@@ -41,8 +102,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             self.window!.rootViewController = storyboard.instantiateViewController(withIdentifier: "loginView")
         }
-        
-        Fabric.with([Crashlytics.self])
+		
+		app.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
         
         return true
     }
@@ -57,10 +118,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return false
     }
-    
+	
     
     func setupAppearance(_ app: UIApplication) {
-        app.statusBarStyle = UIStatusBarStyle.lightContent
         
         UINavigationBar.appearance().tintColor = UIColor.brickColor()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.brickColor()]
@@ -73,8 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance(whenContainedInInstancesOf: [MessagesTableViewController.self]).separatorColor = UIColor.backgroundColor()
         UITableViewCell.appearance().backgroundColor = UIColor.backgroundColor()
     }
-    
-    
+
 
     func applicationWillResignActive(_ app: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
