@@ -24,8 +24,9 @@ final class API {
     let baseURL: String
     let oauthSession: OAuth2CodeGrant
     
-    var memberId: String?
-    var memberNickname: String?
+    private var memberId: String?
+    private var memberNickname: String?
+	var currentMember: Member?
     
     class func isAuthorized() -> Bool {
         return sharedInstance.isAuthorized()
@@ -39,10 +40,17 @@ final class API {
         return sharedInstance.memberNickname
     }
     
+    /// Authorizes the current user.
+    ///
+    /// - Parameters:
+    ///   - context: Context of the authorization
+    ///   - onAuthorize: Completion to run upon authorization
     class func authorizeInContext(_ context: AnyObject, onAuthorize: @escaping (_ parameters: OAuth2JSON?, _ error: Error?) -> Void) {
         guard isAuthorized() else {
-//            sharedInstance.oauthSession.authorize(callback: onAuthorize)
-//            sharedInstance.oauthSession.failure(callback: onFailure)
+//          sharedInstance.oauthSession.authorize(callback: onAuthorize)
+//          sharedInstance.oauthSession.failure(callback: onFailure)
+			let storage = HTTPCookieStorage.shared
+			storage.cookies?.forEach() { storage.deleteCookie($0) }
             sharedInstance.oauthSession.authorizeEmbedded(from: context, callback: onAuthorize)
             return
         }
@@ -63,7 +71,7 @@ final class API {
             "token_uri": "\(baseURL)/oauth/token",
             "scope": "",
             "redirect_uris": ["fetlifeapp://oauth/callback"],
-            "verbose": true
+            "verbose": false
         ] as OAuth2JSON)
         
         oauthSession.authConfig.ui.useSafariView = true
@@ -89,6 +97,9 @@ final class API {
 	
 	// MARK: - Conversation API
 	
+    /// Loads all the conversations for the current user.
+    ///
+    /// - Parameter completion: Optional completion with error
     func loadConversations(_ completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["limit": 100, "order": "-updated_at", "with_archived": true] as [String : Any]
         let url = "\(baseURL)/v2/me/conversations"
@@ -104,8 +115,8 @@ final class API {
                     }
                     
                     let realm = try! Realm()
-                    realm.beginWrite()
-                    
+					realm.refresh() // make sure Realm instance is the most recent version
+					realm.beginWrite()
                     for c in json {
                         let conversation = try! Conversation.init(json: c)
                         realm.add(conversation, update: true)
@@ -122,6 +133,11 @@ final class API {
         }
     }
     
+    /// Archives the specified conversation.
+    ///
+    /// - Parameters:
+    ///   - conversationId: ID of conversation to archive
+    ///   - completion: Optional completion with error
     func archiveConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["is_archived": true]
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
@@ -135,7 +151,7 @@ final class API {
                     let conversation = try Conversation.init(json: json)
                     
                     let realm = try Realm()
-                    
+                    realm.refresh() // make sure Realm instance is the most recent version
                     try realm.write {
                         realm.add(conversation, update: true)
                     }
@@ -149,11 +165,44 @@ final class API {
             }
         }
     }
-
+	
+	func unarchiveConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
+		let parameters = ["is_archived": false]
+		let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
+		
+		oauthSession.request(.put, url, parameters: parameters).responseData { response -> Void in
+			switch response.result {
+			case .success(let value):
+				do {
+					let json = try JSON(data: value)
+					
+					let conversation = try Conversation.init(json: json)
+					
+					let realm = try Realm()
+					realm.refresh() // make sure Realm instance is the most recent version
+					try realm.write {
+						realm.add(conversation, update: true)
+					}
+					
+					completion?(nil)
+				} catch(let error) {
+					completion?(error)
+				}
+			case .failure(let error):
+				completion?(error)
+			}
+		}
+	}
     
+    /// Gets the messages in a conversation.
+    ///
+    /// - Parameters:
+    ///   - conversationId: ID of conversation to load
+    ///   - extraParameters: A dictionary of any additional parameters to send
+    ///   - completion: Optional completion with error
     func loadMessages(_ conversationId: String, parameters extraParameters: Dictionary<String, Any> = [:], completion: ((_ error: Error?) -> Void)?) {
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)/messages"
-        var parameters: Dictionary<String, Any> = ["limit": 50 as Any]
+        var parameters: Dictionary<String, Any> = ["limit": 100 as Any]
 
         for (k, v) in extraParameters {
             parameters.updateValue(v, forKey: k)
@@ -171,11 +220,11 @@ final class API {
                     }
                     
                     let realm = try! Realm()
-                    
+                    realm.refresh() // make sure Realm instance is the most recent version
                     realm.beginWrite()
                     
                     for m in json {
-                        let message = try! Message.init(json: m)
+                        let message = try Message.init(json: m)
                         message.conversationId = conversationId
                         realm.add(message, update: true)
                     }
@@ -192,6 +241,11 @@ final class API {
         }
     }
     
+    /// Creates a message in a conversation with the specified text.
+    ///
+    /// - Parameters:
+    ///   - conversationId: The conversation ID
+    ///   - messageBody: The text of the message
     func createAndSendMessage(_ conversationId: String, messageBody: String) {
         let parameters = ["body": messageBody]
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)/messages"
@@ -203,8 +257,8 @@ final class API {
                     let json = try JSON(data: value)
                     
                     let realm = try! Realm()
-                    
-                    let conversation = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject)
+                    realm.refresh() // make sure Realm instance is the most recent version
+					let conversation: Conversation? = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject)
                     let message = try Message(json: json)
                     
                     message.conversationId = conversationId
@@ -212,6 +266,7 @@ final class API {
                     try! realm.write {
                         conversation?.lastMessageBody = message.body
                         conversation?.lastMessageCreated = message.createdAt
+						conversation?.lastMessageIsIncoming = false
                         realm.add(message)
                     }
                     
@@ -224,7 +279,13 @@ final class API {
         }
     }
     
-    func markMessagesAsRead(_ conversationId: String, messageIds: [String]) {
+    /// Marks a conversation as read.
+    ///
+    /// - Parameters:
+    ///   - conversationId: ID of the conversation
+    ///   - messageIds: Message(s) to mark as read
+    ///   - completion: Optional completion closure with error
+    func markMessagesAsRead(_ conversationId: String, messageIds: [String], completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["ids": messageIds]
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)/messages/read"
         
@@ -232,21 +293,21 @@ final class API {
             switch response.result {
             case .success:
                 let realm = try! Realm()
-                
+                realm.refresh() // make sure Realm instance is the most recent version
                 let conversation = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject)
                 
                 try! realm.write {
                     conversation?.hasNewMessages = false
                 }
+				completion?(nil)
             case .failure(let error):
                 print(error)
+				completion?(error)
             }
         }
     }
 
-    /**
-     Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
-     */
+     /// Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
     func logout() {
         oauthSession.forgetTokens();
         let storage = HTTPCookieStorage.shared
@@ -256,7 +317,35 @@ final class API {
 			realm.deleteAll()
 		}
     }
-    
+	
+	// MARK: - Profile API
+	
+	/// Gets the profile of the specified user.
+	///
+	/// - Important: Do not use this to get the profile of the currently logged-in user. Instead, use getMe(_:).
+	/// - Parameters:
+	///   - userID: ID of the user whose profile you wish to retrieve
+	///   - completion: Optional completion handler taking `JSON?` and `Error?` parameters
+	func getFetUser(_ userID: String, completion: ((_ userInfo: JSON?, _ error: Error?) -> Void)?) {
+		let url = "\(baseURL)/v2/members/\(userID)"
+		
+		oauthSession.request(.get, url, parameters: nil).responseData { response -> Void in
+			switch response.result {
+			case .success(let value):
+				do {
+					let json: JSON = try JSON(data: value)
+					completion?(json, nil)
+				} catch(let error) {
+					print("Error reading JSON data")
+					completion?(nil, error)
+				}
+			case .failure(let error):
+				print("Error: \(error.localizedDescription)")
+				completion?(nil, error)
+			}
+		}
+	}
+	
     // Extremely useful for making app store screenshots, keeping this around for now.
     func fakeConversations() -> JSON {
         return JSON.array([
