@@ -15,7 +15,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var devilHeartImage: UIImageView!
     @IBOutlet weak var loginButton: UIButton!
-	
+    
     // MARK: - View lifecycle
     
     override func viewDidLoad() {

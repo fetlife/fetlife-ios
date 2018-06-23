@@ -13,12 +13,12 @@
         <tableViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="MessagesTableViewCellOutgoing" rowHeight="48" id="w8c-WR-1A3" customClass="MessagesTableViewCellOutgoing" customModule="FetLife" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" tableViewCell="w8c-WR-1A3" id="XN0-Xp-NPN">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w8c-WR-1A3" id="XN0-Xp-NPN">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="55.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
-                        <rect key="frame" x="141" y="11" width="163" height="24.5"/>
+                    <view clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
+                        <rect key="frame" x="133.5" y="11" width="170.5" height="24.5"/>
                         <subviews>
                             <view hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Beu-bj-bRw" userLabel="Unread Marker">
                                 <rect key="frame" x="0.0" y="0.0" width="4" height="24.5"/>
@@ -27,10 +27,10 @@
                                     <constraint firstAttribute="width" constant="4" id="ehl-nH-yf8"/>
                                 </constraints>
                             </view>
-                            <textView opaque="NO" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" editable="NO" text="Outgoing Message" textAlignment="natural" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body" customClass="MessageTextView" customModule="FetLife" customModuleProvider="target">
-                                <rect key="frame" x="8" y="4" width="147" height="16.5"/>
+                            <textView opaque="NO" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" bouncesZoom="NO" keyboardDismissMode="onDrag" editable="NO" text="Outgoing Message" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body" customClass="MessageTextView" customModule="FetLife" customModuleProvider="target">
+                                <rect key="frame" x="8" y="4" width="154.5" height="16.5"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
                             </textView>
@@ -48,7 +48,7 @@
                         </constraints>
                     </view>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" insetsLayoutMarginsFromSafeArea="NO" text="HH:MM AM dd/mm/yy" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVQ-OX-y2A">
-                        <rect key="frame" x="141" y="38.5" width="163" height="14"/>
+                        <rect key="frame" x="133.5" y="38.5" width="170.5" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" placeholder="YES" identifier="timestampHeightConstraint" id="Q5r-A6-Q8I"/>
                             <constraint firstAttribute="height" priority="750" constant="14" id="wTL-U0-GyK"/>

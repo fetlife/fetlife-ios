@@ -38,16 +38,16 @@ class LoadingView: UIView {
         label.textAlignment = .center
         return label
     }()
-	
-	lazy var noConversationsLabel: UILabel = {
-		let label = UILabel()
-		label.text = "No Conversations"
-		label.textColor = UIColor.brownishGreyColor()
-		label.lineBreakMode = .byWordWrapping
-		label.numberOfLines = 0
-		label.textAlignment = .center
-		return label
-	}()
+    
+    lazy var noConversationsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No Conversations"
+        label.textColor = UIColor.brownishGreyColor()
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
     
     // MARK: - Lifecycle
     
@@ -74,22 +74,22 @@ class LoadingView: UIView {
             make.centerX.equalTo(snp.centerX)
             make.topMargin.equalTo(97.0)
         }
-		
-		if API.sharedInstance.isAuthorized() { // only show loading view if logged in
-			activityIndicatorView.snp.makeConstraints { make in
-				make.size.equalTo(37.0)
-			}
-			
-			textLabel.snp.makeConstraints { make in
-				make.width.lessThanOrEqualTo(248.0)
-			}
-		} else {
-			stackView.removeArrangedSubview(activityIndicatorView)
-			stackView.removeArrangedSubview(textLabel)
-			stackView.addArrangedSubview(noConversationsLabel)
-			noConversationsLabel.snp.makeConstraints { make in
-				make.width.lessThanOrEqualTo(248.0)
-			}
-		}
+        
+        if API.sharedInstance.isAuthorized() { // only show loading view if logged in
+            activityIndicatorView.snp.makeConstraints { make in
+                make.size.equalTo(37.0)
+            }
+            
+            textLabel.snp.makeConstraints { make in
+                make.width.lessThanOrEqualTo(248.0)
+            }
+        } else {
+            stackView.removeArrangedSubview(activityIndicatorView)
+            stackView.removeArrangedSubview(textLabel)
+            stackView.addArrangedSubview(noConversationsLabel)
+            noConversationsLabel.snp.makeConstraints { make in
+                make.width.lessThanOrEqualTo(248.0)
+            }
+        }
     }
 }

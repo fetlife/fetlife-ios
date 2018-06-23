@@ -13,14 +13,14 @@ import SnapKit
 import RealmSwift
 
 class MessagesTableViewController: SLKTextViewController {
-	
+    
     // MARK: - Properties
     
     let incomingCellIdentifier = "MessagesTableViewCellIncoming"
     let outgoingCellIdentifier = "MessagesTableViewCellOutgoing"
-	var updateTimer: Timer = Timer()
-	
-	@IBOutlet weak var titleButton: UIButton!
+    var updateTimer: Timer = Timer()
+    
+    @IBOutlet weak var titleButton: UIButton!
     
     lazy var loadingView: LoadingView = {
         let lv = LoadingView(frame: self.view.frame)
@@ -32,33 +32,35 @@ class MessagesTableViewController: SLKTextViewController {
         
         return lv
     }()
-	
-	lazy var noConvoSelectedView: NoConversationsView = {
-		let ncsv: NoConversationsView = NoConversationsView(frame: self.view.frame)
-		if self.messages != nil && (!self.messages.isEmpty || self.conversation.member != nil) {
-			ncsv.isHidden = true
-			ncsv.alpha = 0
-		}
-		return ncsv
-	}()
+    
+    lazy var noConvoSelectedView: NoConversationsView = {
+        let ncsv: NoConversationsView = NoConversationsView(frame: self.view.frame)
+        if self.messages != nil && (!self.messages.isEmpty || self.conversation.member != nil) {
+            ncsv.isHidden = true
+            ncsv.alpha = 0
+        }
+        return ncsv
+    }()
     
     var conversation: Conversation! {
         didSet {
             self.messages = try! Realm().objects(Message.self).filter("conversationId == %@", self.conversation.id).sorted(byKeyPath: "createdAt", ascending: false)
-			self.memberId = conversation.member!.id
+            self.memberId = conversation.member!.id
+            self.member = conversation.member!
         }
     }
     var messages: Results<Message>!
     var notificationToken: NotificationToken? = nil
-	var memberId: String!
+    var memberId: String!
+    var member: Member!
     
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(loadingView)
-		view.addSubview(noConvoSelectedView)
+        view.addSubview(noConvoSelectedView)
         
         loadingView.snp.makeConstraints { make in
             if let navigationController = navigationController {
@@ -69,16 +71,16 @@ class MessagesTableViewController: SLKTextViewController {
             make.bottom.equalTo(view)
             make.left.equalTo(view)
         }
-		
-		noConvoSelectedView.snp.makeConstraints { make in
-			if let navigationController: UINavigationController = navigationController {
-				make.top.equalTo(view).offset(navigationController.navigationBar.frame.height)
-			}
-			
-			make.right.equalTo(view)
-			make.bottom.equalTo(view)
-			make.left.equalTo(view)
-		}
+        
+        noConvoSelectedView.snp.makeConstraints { make in
+            if let navigationController: UINavigationController = navigationController {
+                make.top.equalTo(view).offset(navigationController.navigationBar.frame.height)
+            }
+            
+            make.right.equalTo(view)
+            make.bottom.equalTo(view)
+            make.left.equalTo(view)
+        }
         
         tableView!.register(UINib.init(nibName: incomingCellIdentifier, bundle: nil), forCellReuseIdentifier: incomingCellIdentifier)
         tableView!.register(UINib.init(nibName: outgoingCellIdentifier, bundle: nil), forCellReuseIdentifier: outgoingCellIdentifier)
@@ -87,10 +89,10 @@ class MessagesTableViewController: SLKTextViewController {
         textInputbar.layoutMargins = UIEdgeInsets.zero
         textInputbar.autoHideRightButton = true
         textInputbar.tintColor = UIColor.brickColor()
-		
-		titleButton.tintColor = UIColor.brickColor()
-		titleButton.setTitle("\(conversation.member!.nickname)", for: UIControlState.normal)
-		
+        
+        titleButton.tintColor = UIColor.brickColor()
+        titleButton.setTitle("\(conversation.member!.nickname)", for: UIControlState.normal)
+        
         textView.placeholder = "What say you?"
         textView.placeholderColor = UIColor.lightText
         textView.backgroundColor = UIColor.backgroundColor()
@@ -98,12 +100,12 @@ class MessagesTableViewController: SLKTextViewController {
         textView.layer.borderWidth = 0.0
         textView.layer.cornerRadius = 2.0
         textView.isDynamicTypeEnabled = true
-		textView.keyboardType = .default
-		textView.keyboardAppearance = .dark
-		textView.returnKeyType = .default
-		
+        textView.keyboardType = .default
+        textView.keyboardAppearance = .dark
+        textView.returnKeyType = .default
+        
         if let conversation = conversation {
-			notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
+            notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
                 guard let tableView = self?.tableView else { return }
                 
                 switch changes {
@@ -116,7 +118,7 @@ class MessagesTableViewController: SLKTextViewController {
                     let newMessageIds = messages.filter("isNew == true").map { $0.id }
                     
                     if !newMessageIds.isEmpty {
-						API.sharedInstance.markMessagesAsRead(conversation.id, messageIds: Array(newMessageIds), completion: nil)
+                        API.sharedInstance.markMessagesAsRead(conversation.id, messageIds: Array(newMessageIds), completion: nil)
                     }
                     
                     tableView.beginUpdates()
@@ -132,36 +134,36 @@ class MessagesTableViewController: SLKTextViewController {
                 
                 tableView.reloadData()
                 self?.hideLoadingView()
-				self?.hideNoConvoSelectedView()
+                self?.hideNoConvoSelectedView()
             })
-			
-			// get a more detailed Member object from the API and replace when possible
-			API.sharedInstance.getFetUser(self.memberId, completion: { (userInfo, err) in
-				if err == nil && userInfo != nil {
-					do {
-						if let u = userInfo {
-							try self.conversation.member?.updateMemberInfo(u)
-						}
-					} catch let e {
-						print("Error updating info: \(e.localizedDescription)")
-					}
-				}
-			})
-		} else {
-			print("No conversation")
-		}
-		if !updateTimer.isValid { createTimer() }
-		
+            
+            // get a more detailed Member object from the API and replace when possible
+            API.sharedInstance.getFetUser(self.memberId, completion: { (userInfo, err) in
+                if err == nil && userInfo != nil {
+                    do {
+                        if let u = userInfo {
+                            try self.conversation.member?.updateMemberInfo(u)
+                        }
+                    } catch let e {
+                        print("Error updating info: \(e.localizedDescription)")
+                    }
+                }
+            })
+        } else {
+            print("No conversation")
+        }
+        if !updateTimer.isValid { createTimer() }
+        
     }
     
     deinit {
-		notificationToken?.invalidate()
-		updateTimer.invalidate()
+        notificationToken?.invalidate()
+        updateTimer.invalidate()
     }
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		updateTimer.invalidate()
-	}
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        updateTimer.invalidate()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -171,13 +173,13 @@ class MessagesTableViewController: SLKTextViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-	
-	// creates timer to check for new messages every 10 seconds ± 5 seconds
-	func createTimer() {
-		// FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
-		updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchMessages), userInfo: nil, repeats: true)
-		updateTimer.tolerance = 5
-	}
+    
+    // creates timer to check for new messages every 10 seconds ± 5 seconds
+    func createTimer() {
+        // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
+        updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchMessages), userInfo: nil, repeats: true)
+        updateTimer.tolerance = 5
+    }
     
     // MARK: - Actions
     
@@ -228,14 +230,14 @@ class MessagesTableViewController: SLKTextViewController {
         let cellIdent = (message.memberId != conversation.member!.id) ? self.outgoingCellIdentifier : self.incomingCellIdentifier
         
         // Get a cell, and coerce into a base class.
-		let cell: BaseMessagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as! BaseMessagesTableViewCell
+        let cell: BaseMessagesTableViewCell = tableView.dequeueReusableCell(withIdentifier: cellIdent, for: indexPath) as! BaseMessagesTableViewCell
         
         // SlackTextViewController inverts tables in order to get the layout to work. This means that our table cells needs to
         // apply the same inversion or be upside down.
         cell.transform = self.tableView!.transform // 😬
         
         cell.message = message
-		
+        
         // Remove margins from the table cell.
         if cell.responds(to: #selector(setter: UIView.preservesSuperviewLayoutMargins)) {
             cell.layoutMargins = UIEdgeInsets.zero
@@ -244,7 +246,7 @@ class MessagesTableViewController: SLKTextViewController {
         
         // Force autolayout to apply for the cell before rendering it.
         cell.layoutIfNeeded()
-		cell.awakeFromNib()
+        cell.awakeFromNib()
         
         return cell
     }
@@ -259,11 +261,11 @@ class MessagesTableViewController: SLKTextViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50.0
     }
-
+    
     // MARK: - Methods
     
     func fetchMessages() {
-		print("Checking for new messages in Messages View...")
+        print("Checking for new messages in Messages View...")
         if let conversation = conversation, let messages = messages {
             let conversationId = conversation.id
             if let lastMessage = messages.first {
@@ -274,9 +276,9 @@ class MessagesTableViewController: SLKTextViewController {
                 
                 Dispatch.asyncOnUserInitiatedQueue() {
                     API.sharedInstance.loadMessages(conversationId, parameters: parameters) { error in
-						if let e = error {
-							print(e)
-						}
+                        if let e = error {
+                            print(e)
+                        }
                         self.hideLoadingView()
                     }
                 }
@@ -287,55 +289,52 @@ class MessagesTableViewController: SLKTextViewController {
                     }
                 }
             }
-		} else {
-			self.hideLoadingView()
-		}
+        } else {
+            self.hideLoadingView()
+        }
     }
     
     func showLoadingView() {
         UIView.animate(withDuration: 0.3,
-            animations: { () -> Void in
-                self.loadingView.alpha = 1
-            },
-            completion: { finished  in
-                self.loadingView.isHidden = false
-            }
-        )
+                       animations: { () -> Void in
+                        self.loadingView.alpha = 1
+        },
+                       completion: { finished  in
+                        self.loadingView.isHidden = false
+        })
     }
     
     func hideLoadingView() {
         UIView.animate(withDuration: 0.3,
-            animations: { () -> Void in
-                self.loadingView.alpha = 0
-            },
-            completion: { finished in
-                self.loadingView.isHidden = true
-            }
-		)
-	}
-	
-	func hideNoConvoSelectedView() {
-		UIView.animate(withDuration: 0.3,
-			animations: { () -> Void in
-				self.noConvoSelectedView.alpha = 0
-			},
-			completion: { finished in
-				self.noConvoSelectedView.isHidden = true
-			}
-		)
-	}
-	
-	// MARK: - Navigation
-	
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "ViewFriendProfileSegue" || segue.identifier == "ViewFriendProfileSegueTitle" {
-			let fpvc: FriendProfileViewController = segue.destination as! FriendProfileViewController
-			fpvc.friend = self.member
-		}
-	}
-	
-	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-		return .none
-	}
-	
+                       animations: { () -> Void in
+                        self.loadingView.alpha = 0
+        },
+                       completion: { finished in
+                        self.loadingView.isHidden = true
+        })
+    }
+    
+    func hideNoConvoSelectedView() {
+        UIView.animate(withDuration: 0.3,
+                       animations: { () -> Void in
+                        self.noConvoSelectedView.alpha = 0
+        },
+                       completion: { finished in
+                        self.noConvoSelectedView.isHidden = true
+        })
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ViewFriendProfileSegue" || segue.identifier == "ViewFriendProfileSegueTitle" {
+            let fpvc: FriendProfileViewController = segue.destination as! FriendProfileViewController
+            fpvc.friend = self.member
+        }
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
 }

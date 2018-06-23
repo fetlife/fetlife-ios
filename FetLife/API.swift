@@ -18,7 +18,7 @@ import RealmSwift
 
 final class API {
     
-    // Make this is a singleton, accessed through sharedInstance
+    // Make this a singleton, accessed through sharedInstance
     static let sharedInstance = API()
     
     let baseURL: String
@@ -26,7 +26,7 @@ final class API {
     
     private var memberId: String?
     private var memberNickname: String?
-	var currentMember: Member?
+    var currentMember: Member?
     
     class func isAuthorized() -> Bool {
         return sharedInstance.isAuthorized()
@@ -94,9 +94,9 @@ final class API {
     func isAuthorized() -> Bool {
         return oauthSession.hasUnexpiredAccessToken()
     }
-	
-	// MARK: - Conversation API
-	
+    
+    // MARK: - Conversation API
+    
     /// Loads all the conversations for the current user.
     ///
     /// - Parameter completion: Optional completion with error
@@ -165,34 +165,34 @@ final class API {
             }
         }
     }
-	
-	func unarchiveConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
-		let parameters = ["is_archived": false]
-		let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
-		
-		oauthSession.request(.put, url, parameters: parameters).responseData { response -> Void in
-			switch response.result {
-			case .success(let value):
-				do {
-					let json = try JSON(data: value)
-					
-					let conversation = try Conversation.init(json: json)
-					
-					let realm = try Realm()
-					realm.refresh() // make sure Realm instance is the most recent version
-					try realm.write {
-						realm.add(conversation, update: true)
-					}
-					
-					completion?(nil)
-				} catch(let error) {
-					completion?(error)
-				}
-			case .failure(let error):
-				completion?(error)
-			}
-		}
-	}
+    
+    func unarchiveConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
+        let parameters = ["is_archived": false]
+        let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
+        
+        oauthSession.request(.put, url, parameters: parameters).responseData { response -> Void in
+            switch response.result {
+            case .success(let value):
+                do {
+                    let json = try JSON(data: value)
+                    
+                    let conversation = try Conversation.init(json: json)
+                    
+                    let realm = try Realm()
+                    realm.refresh() // make sure Realm instance is the most recent version
+                    try realm.write {
+                        realm.add(conversation, update: true)
+                    }
+                    
+                    completion?(nil)
+                } catch(let error) {
+                    completion?(error)
+                }
+            case .failure(let error):
+                completion?(error)
+            }
+        }
+    }
     
     /// Gets the messages in a conversation.
     ///
@@ -299,53 +299,53 @@ final class API {
                 try! realm.write {
                     conversation?.hasNewMessages = false
                 }
-				completion?(nil)
+                completion?(nil)
             case .failure(let error):
                 print(error)
-				completion?(error)
+                completion?(error)
             }
         }
     }
-
-     /// Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
+    
+    /// Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
     func logout() {
         oauthSession.forgetTokens();
         let storage = HTTPCookieStorage.shared
         storage.cookies?.forEach() { storage.deleteCookie($0) }
-		let realm: Realm = try! Realm()
-		try! realm.write {
-			realm.deleteAll()
-		}
+        let realm: Realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
     }
-	
-	// MARK: - Profile API
-	
-	/// Gets the profile of the specified user.
-	///
-	/// - Important: Do not use this to get the profile of the currently logged-in user. Instead, use getMe(_:).
-	/// - Parameters:
-	///   - userID: ID of the user whose profile you wish to retrieve
-	///   - completion: Optional completion handler taking `JSON?` and `Error?` parameters
-	func getFetUser(_ userID: String, completion: ((_ userInfo: JSON?, _ error: Error?) -> Void)?) {
-		let url = "\(baseURL)/v2/members/\(userID)"
-		
-		oauthSession.request(.get, url, parameters: nil).responseData { response -> Void in
-			switch response.result {
-			case .success(let value):
-				do {
-					let json: JSON = try JSON(data: value)
-					completion?(json, nil)
-				} catch(let error) {
-					print("Error reading JSON data")
-					completion?(nil, error)
-				}
-			case .failure(let error):
-				print("Error: \(error.localizedDescription)")
-				completion?(nil, error)
-			}
-		}
-	}
-	
+    
+    // MARK: - Profile API
+    
+    /// Gets the profile of the specified user.
+    ///
+    /// - Important: Do not use this to get the profile of the currently logged-in user. Instead, use getMe(_:).
+    /// - Parameters:
+    ///   - userID: ID of the user whose profile you wish to retrieve
+    ///   - completion: Optional completion handler taking `JSON?` and `Error?` parameters
+    func getFetUser(_ userID: String, completion: ((_ userInfo: JSON?, _ error: Error?) -> Void)?) {
+        let url = "\(baseURL)/v2/members/\(userID)"
+        
+        oauthSession.request(.get, url, parameters: nil).responseData { response -> Void in
+            switch response.result {
+            case .success(let value):
+                do {
+                    let json: JSON = try JSON(data: value)
+                    completion?(json, nil)
+                } catch(let error) {
+                    print("Error reading JSON data")
+                    completion?(nil, error)
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                completion?(nil, error)
+            }
+        }
+    }
+    
     // Extremely useful for making app store screenshots, keeping this around for now.
     func fakeConversations() -> JSON {
         return JSON.array([
