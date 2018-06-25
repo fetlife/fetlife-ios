@@ -12,10 +12,10 @@ typealias ExecutionBlock = () -> Void
 
 
 struct Dispatch {
-	static func delay(_ delay: Double, closure: @escaping ExecutionBlock) {
-		Queue.main.asyncAfter(
-			deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
-	}
+    static func delay(_ delay: Double, closure: @escaping ExecutionBlock) {
+        Queue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
+    }
     static func asyncOnMainQueue(asyncBlock: @escaping ExecutionBlock) {
         executeAsynchronously(Queue.main, closure: asyncBlock)
     }
