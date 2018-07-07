@@ -142,17 +142,6 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "FriendManagementSegue" {
-            let favc: FriendActionsViewController = segue.destination as! FriendActionsViewController
-            let controller = favc.popoverPresentationController
-            favc.friend = friend
-            if (controller != nil) {
-                controller?.delegate = self
-            }
-        }
-    }
-    
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
