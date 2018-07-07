@@ -167,6 +167,7 @@ class MessagesTableViewController: SLKTextViewController {
                     }
                 })
                 attempts = 0
+                print("Successfully registered for updates")
             } else {
                 print("No conversation")
             }
@@ -345,9 +346,10 @@ class MessagesTableViewController: SLKTextViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ViewFriendProfileSegue" || segue.identifier == "ViewFriendProfileSegueTitle" {
+        if segue.identifier == "ViewFriendProfileSegueTitle" {
             let fpvc: FriendProfileViewController = segue.destination as! FriendProfileViewController
             fpvc.friend = self.member
+            fpvc.messagesViewController = self
         }
     }
     

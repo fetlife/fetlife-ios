@@ -27,9 +27,10 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
     @IBOutlet var mainStackHeightConstraint: NSLayoutConstraint!
     
     var friend: Member!
+    var messagesViewController: MessagesTableViewController!
     var avatarImageFilter: AspectScaledToFillSizeWithRoundedCornersFilter?
     
-    var stillLoadingTimer: Timer!
+    var stillLoadingTimer: Timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
             loadInfo(true)
         } else {
             loadInfo(false)
-            stillLoadingTimer = Timer(timeInterval: 0.5, target: self, selector: #selector(checkIfLoaded), userInfo: nil, repeats: true)
+            stillLoadingTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkIfLoaded), userInfo: nil, repeats: true)
         }
         
         avatarImageFilter = AspectScaledToFillSizeWithRoundedCornersFilter(size: profilePicture.frame.size, radius: 3.0)
@@ -70,10 +71,13 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
     }
     
     func checkIfLoaded() {
+        print("checking for info")
+        friend = messagesViewController.member
         if friend.genderName != "" && friend.orientation != "" {
+            print("Info loaded!")
             loadInfo(true)
             stillLoadingTimer.invalidate()
-        }
+        } else { print("info not yet loaded") }
     }
     
     func loadInfo(_ loaded: Bool) {
@@ -90,6 +94,9 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         supporterIcon.isHidden = loaded ? !friend.isSupporter : true
         if aboutMeText.text == "" {
             aboutMeText.text = "Nothing to see here..."
+            aboutMeText.textAlignment = .center
+            aboutMeText.textColor = UIColor.darkGray
+        } else if !loaded {
             aboutMeText.textAlignment = .center
             aboutMeText.textColor = UIColor.darkGray
         } else {
