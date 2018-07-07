@@ -66,7 +66,6 @@
 		82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
 		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
 		C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9968A0820B8CD9800653283 /* MessageTextView.swift */; };
-		C9968A0A20B9466900653283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82B55AC61C60FB060035D45E /* Assets.xcassets */; };
 		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
 		C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */; };
 		C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */; };
@@ -110,7 +109,6 @@
 		82B355C91CC52AC800CBDAB3 /* FetLifeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetLifeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82B55ABD1C60FB060035D45E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82B55AC41C60FB060035D45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		82B55AC61C60FB060035D45E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		82B55AC91C60FB060035D45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82B55ACB1C60FB060035D45E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82B55AD41C60FB060035D45E /* FetChatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = FetChatTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -124,9 +122,11 @@
 		82F6D1041C8DF067002DF881 /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Dispatch.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		907CB49BDF4A4BD580D53BDB /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
 		C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
+		C9968A0720B74FB200653283 /* FetLife.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FetLife.entitlements; sourceTree = "<group>"; };
 		C9968A0820B8CD9800653283 /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
 		C9968A0B20B9505B00653283 /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FriendProfileViewController.swift; path = FetLife/ViewControllers/FriendProfileViewController.swift; sourceTree = SOURCE_ROOT; };
+		C9C2BD5420F036B200A4C454 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -271,7 +271,7 @@
 				8256F35D1C63A619004253FE /* ViewControllers */,
 				827439361C6E575A0086D13D /* Views */,
 				82329A961C65436600DADA23 /* Storyboards */,
-				82B55AC61C60FB060035D45E /* Assets.xcassets */,
+				C9C2BD5420F036B200A4C454 /* Assets.xcassets */,
 				82B55ACB1C60FB060035D45E /* Info.plist */,
 				82016BA21C722A6600E05F10 /* Podfile */,
 				829412C71C6BABBA006E6DCB /* FetLife-Swift-Bridging-Header.h */,
@@ -364,6 +364,16 @@
 				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "BitLove Inc.";
+				TargetAttributes = {
+					828D66281CC1DD3200A6F1D2 = {
+						DevelopmentTeam = 3LXY9JQHFA;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
 			};
 			buildConfigurationList = 82B55AB51C60FB060035D45E /* Build configuration list for PBXProject "FetLife" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -426,9 +436,22 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FetLife/Pods-FetLife-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
+				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
+				"${BUILT_PRODUCTS_DIR}/Freddy/Freddy.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWTDecode.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -444,6 +467,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FetLife-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -489,7 +513,6 @@
 				C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */,
 				828D66381CC1DD3200A6F1D2 /* Models.swift in Sources */,
 				828D66391CC1DD3200A6F1D2 /* BaseMessagesTableViewCell.swift in Sources */,
-				C9B27E7F20BF39250005C837 /* FriendActionsViewController.swift in Sources */,
 				828D663A1CC1DD3200A6F1D2 /* MessagesTableViewCellIOutgoing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,6 +602,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = FetLife/Info.plist;
@@ -602,6 +626,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = FetLife/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -620,6 +645,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -638,6 +664,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -654,6 +681,7 @@
 		82B355C71CC52AC800CBDAB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = FetLifeUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -667,6 +695,7 @@
 		82B355C81CC52AC800CBDAB3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				INFOPLIST_FILE = FetLifeUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.FetLifeUITests;

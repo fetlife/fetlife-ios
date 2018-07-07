@@ -88,6 +88,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 print("Error updating table")
                 break
             }
+            self?.getUnreadCount()
         })
         
         if conversations.isEmpty {
@@ -128,7 +129,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             let conversation = conversations[indexPath.row]
             let controller: MessagesTableViewController = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
             controller.conversation = conversation
-            controller.navigationItem.title = "\(conversation.member!.nickname)"
+            controller.navigationItem.title = "\(conversation.member!.nickname) ‣"
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             controller.navigationItem.leftItemsSupplementBackButton = true
         }
@@ -147,10 +148,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
                 } else {
-                    let unreadConversationCount: Int = self.conversations.filter({ (c: Conversation) -> Bool in
-                        return c.hasNewMessages
-                    }).count
-                    UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+                    self.getUnreadCount()
                 }
             }
         }
@@ -172,13 +170,31 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
                 } else {
-                    let unreadConversationCount: Int = self.allConversations.filter({ (c: Conversation) -> Bool in
-                        return c.hasNewMessages
-                    }).count
-                    UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+                    self.getUnreadCount()
                 }
             }
         }
+    }
+    
+    func getUnreadCount() {
+        let unreadConversationCount: Int = self.conversations.filter({ (c: Conversation) -> Bool in
+            return c.hasNewMessages
+        }).count
+        UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+        if unreadConversationCount > 0 {
+            inboxSelector.setTitle("Inbox (\(unreadConversationCount))", forSegmentAt: 0)
+        } else {
+            inboxSelector.setTitle("Inbox", forSegmentAt: 0)
+        }
+        let unreadArchiveCount: Int = self.allConversations.filter({ (c: Conversation) -> Bool in
+            return c.hasNewMessages
+        }).count
+        if unreadArchiveCount > 0 {
+            inboxSelector.setTitle("Archived (\(unreadArchiveCount))", forSegmentAt: 1)
+        } else {
+            inboxSelector.setTitle("Archived", forSegmentAt: 1)
+        }
+        inboxSelector.layoutIfNeeded()
     }
     
     func setupStateViews() {
@@ -281,7 +297,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         action.backgroundColor = UIColor.brickColor()
         return [action]
     }
-    
+
     @available(iOS 11.0, *)
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let conversationToChange: Conversation = self.conversations[indexPath.row]
@@ -305,7 +321,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-    
     
     // MARK: - SplitViewController Delegate
     
