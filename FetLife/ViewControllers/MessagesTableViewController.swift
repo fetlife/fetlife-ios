@@ -32,7 +32,6 @@ class MessagesTableViewController: SLKTextViewController {
         
         return lv
     }()
-    
     lazy var noConvoSelectedView: NoConversationsView = {
         let ncsv: NoConversationsView = NoConversationsView(frame: self.view.frame)
         if self.messages != nil && (!self.messages.isEmpty || self.conversation.member != nil) {
@@ -53,6 +52,7 @@ class MessagesTableViewController: SLKTextViewController {
     var notificationToken: NotificationToken? = nil
     var memberId: String!
     var member: Member!
+    fileprivate var attempts: Int = 0
     
     // MARK: - Lifecycle
     
@@ -84,6 +84,7 @@ class MessagesTableViewController: SLKTextViewController {
         
         tableView!.register(UINib.init(nibName: incomingCellIdentifier, bundle: nil), forCellReuseIdentifier: incomingCellIdentifier)
         tableView!.register(UINib.init(nibName: outgoingCellIdentifier, bundle: nil), forCellReuseIdentifier: outgoingCellIdentifier)
+        tableView!.delegate = self
         
         textInputbar.backgroundColor = UIColor.backgroundColor()
         textInputbar.layoutMargins = UIEdgeInsets.zero
@@ -91,7 +92,7 @@ class MessagesTableViewController: SLKTextViewController {
         textInputbar.tintColor = UIColor.brickColor()
         
         titleButton.tintColor = UIColor.brickColor()
-        titleButton.setTitle("\(conversation.member!.nickname)", for: UIControlState.normal)
+        titleButton.setTitle("\(conversation.member!.nickname) ‣", for: UIControlState.normal)
         
         textView.placeholder = "What say you?"
         textView.placeholderColor = UIColor.lightText
@@ -104,56 +105,73 @@ class MessagesTableViewController: SLKTextViewController {
         textView.keyboardAppearance = .dark
         textView.returnKeyType = .default
         
-        if let conversation = conversation {
-            notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
-                guard let tableView = self?.tableView else { return }
-                
-                switch changes {
-                case .initial(let messages):
-                    if messages.count > 0 {
-                        tableView.reloadData()
-                    }
-                    break
-                case .update(let messages, let deletions, let insertions, let modifications):
-                    let newMessageIds = messages.filter("isNew == true").map { $0.id }
-                    
-                    if !newMessageIds.isEmpty {
-                        API.sharedInstance.markMessagesAsRead(conversation.id, messageIds: Array(newMessageIds), completion: nil)
-                    }
-                    
-                    tableView.beginUpdates()
-                    tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .bottom)
-                    tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
-                    tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
-                    tableView.endUpdates()
-                    
-                    break
-                case .error:
-                    break
-                }
-                
-                tableView.reloadData()
-                self?.hideLoadingView()
-                self?.hideNoConvoSelectedView()
-            })
-            
-            // get a more detailed Member object from the API and replace when possible
-            API.sharedInstance.getFetUser(self.memberId, completion: { (userInfo, err) in
-                if err == nil && userInfo != nil {
-                    do {
-                        if let u = userInfo {
-                            try self.conversation.member?.updateMemberInfo(u)
-                        }
-                    } catch let e {
-                        print("Error updating info: \(e.localizedDescription)")
-                    }
-                }
-            })
-        } else {
-            print("No conversation")
-        }
-        if !updateTimer.isValid { createTimer() }
+        registerUpdateNotifications()
         
+        if !updateTimer.isValid { createTimer() }
+    }
+    
+    func registerUpdateNotifications() {
+        let realm = try! Realm()
+        if realm.isInWriteTransaction { // we can't add a change notification while in a write transaction, so we have to wait...
+            if attempts <= 10 {
+                attempts += 1
+                print("Unable to register for updates. Will try again in \(attempts)s...")
+                Dispatch.delay(Double(attempts), closure: registerUpdateNotifications)
+            } else {
+                print("Notification registration failed too many times! Unable to register change notifications")
+            }
+        } else {
+            if let conversation = conversation {
+                notificationToken = messages.observe({ [weak self] (changes: RealmCollectionChange) in
+                    guard let tableView = self?.tableView else { return }
+                    
+                    switch changes {
+                    case .initial(let messages):
+                        if messages.count > 0 {
+                            tableView.reloadData()
+                        }
+                        break
+                    case .update(let messages, let deletions, let insertions, let modifications):
+                        let newMessageIds = messages.filter("isNew == true").map { $0.id }
+                        
+                        if !newMessageIds.isEmpty {
+                            API.sharedInstance.markMessagesAsRead(conversation.id, messageIds: Array(newMessageIds), completion: nil)
+                        }
+                        
+                        tableView.beginUpdates()
+                        tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .bottom)
+                        tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                        tableView.endUpdates()
+                        
+                        break
+                    case .error:
+                        break
+                    }
+                    
+                    tableView.reloadData()
+                    self?.hideLoadingView()
+                    self?.hideNoConvoSelectedView()
+                })
+                
+                // get a more detailed Member object from the API and replace when possible
+                API.sharedInstance.getFetUser(self.memberId, completion: { (userInfo, err) in
+                    if err == nil && userInfo != nil {
+                        do {
+                            if let u = userInfo {
+                                try self.conversation.member?.updateMemberInfo(u)
+                            }
+                        } catch let e {
+                            print("Error updating info: \(e.localizedDescription)")
+                        }
+                    }
+                })
+                attempts = 0
+                print("Successfully registered for updates")
+            } else {
+                print("No conversation")
+            }
+        }
     }
     
     deinit {
@@ -174,7 +192,7 @@ class MessagesTableViewController: SLKTextViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // creates timer to check for new messages every 10 seconds ± 5 seconds
+    /// Creates timer to check for new messages every 10 seconds ± 5 seconds
     func createTimer() {
         // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
         updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchMessages), userInfo: nil, repeats: true)
@@ -289,6 +307,7 @@ class MessagesTableViewController: SLKTextViewController {
                     }
                 }
             }
+            self.tableView!.awakeFromNib()
         } else {
             self.hideLoadingView()
         }
@@ -327,9 +346,10 @@ class MessagesTableViewController: SLKTextViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ViewFriendProfileSegue" || segue.identifier == "ViewFriendProfileSegueTitle" {
+        if segue.identifier == "ViewFriendProfileSegueTitle" {
             let fpvc: FriendProfileViewController = segue.destination as! FriendProfileViewController
             fpvc.friend = self.member
+            fpvc.messagesViewController = self
         }
     }
     

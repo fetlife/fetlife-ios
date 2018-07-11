@@ -13,6 +13,7 @@ import Freddy
 import p2_OAuth2
 import JWTDecode
 import RealmSwift
+import Realm
 
 // MARK: - API Singleton
 
@@ -97,37 +98,51 @@ final class API {
     
     // MARK: - Conversation API
     
+    fileprivate var conversationLoadAttempts: Int = 0
+    
     /// Loads all the conversations for the current user.
     ///
     /// - Parameter completion: Optional completion with error
     func loadConversations(_ completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["limit": 100, "order": "-updated_at", "with_archived": true] as [String : Any]
         let url = "\(baseURL)/v2/me/conversations"
-        
+        conversationLoadAttempts += 1
         oauthSession.request(.get, url, parameters: parameters).responseData { response -> Void in
             switch response.result {
             case .success(let value):
                 do {
                     let json = try JSON(data: value).getArray()
                     if json.isEmpty {
+                        self.conversationLoadAttempts = 0
                         completion?(nil)
                         return
                     }
                     
                     let realm = try! Realm()
-					realm.refresh() // make sure Realm instance is the most recent version
-					realm.beginWrite()
-                    for c in json {
-                        let conversation = try! Conversation.init(json: c)
-                        realm.add(conversation, update: true)
+                    if !realm.isInWriteTransaction {
+                        realm.beginWrite()
+                        for c in json {
+                            let conversation = try! Conversation.init(json: c)
+                            realm.add(conversation, update: true)
+                        }
+                        try realm.commitWrite()
+                        self.conversationLoadAttempts = 0
+                        completion?(nil)
+                    } else if self.conversationLoadAttempts <= 10 {
+                        print("Realm in write transaction! Will retry in \(self.conversationLoadAttempts)s...")
+                        Dispatch.delay(Double(self.conversationLoadAttempts), closure: {
+                            self.loadConversations(completion)
+                        })
+                    } else {
+                        print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        completion?(RLMError.fail as? Error)
                     }
-                    
-                    try! realm.commitWrite()
-                    completion?(nil)
                 } catch(let error) {
+                    self.conversationLoadAttempts = 0
                     completion?(error)
                 }
             case .failure(let error):
+                self.conversationLoadAttempts = 0
                 completion?(error)
             }
         }
@@ -194,6 +209,8 @@ final class API {
         }
     }
     
+    fileprivate var messagesLoadAttempts: Int = 0
+    
     /// Gets the messages in a conversation.
     ///
     /// - Parameters:
@@ -207,7 +224,7 @@ final class API {
         for (k, v) in extraParameters {
             parameters.updateValue(v, forKey: k)
         }
-        
+        messagesLoadAttempts += 1
         oauthSession.request(.get, url, parameters: parameters).responseData { response in
             switch response.result {
             case .success(let value):
@@ -215,27 +232,38 @@ final class API {
                     let json = try JSON(data: value).getArray()
                     
                     if json.isEmpty {
+                        self.messagesLoadAttempts = 0
                         completion?(nil)
                         return
                     }
                     
                     let realm = try! Realm()
-                    realm.refresh() // make sure Realm instance is the most recent version
-                    realm.beginWrite()
-                    
-                    for m in json {
-                        let message = try Message.init(json: m)
-                        message.conversationId = conversationId
-                        realm.add(message, update: true)
+                    if !realm.isInWriteTransaction {
+                        realm.beginWrite()
+                        
+                        for m in json {
+                            let message = try Message.init(json: m)
+                            message.conversationId = conversationId
+                            realm.add(message, update: true)
+                        }
+                        try realm.commitWrite()
+                        self.messagesLoadAttempts = 0
+                        completion?(nil)
+                    } else if self.messagesLoadAttempts <= 10 {
+                        print("Realm in write transaction! Will retry in \(self.messagesLoadAttempts)s...")
+                        Dispatch.delay(Double(self.messagesLoadAttempts), closure: {
+                            self.loadMessages(conversationId, parameters: parameters, completion: completion)
+                        })
+                    } else {
+                        print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        completion?(RLMError.fail as? Error)
                     }
-                    
-                    try! realm.commitWrite()
-                    
-                    completion?(nil)
                 } catch(let error) {
+                    self.messagesLoadAttempts = 0
                     completion?(error)
                 }
             case .failure(let error):
+                self.messagesLoadAttempts = 0
                 completion?(error)
             }
         }

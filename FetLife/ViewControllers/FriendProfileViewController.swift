@@ -14,12 +14,23 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
     
     @IBOutlet var profilePicture: UIImageView!
     @IBOutlet var nick: UILabel!
+    @IBOutlet var supporterIcon: UIImageView!
     @IBOutlet var metaInfo: UILabel!
     @IBOutlet var aboutMeText: UITextView!
     @IBOutlet var imageLoadProgress: UIProgressView!
+    @IBOutlet var essentialsInfoStack: UIStackView!
+    @IBOutlet var showHideEssentials: UIButton!
+    @IBOutlet var showHideAboutMe: UIButton!
+    @IBOutlet var genderText: UILabel!
+    @IBOutlet var orientationText: UILabel!
+    @IBOutlet var locationText: UILabel!
+    @IBOutlet var mainStackHeightConstraint: NSLayoutConstraint!
     
     var friend: Member!
+    var messagesViewController: MessagesTableViewController!
     var avatarImageFilter: AspectScaledToFillSizeWithRoundedCornersFilter?
+    
+    var stillLoadingTimer: Timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +41,12 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         self.title = friend.nickname
         nick.text = friend.nickname
         metaInfo.text = friend.metaLine
-        aboutMeText.text = friend.aboutMe
         
-        if aboutMeText.text == "" {
-            aboutMeText.text = "Nothing to see here 😶"
+        if friend.genderName != "" && friend.orientation != "" { // if gender and orientation are blank, it means the info isn't loaded yet
+            loadInfo(true)
+        } else {
+            loadInfo(false)
+            stillLoadingTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(checkIfLoaded), userInfo: nil, repeats: true)
         }
         
         avatarImageFilter = AspectScaledToFillSizeWithRoundedCornersFilter(size: profilePicture.frame.size, radius: 3.0)
@@ -53,14 +66,49 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         } else {
             profilePicture.image = UIImage(data: friend.avatarImageData!)
         }
+        supporterIcon.tintColor = UIColor.darkGray
         
+    }
+    
+    func checkIfLoaded() {
+        print("checking for info")
+        friend = messagesViewController.member
+        if friend.genderName != "" && friend.orientation != "" {
+            print("Info loaded!")
+            loadInfo(true)
+            stillLoadingTimer.invalidate()
+        } else { print("info not yet loaded") }
+    }
+    
+    func loadInfo(_ loaded: Bool) {
+        genderText.text = loaded ? friend.genderName : "Loading..."
+        orientationText.text = loaded ? friend.orientation  : "Loading..."
+        if friend.city != "" {
+            locationText.text = "\(friend.city), \(friend.country)"
+        } else if friend.state != "" {
+            locationText.text = "\(friend.state), \(friend.country)"
+        } else {
+            locationText.text = loaded ? friend.country : "Loading..."
+        }
+        aboutMeText.text = loaded ? friend.aboutMe : "Loading..."
+        supporterIcon.isHidden = loaded ? !friend.isSupporter : true
+        if aboutMeText.text == "" {
+            aboutMeText.text = "Nothing to see here..."
+            aboutMeText.textAlignment = .center
+            aboutMeText.textColor = UIColor.darkGray
+        } else if !loaded {
+            aboutMeText.textAlignment = .center
+            aboutMeText.textColor = UIColor.darkGray
+        } else {
+            aboutMeText.textAlignment = .natural
+            aboutMeText.textColor = UIColor.lightText
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     // MARK: - Navigation
     
@@ -71,13 +119,32 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         self.present(navCon, animated: true, completion: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "FriendManagementSegue" {
-            let favc: FriendActionsViewController = segue.destination as! FriendActionsViewController
-            let controller = favc.popoverPresentationController
-            favc.friend = friend
-            if (controller != nil) {
-                controller?.delegate = self
+    @IBAction func showHideEssentialsTapped(_ sender: UIButton) {
+        if essentialsInfoStack.isHidden {
+            UIView.animate(withDuration: 0.2) {
+                self.essentialsInfoStack.isHidden = false
+                self.showHideEssentials.setTitle("tap to hide", for: .normal)
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.essentialsInfoStack.isHidden = true
+                self.showHideEssentials.setTitle("tap to show", for: .normal)
+            }
+        }
+    }
+    
+    @IBAction func showHideAboutMeTapped(_ sender: UIButton) {
+        if aboutMeText.isHidden {
+            UIView.animate(withDuration: 0.2) {
+                self.aboutMeText.isHidden = false
+                self.showHideAboutMe.setTitle("tap to hide", for: .normal)
+                self.mainStackHeightConstraint.isActive = true
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.aboutMeText.isHidden = true
+                self.showHideAboutMe.setTitle("tap to show", for: .normal)
+                self.mainStackHeightConstraint.isActive = false
             }
         }
     }

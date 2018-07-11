@@ -44,7 +44,7 @@ class Member: Object, JSONDecodable {
             _lookingFor.append(objectsIn: newValue.map({ RealmString(value: [$0]) }))
         }
     }
-    let _lookingFor = List<RealmString>()
+    private let _lookingFor = List<RealmString>()
     
     override static func ignoredProperties() -> [String] {
         return ["lookingFor"]
@@ -92,7 +92,6 @@ class Member: Object, JSONDecodable {
     
     func updateMemberInfo(_ json: JSON) throws {
         let realm = try! Realm()
-        realm.refresh() // make sure Realm instance is the most recent version
         realm.beginWrite() // Realm write operation required because we're updating an existing Realm object
         nickname = (try? json.getString(at: "nickname")) ?? nickname
         metaLine = (try? json.getString(at: "meta_line")) ?? metaLine
@@ -216,8 +215,10 @@ private func dateStringToNSDate(_ jsonString: String!) -> Date? {
 // Decode html encoded strings. Not recommended to be used at runtime as this this is heavyweight,
 // the output should be precomputed and cached.
 private func decodeHTML(_ htmlEncodedString: String) -> String {
-    let encodedData = htmlEncodedString.data(using: String.Encoding.utf8)!
-    let attributedOptions : [String: AnyObject] = [
+    // replace newline character ("\n") with placeholder to preserve line breaks
+    let es = htmlEncodedString.replacingOccurrences(of: "\n", with: "\\n")
+    let encodedData = es.data(using: String.Encoding.utf8)!
+    let attributedOptions: [String: AnyObject] = [
         NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType as AnyObject,
         NSCharacterEncodingDocumentAttribute: NSNumber(value: String.Encoding.utf8.rawValue) as AnyObject
     ]
@@ -230,5 +231,5 @@ private func decodeHTML(_ htmlEncodedString: String) -> String {
         print(error)
     }
     
-    return attributedString!.string
+    return attributedString!.string.replacingOccurrences(of: "\\n", with: "\n") // replace placeholders with original linebreaks
 }

@@ -84,7 +84,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         Realm.Configuration.defaultConfiguration = config
         do {
-            let _ = try Realm() // Get a realm instance early on to force migrations and configuration.
+            let realm = try Realm() // Get a realm instance early on to force migrations and configuration.
+            realm.autorefresh = true
         } catch let e {
             print("Error initializing Realm instance! \(e.localizedDescription)")
             print("This application will now exit.")
