@@ -4,10 +4,11 @@ PODS:
     - Alamofire (~> 4.5)
   - AlamofireNetworkActivityIndicator (2.2.1):
     - Alamofire (~> 4.7)
-  - Crashlytics (3.10.2):
-    - Fabric (~> 1.7.7)
+  - Crashlytics (3.10.3):
+    - Fabric (~> 1.7.8)
   - DateTools (1.7.0)
-  - Fabric (1.7.7)
+  - DynamicBlurView (2.0.2)
+  - Fabric (1.7.8)
   - Freddy (3.0.3)
   - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
@@ -29,6 +30,7 @@ DEPENDENCIES:
   - AlamofireNetworkActivityIndicator (~> 2.1)
   - Crashlytics
   - DateTools (~> 1.7)
+  - DynamicBlurView
   - Fabric
   - Freddy (~> 3.0.0)
   - JSQMessagesViewController
@@ -46,6 +48,7 @@ SPEC REPOS:
     - AlamofireNetworkActivityIndicator
     - Crashlytics
     - DateTools
+    - DynamicBlurView
     - Fabric
     - Freddy
     - JSQMessagesViewController
@@ -62,9 +65,10 @@ SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   AlamofireImage: 3b35b586853abaf94ca1250f4e94cff3c21a4c0d
   AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
-  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
+  Crashlytics: 2aea305161a2122492698c75af27f2b98aa49a25
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
-  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
+  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
+  Fabric: fba4684a95df789565b0b27fc5b6e68f1755af32
   Freddy: 7c62db262a0d0e3b3e2b8b40f2c0cc51e122fbc4
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
@@ -76,6 +80,6 @@ SPEC CHECKSUMS:
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   StatefulViewController: 4803bf900d44de26074344998e10e041113b5931
 
-PODFILE CHECKSUM: 97f9fcbd8b254988a50a0fd1bc437909fe985c36
+PODFILE CHECKSUM: 4b6f74421f0c06e6f3a312226938b4a3eeadc892
 
 COCOAPODS: 1.5.2

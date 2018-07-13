@@ -10,9 +10,9 @@ import UIKit
 import RealmSwift
 import AlamofireImage
 
-class FriendProfileViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class FriendProfileViewController: UIViewController, UIPopoverPresentationControllerDelegate, UIGestureRecognizerDelegate {
     
-    @IBOutlet var profilePicture: UIImageView!
+    @IBOutlet var profilePicture: BlurImageView!
     @IBOutlet var nick: UILabel!
     @IBOutlet var supporterIcon: UIImageView!
     @IBOutlet var metaInfo: UILabel!
@@ -25,6 +25,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
     @IBOutlet var orientationText: UILabel!
     @IBOutlet var locationText: UILabel!
     @IBOutlet var mainStackHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var profilePicTapGesture: UITapGestureRecognizer!
     
     var friend: Member!
     var messagesViewController: MessagesTableViewController!
@@ -42,7 +43,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         nick.text = friend.nickname
         metaInfo.text = friend.metaLine
         
-        if friend.genderName != "" && friend.orientation != "" { // if gender and orientation are blank, it means the info isn't loaded yet
+        if friend.additionalInfoRetrieved {
             loadInfo(true)
         } else {
             loadInfo(false)
@@ -54,7 +55,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         profilePicture.layer.borderWidth = 1
         profilePicture.layer.borderColor = UIColor.backgroundColor().cgColor
         if friend.avatarImageData == nil {
-            profilePicture.af_setImage(withURL: URL(string: friend.avatarURL)!, placeholderImage: #imageLiteral(resourceName: "DefaultAvatar"), filter: avatarImageFilter, progress: { (progress) in
+            profilePicture.af_setImageWithBlur(withURL: URL(string: friend.avatarURL)!, placeholderImage: #imageLiteral(resourceName: "DefaultAvatar"), filter: avatarImageFilter, progress: { (progress) in
                 self.imageLoadProgress.setProgress(Float(progress.fractionCompleted), animated: true)
             }, progressQueue: .main, imageTransition: .noTransition, runImageTransitionIfCached: false) { (response) in
                 if response.error != nil {
@@ -65,15 +66,25 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
             }
         } else {
             profilePicture.image = UIImage(data: friend.avatarImageData!)
+            profilePicture.createBlurView()
         }
         supporterIcon.tintColor = UIColor.darkGray
-        
+        profilePicture.awakeFromNib()
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Don't recognize a single tap until a double-tap fails.
+        if gestureRecognizer == self.profilePicTapGesture &&
+            otherGestureRecognizer == self.profilePicture.doubleTapRecognizer {
+            return true
+        }
+        return false
     }
     
     func checkIfLoaded() {
         print("checking for info")
         friend = messagesViewController.member
-        if friend.genderName != "" && friend.orientation != "" {
+        if friend.additionalInfoRetrieved {
             print("Info loaded!")
             loadInfo(true)
             stillLoadingTimer.invalidate()

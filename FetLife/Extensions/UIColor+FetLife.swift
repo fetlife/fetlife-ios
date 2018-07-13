@@ -40,4 +40,8 @@ extension UIColor {
     public class func messageTextColor() -> UIColor {
         return UIColor(red:0.600, green:0.600, blue:0.600, alpha:1)
     }
+    
+    public class func supporterIconTintColor() -> UIColor {
+        return UIColor.darkGray
+    }
 }

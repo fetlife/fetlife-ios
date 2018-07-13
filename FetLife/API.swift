@@ -55,6 +55,20 @@ final class API {
             sharedInstance.oauthSession.authorizeEmbedded(from: context, callback: onAuthorize)
             return
         }
+        sharedInstance.getMe { (me, error) in
+            if me != nil && error == nil {
+                AppSettings.currentUserID = me!.id
+                self.sharedInstance.currentMember = me
+            } else if error != nil && me == nil {
+                print("Error getting current user: \(String(describing: error))")
+                AppSettings.currentUserID = ""
+                self.sharedInstance.currentMember = nil
+            } else {
+                print("Error getting current user")
+                AppSettings.currentUserID = ""
+                self.sharedInstance.currentMember = nil
+            }
+        }
     }
     
     fileprivate init() {
@@ -285,7 +299,6 @@ final class API {
                     let json = try JSON(data: value)
                     
                     let realm = try! Realm()
-                    realm.refresh() // make sure Realm instance is the most recent version
 					let conversation: Conversation? = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject)
                     let message = try Message(json: json)
                     
@@ -344,6 +357,7 @@ final class API {
         try! realm.write {
             realm.deleteAll()
         }
+        API.sharedInstance.currentMember = nil
     }
     
     // MARK: - Profile API
@@ -369,6 +383,42 @@ final class API {
                 }
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
+                completion?(nil, error)
+            }
+        }
+    }
+    
+    /// Gets the logged-in user's profile information.
+    ///
+    /// - Parameter completion: Optional completion with error
+    func getMe(_ completion: ((_ me: Member?, _ error: Error?) -> Void)?) {
+        let parameters = [:] as [String : Any]
+        let url = "\(baseURL)/v2/me"
+        
+        oauthSession.request(.get, url, parameters: parameters).responseData { response -> Void in
+            switch response.result {
+            case .success(let value):
+                do {
+                    let json = try JSON(data: value)
+                    if json == nil {
+                        completion?(nil, nil)
+                        return
+                    }
+                    
+                    let realm = try! Realm()
+                    realm.beginWrite()
+                    if let m = try? Member(json: json) {
+                        API.sharedInstance.currentMember = m
+                        completion?(m, nil)
+                    } else {
+                        completion?(nil, nil)
+                    }
+                    try! realm.commitWrite()
+                    
+                } catch(let error) {
+                    completion?(nil, error)
+                }
+            case .failure(let error):
                 completion?(nil, error)
             }
         }
