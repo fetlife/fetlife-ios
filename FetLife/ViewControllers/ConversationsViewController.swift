@@ -268,6 +268,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             cell.layoutMargins = UIEdgeInsets.zero
             cell.preservesSuperviewLayoutMargins = false
         }
+        cell.authorAvatarImage.awakeFromNib()
         return cell
     }
     

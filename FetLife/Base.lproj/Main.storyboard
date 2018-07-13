@@ -642,12 +642,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" editable="NO" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TRe-4J-yXR">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" editable="NO" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRe-4J-yXR">
                                 <rect key="frame" x="16" y="72" width="343" height="575"/>
                                 <string key="text">FetLife Staff:
 	• John Baku, CEO: @JohnBaku
 	• René Klačan, CTO: @GreenRabbit
-	• Others?
 GitHub:
 	• @jacortinas (https://github.com/jacortinas)
 	• @whitehat007 (https://github.com/whitehat007)
