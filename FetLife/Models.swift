@@ -52,6 +52,7 @@ class Member: Object, JSONDecodable {
             return true
         }
     }
+    var lastUpdated: Date = Date()
     
     override static func ignoredProperties() -> [String] {
         return ["lookingFor", "additionalInfoRetrieved"]
@@ -134,6 +135,7 @@ class Member: Object, JSONDecodable {
         notificationToken = (try? json.getString(at: "notification_token")) ?? "" // only for current logged-in user
         realm.add(self, update: true)
         try! realm.commitWrite()
+        lastUpdated = Date()
         return self
     }
 }
@@ -176,11 +178,14 @@ class Conversation: Object, JSONDecodable {
         }
         if !member!.additionalInfoRetrieved {
             // first try loading the member object from Realm
-            member = try! Realm().objects(Member.self).filter("id == %@", member!.id).first!
+            member = try! Realm().objects(Member.self).filter("id == %@", member!.id).first ?? member
             if !member!.additionalInfoRetrieved {
                 // if the additional info is still not available, request it from the API
                 getAdditionalUserInfo()
             }
+        }
+        if member!.lastUpdated.hoursFromNow >= 24 { // every 24 hours update the user profile information
+            getAdditionalUserInfo()
         }
     }
     
