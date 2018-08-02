@@ -65,11 +65,15 @@
 		82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FDD1C6D5BBC000E782B /* MessagesTableViewCellIOutgoing.swift */; };
 		82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
 		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
+		C957EE7120F2C11300EBD061 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
+		C957EE7220F2C11300EBD061 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
 		C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9968A0820B8CD9800653283 /* MessageTextView.swift */; };
 		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
 		C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */; };
 		C9C2BD5520F036B200A4C454 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9C2BD5420F036B200A4C454 /* Assets.xcassets */; };
 		C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */; };
+		C9D129F220F2BA8A00FD1B53 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */; };
+		C9D129F420F2BC5600FD1B53 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
 		DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */; };
 /* End PBXBuildFile section */
 
@@ -129,6 +133,8 @@
 		C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FriendProfileViewController.swift; path = FetLife/ViewControllers/FriendProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		C9C2BD5420F036B200A4C454 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureViewController.swift; sourceTree = "<group>"; };
+		C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +229,7 @@
 				C9968A0820B8CD9800653283 /* MessageTextView.swift */,
 				C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */,
 				C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */,
+				C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -230,6 +237,7 @@
 		827439361C6E575A0086D13D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */,
 				822989411C8742A400358EEF /* NoConversationsView.swift */,
 				829BAB1E1C87E74100176A9F /* LoadingView.swift */,
 				829BAB221C87E9EE00176A9F /* ErrorView.swift */,
@@ -448,6 +456,7 @@
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/DateTools/DateTools.framework",
+				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/Freddy/Freddy.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
@@ -465,6 +474,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateTools.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Freddy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
@@ -523,6 +533,7 @@
 				828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */,
 				C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */,
 				828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */,
+				C9D129F220F2BA8A00FD1B53 /* SettingsViewController.swift in Sources */,
 				828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */,
 				828D662E1CC1DD3200A6F1D2 /* ConversationCell.swift in Sources */,
 				828D662F1CC1DD3200A6F1D2 /* ConversationsViewController.swift in Sources */,
@@ -536,6 +547,7 @@
 				C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */,
 				828D66371CC1DD3200A6F1D2 /* NoConversationsView.swift in Sources */,
 				C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */,
+				C9D129F420F2BC5600FD1B53 /* BlurImageView.swift in Sources */,
 				828D66381CC1DD3200A6F1D2 /* Models.swift in Sources */,
 				828D66391CC1DD3200A6F1D2 /* BaseMessagesTableViewCell.swift in Sources */,
 				828D663A1CC1DD3200A6F1D2 /* MessagesTableViewCellIOutgoing.swift in Sources */,
@@ -559,6 +571,7 @@
 				82B355A11CC52A6400CBDAB3 /* API.swift in Sources */,
 				82B355A21CC52A6400CBDAB3 /* ErrorView.swift in Sources */,
 				82B355A31CC52A6400CBDAB3 /* NoConversationsView.swift in Sources */,
+				C957EE7120F2C11300EBD061 /* BlurImageView.swift in Sources */,
 				82B355A41CC52A6400CBDAB3 /* Models.swift in Sources */,
 				82B355A51CC52A6400CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
 				82B355A61CC52A6400CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,
@@ -582,6 +595,7 @@
 				82B355BC1CC52AC800CBDAB3 /* UIColor+FetLife.swift in Sources */,
 				82B355BD1CC52AC800CBDAB3 /* ErrorView.swift in Sources */,
 				82B355BE1CC52AC800CBDAB3 /* NoConversationsView.swift in Sources */,
+				C957EE7220F2C11300EBD061 /* BlurImageView.swift in Sources */,
 				82B355BF1CC52AC800CBDAB3 /* Models.swift in Sources */,
 				82B355C01CC52AC800CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
 				82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,

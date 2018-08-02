@@ -16,8 +16,11 @@ import RealmSwift
 
 
 // MARK: - Global Variables
-let REALM_SCHEMA_VERSION: UInt64 = 1 // Increment upon updating Realm object models between releases
+let REALM_SCHEMA_VERSION: UInt64 = 2 // Increment upon updating Realm object models between releases
+let APP_VERSION: String = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+let BUILD_NUMBER: String = Bundle.main.infoDictionary!["CFBundleVersion"] as! String
 let defaults = UserDefaults.standard // The UserDefaults object for storing preferences and persistent variables
+
 
 // MARK: - Globally Shared Functions
 
@@ -39,19 +42,42 @@ func dlgOKCancel(_ sender: UIViewController, title: String, message: String, onO
     }
     alertController.addAction(okAction)
     alertController.addAction(cancelAction)
-    
+    sender.present(alertController, animated: true, completion: nil)
+}
+
+/// Creates a message box with optional completion handlers.
+///
+/// - Parameters:
+///   - sender: UIViewController presenting the dialog
+///   - title: Title of the dialog box
+///   - message: Main body of the dialog box
+///   - onOk: Optional completion handler for when "Ok" is pressed
+func dlgOK(_ sender: UIViewController, title: String, message: String, onOk: ((UIAlertAction) -> Void)?) {
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default) { (action) -> Void in
+        onOk?(action)
+    }
+    alertController.addAction(okAction)
     sender.present(alertController, animated: true, completion: nil)
 }
 
 // MARK: - User Default Variables
 // Setting up user defaults as variables simplifies the process of reading and writing to the UserDefaults store.
 
-/// The index of the UISegmentedControl indicating which mailbox should be shown.
-///
-/// **Possible Values:**
-/// - `0` : Inbox
-/// - `1` : Archived Mail
-var optLastSelectedMailbox: Int { get { return defaults.integer(forKey: "optLastSelectedMailbox") } set(val) { defaults.set(val, forKey: "optLastSelectedMailbox") } }
+/// Global user defaults settings, preserved across launches
+struct AppSettings {
+    /// The index of the `UISegmentedControl` indicating which mailbox should be shown.
+    ///
+    /// **Possible Values:**
+    /// - `0` : Inbox
+    /// - `1` : Archived Mail
+    static var lastSelectedMailbox: Int { get { return defaults.integer(forKey: "optLastSelectedMailbox") } set(val) { defaults.set(val, forKey: "optLastSelectedMailbox") } }
+    /// Boolean value indicating if the Safe For Work mode is enabled.
+    static var sfwModeEnabled: Bool { get { return defaults.bool(forKey: "optSFWModeEnabled") } set(val) { defaults.set(val, forKey: "optSFWModeEnabled") } }
+    /// String value of current user (or empty string if no user is logged in)
+    static var currentUserID: String { get { return defaults.string(forKey: "optCurrentUserID")! } set(val) { defaults.set(val, forKey: "optCurrentUserID") } }
+}
+
 
 // MARK: -
 @UIApplicationMain
@@ -100,6 +126,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if API.isAuthorized() {
             self.window!.rootViewController = storyboard.instantiateInitialViewController()
+            API.sharedInstance.getMe { (me, error) in
+                if me != nil && error == nil {
+                    AppSettings.currentUserID = me!.id
+                } else if error != nil && me == nil {
+                    print("Error getting current user: \(error!.localizedDescription)")
+                    AppSettings.currentUserID = ""
+                } else {
+                    print("Error getting current user")
+                    AppSettings.currentUserID = ""
+                }
+            }
         } else {
             self.window!.rootViewController = storyboard.instantiateViewController(withIdentifier: "loginView")
         }

@@ -44,6 +44,7 @@ class MessagesTableViewController: SLKTextViewController {
     var conversation: Conversation! {
         didSet {
             self.messages = try! Realm().objects(Message.self).filter("conversationId == %@", self.conversation.id).sorted(byKeyPath: "createdAt", ascending: false)
+            assert(conversation.member != nil, "Conversation member is nil!")
             self.memberId = conversation.member!.id
             self.member = conversation.member!
         }
@@ -52,6 +53,7 @@ class MessagesTableViewController: SLKTextViewController {
     var notificationToken: NotificationToken? = nil
     var memberId: String!
     var member: Member!
+    var conversationId: String = ""
     fileprivate var attempts: Int = 0
     
     // MARK: - Lifecycle
@@ -93,6 +95,9 @@ class MessagesTableViewController: SLKTextViewController {
         
         titleButton.tintColor = UIColor.brickColor()
         titleButton.setTitle("\(conversation.member!.nickname) ‣", for: UIControlState.normal)
+        if let navcon = navigationController {
+            navcon.title = "\(conversation.member!.nickname) ‣"
+        }
         
         textView.placeholder = "What say you?"
         textView.placeholderColor = UIColor.lightText
@@ -152,19 +157,6 @@ class MessagesTableViewController: SLKTextViewController {
                     tableView.reloadData()
                     self?.hideLoadingView()
                     self?.hideNoConvoSelectedView()
-                })
-                
-                // get a more detailed Member object from the API and replace when possible
-                API.sharedInstance.getFetUser(self.memberId, completion: { (userInfo, err) in
-                    if err == nil && userInfo != nil {
-                        do {
-                            if let u = userInfo {
-                                try self.conversation.member?.updateMemberInfo(u)
-                            }
-                        } catch let e {
-                            print("Error updating info: \(e.localizedDescription)")
-                        }
-                    }
                 })
                 attempts = 0
                 print("Successfully registered for updates")
@@ -227,7 +219,8 @@ class MessagesTableViewController: SLKTextViewController {
     }
     
     override func keyForTextCaching() -> String? {
-        return Bundle.main.bundleIdentifier
+        // creates a unique key for each conversation
+        return "\(Bundle.main.bundleIdentifier!).\(self.conversationId)"
     }
     
     // MARK: - TableView Delegate & DataSource
@@ -274,6 +267,7 @@ class MessagesTableViewController: SLKTextViewController {
         
         // Round that cell.
         cell.messageContainerView.layer.cornerRadius = 3.0
+        cell.awakeFromNib()
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -283,7 +277,6 @@ class MessagesTableViewController: SLKTextViewController {
     // MARK: - Methods
     
     func fetchMessages() {
-        print("Checking for new messages in Messages View...")
         if let conversation = conversation, let messages = messages {
             let conversationId = conversation.id
             if let lastMessage = messages.first {
@@ -310,6 +303,13 @@ class MessagesTableViewController: SLKTextViewController {
             self.tableView!.awakeFromNib()
         } else {
             self.hideLoadingView()
+        }
+        if let visibleCellIndexes = tableView!.indexPathsForVisibleRows {
+            for path in visibleCellIndexes {
+                if let cell: BaseMessagesTableViewCell = tableView!.cellForRow(at: path) as! BaseMessagesTableViewCell? {
+                    cell.awakeFromNib() // This will update the timestamps
+                }
+            }
         }
     }
     

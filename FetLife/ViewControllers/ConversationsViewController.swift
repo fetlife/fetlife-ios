@@ -47,7 +47,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        inboxSelector.selectedSegmentIndex = optLastSelectedMailbox
+        inboxSelector.selectedSegmentIndex = AppSettings.lastSelectedMailbox
         
         // setting conversation value here (rather than in file declaration) to allow time for Realm setup and migration if necessary
         let filter = inboxSelector.selectedSegmentIndex == 0 ? "isArchived == false" : "isArchived == true"
@@ -103,6 +103,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
         updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
         updateTimer.tolerance = 5
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -132,6 +133,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             controller.navigationItem.title = "\(conversation.member!.nickname) ‣"
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             controller.navigationItem.leftItemsSupplementBackButton = true
+            controller.conversationId = conversation.id
         }
     }
     
@@ -155,7 +157,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func fetchConversationsInBackground() {
-        print("Checking for new messages in Conversation View in the background...")
         let lastMessageDate: Date = (conversations[0]).lastMessageCreated
         Dispatch.asyncOnUserInitiatedQueue() {
             API.sharedInstance.loadConversations() { error in
@@ -223,6 +224,12 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         self.present(alertController, animated: true, completion: nil)
     }
     
+    @IBAction func settingsButtonPressed(_ sender: UIBarButtonItem) {
+        let svc: SettingsViewController = storyboard?.instantiateViewController(withIdentifier: "vcSettings") as! SettingsViewController
+        let navCon = UINavigationController(rootViewController: svc)
+        self.present(navCon, animated: true, completion: nil)
+    }
+    
     // MARK: - StatefulViewController
     
     func hasContent() -> Bool {
@@ -240,7 +247,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             conversations = allConversations
             print("Archived messages selected")
         }
-        optLastSelectedMailbox = sender.selectedSegmentIndex
+        AppSettings.lastSelectedMailbox = sender.selectedSegmentIndex
         tableView.reloadData()
         self.startLoading()
         self.fetchConversations()
@@ -252,7 +259,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         let cellIdentifier = "ConversationCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ConversationCell
         
-        let conversation = conversations[indexPath.row]
+        let conversation = try! Realm().objects(Conversation.self).filter("id == %@", conversations[indexPath.row].id).first!
         
         cell.conversation = conversation
         cell.index = indexPath.row
@@ -261,7 +268,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             cell.layoutMargins = UIEdgeInsets.zero
             cell.preservesSuperviewLayoutMargins = false
         }
-        
+        cell.authorAvatarImage.awakeFromNib()
         return cell
     }
     
@@ -313,13 +320,21 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 }
                 ca.backgroundColor = UIColor.unreadMarkerColor()
                 return UISwipeActionsConfiguration(actions: [ca])
+//            } else {
+//                let ca = UIContextualAction(style: .normal, title: "Mark as Unread", handler: { (action, view, completion) in
+//                    API.sharedInstance.markMessagesAsUnread(conversationToChange.id, messageIds: [m.id], completion:  { (err) in
+//                        if err != nil { print(err!) }
+//                    })
+//                })
+//                ca.backgroundColor = UIColor.unreadMarkerColor()
+//                return UISwipeActionsConfiguration(actions: [ca])
             }
         }
         return nil
     }
     
     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
-        return false
+        return true
     }
     
     // MARK: - SplitViewController Delegate

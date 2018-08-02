@@ -45,9 +45,17 @@ class Member: Object, JSONDecodable {
         }
     }
     private let _lookingFor = List<RealmString>()
+    dynamic var notificationToken = ""
+    var additionalInfoRetrieved: Bool {
+        get {
+            guard genderName != "" && orientation != "" else { return false }
+            return true
+        }
+    }
+    var lastUpdated: Date = Date()
     
     override static func ignoredProperties() -> [String] {
-        return ["lookingFor"]
+        return ["lookingFor", "additionalInfoRetrieved"]
     }
     
     override static func primaryKey() -> String? {
@@ -87,10 +95,11 @@ class Member: Object, JSONDecodable {
                 lf.append((j.description) ?? "")
             }
         }
+        notificationToken = (try? json.getString(at: "notification_token")) ?? "" // only for logged-in user
         lookingFor = lf
     }
     
-    func updateMemberInfo(_ json: JSON) throws {
+    func updateMemberInfo(_ json: JSON) throws -> Member {
         let realm = try! Realm()
         realm.beginWrite() // Realm write operation required because we're updating an existing Realm object
         nickname = (try? json.getString(at: "nickname")) ?? nickname
@@ -114,7 +123,7 @@ class Member: Object, JSONDecodable {
         contentType = (try? json.getString(at: "content_type")) ?? ""
         fetProfileURL = (try? json.getString(at: "url")) ?? ""
         isSupporter = (try? json.getBool(at: "is_supporter")) ?? false
-        relationWithMe = (try? json.getString(at: "relation_with_me")) ?? ""
+        relationWithMe = (try? json.getString(at: "relation_with_me")) ?? "self"
         friendCount = (try? json.getInt(at: "friend_count")) ?? 0
         var lf: [String] = []
         if let ljson = try? json.getArray(at: "looking_for") as [AnyObject] {
@@ -123,7 +132,11 @@ class Member: Object, JSONDecodable {
             }
         }
         lookingFor = lf
+        notificationToken = (try? json.getString(at: "notification_token")) ?? "" // only for current logged-in user
+        realm.add(self, update: true)
         try! realm.commitWrite()
+        lastUpdated = Date()
+        return self
     }
 }
 
@@ -163,6 +176,17 @@ class Conversation: Object, JSONDecodable {
             let lastMessageMemberID: String = try lastMessage.getString(at: "member", "id")
             lastMessageIsIncoming = lastMessageMemberID == member!.id
         }
+        if !member!.additionalInfoRetrieved {
+            // first try loading the member object from Realm
+            member = try! Realm().objects(Member.self).filter("id == %@", member!.id).first ?? member
+            if !member!.additionalInfoRetrieved {
+                // if the additional info is still not available, request it from the API
+                getAdditionalUserInfo()
+            }
+        }
+        if member!.lastUpdated.hoursFromNow >= 24 { // every 24 hours update the user profile information
+            getAdditionalUserInfo()
+        }
     }
     
     func summary() -> String {
@@ -171,6 +195,45 @@ class Conversation: Object, JSONDecodable {
     
     func timeAgo() -> String {
         return (lastMessageCreated as NSDate).shortTimeAgoSinceNow()
+    }
+    
+    private var attempts: Int = 0
+    
+    private func getAdditionalUserInfo() {
+        let realm = try! Realm()
+        if realm.isInWriteTransaction { // we can't add a change notification while in a write transaction, so we have to wait...
+            if attempts <= 10 {
+                attempts += 1
+                print("Unable to get additional user info for \(self.member!.nickname). Will try again in ~\(attempts)s...")
+                Dispatch.delay(Double(attempts) * Double.random(in: 0..<2)) { // randomized to prevent collisions with other cells
+                    self.getAdditionalUserInfo()
+                }
+            } else {
+                print("Getting additional user for \(self.member!.nickname) info failed too many times!")
+            }
+        } else {
+            Dispatch.delay(Double.random(in: 0..<1)) {
+                // get a more detailed Member object from the API and replace when possible
+                API.sharedInstance.getFetUser(self.member!.id, completion: { (userInfo, err) in
+                    if err == nil && userInfo != nil {
+                        do {
+                            if let u = userInfo {
+                                let m = try self.member!.updateMemberInfo(u)
+                                realm.beginWrite()
+                                self.member = m
+                                realm.add(self, update: true)
+                                try realm.commitWrite()
+                            }
+                        } catch let e {
+                            print("Error updating info: \(e.localizedDescription)")
+                            return
+                        }
+                    }
+                })
+                self.attempts = 0
+                print("Successfully updated user info for \(self.member!.nickname)")
+            }
+        }
     }
     
 }

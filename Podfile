@@ -17,4 +17,5 @@ target 'FetLife' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'JSQMessagesViewController'
+  pod 'DynamicBlurView'
 end
