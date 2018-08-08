@@ -314,6 +314,7 @@
 				828D663B1CC1DD3200A6F1D2 /* Frameworks */,
 				828D663D1CC1DD3200A6F1D2 /* Resources */,
 				828D66491CC1DD3200A6F1D2 /* Setup Fabric */,
+				13CDE2301998F9D036EE3E25 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
