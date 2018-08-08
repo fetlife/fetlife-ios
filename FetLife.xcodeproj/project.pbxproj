@@ -371,7 +371,6 @@
 				ORGANIZATIONNAME = "BitLove Inc.";
 				TargetAttributes = {
 					828D66281CC1DD3200A6F1D2 = {
-						DevelopmentTeam = 3LXY9JQHFA;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -383,13 +382,6 @@
 								enabled = 0;
 							};
 						};
-					};
-					82B355951CC52A6400CBDAB3 = {
-						DevelopmentTeam = 3LXY9JQHFA;
-						TestTargetID = 828D66281CC1DD3200A6F1D2;
-					};
-					82B355B01CC52AC800CBDAB3 = {
-						DevelopmentTeam = 3LXY9JQHFA;
 					};
 				};
 			};
