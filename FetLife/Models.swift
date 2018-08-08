@@ -138,10 +138,43 @@ class Member: Object, JSONDecodable {
         lastUpdated = Date()
         return self
     }
-}
-
-class RealmString: Object { // using this to be able to store arrays of strings
-    dynamic var stringValue = ""
+    
+    static func ==(a: Member, b: Member) -> Bool {
+        guard a.id == b.id else { return false }
+        guard a.metaLine == b.metaLine else { return false }
+        guard a.nickname == b.nickname else { return false }
+        return true
+    }
+    
+    static func !=(a: Member, b: Member) -> Bool {
+        return !(a == b)
+    }
+    
+    /// Determines if all the properties of two members are the same
+    static func ===(a: Member, b: Member) -> Bool {
+        guard a.id == b.id else { return false }
+        guard a.aboutMe == b.aboutMe else { return false }
+        guard a.age == b.age else { return false }
+        guard a.avatarURL == b.avatarURL else { return false }
+        guard a.canFollow == b.canFollow else { return false }
+        guard a.city == b.city else { return false }
+        guard a.contentType == b.contentType else { return false }
+        guard a.country == b.country else { return false }
+        guard a.friendCount == b.friendCount else { return false }
+        guard a.genderName == b.genderName else { return false }
+        guard a.isSupporter == b.isSupporter else { return false }
+        guard a.lookingFor == b.lookingFor else { return false }
+        guard a.metaLine == b.metaLine else { return false }
+        guard a.nickname == b.nickname else { return false }
+        guard a.notificationToken == b.notificationToken else { return false }
+        guard a.orientation == b.orientation else { return false }
+        guard a.state == b.state else { return false }
+        return true
+    }
+    
+    static func !==(a: Member, b: Member) -> Bool {
+        return !(a === b)
+    }
 }
 
 // MARK: - Conversation
@@ -178,10 +211,12 @@ class Conversation: Object, JSONDecodable {
         }
         if !member!.additionalInfoRetrieved {
             // first try loading the member object from Realm
-            member = try! Realm().objects(Member.self).filter("id == %@", member!.id).first ?? member
-            if !member!.additionalInfoRetrieved {
+            let oldMember = try! Realm().objects(Member.self).filter("id == %@", member!.id).first ?? member
+            if !oldMember!.additionalInfoRetrieved || oldMember! != member! {
                 // if the additional info is still not available, request it from the API
                 getAdditionalUserInfo()
+            } else {
+                member = oldMember
             }
         }
         if member!.lastUpdated.hoursFromNow >= 24 { // every 24 hours update the user profile information
@@ -205,14 +240,14 @@ class Conversation: Object, JSONDecodable {
             if attempts <= 10 {
                 attempts += 1
                 print("Unable to get additional user info for \(self.member!.nickname). Will try again in ~\(attempts)s...")
-                Dispatch.delay(Double(attempts) * Double.random(in: 0..<2)) { // randomized to prevent collisions with other cells
+                Dispatch.delay(Double(attempts) * (2 * drand48())) { // randomized to prevent collisions with other cells
                     self.getAdditionalUserInfo()
                 }
             } else {
                 print("Getting additional user for \(self.member!.nickname) info failed too many times!")
             }
         } else {
-            Dispatch.delay(Double.random(in: 0..<1)) {
+            Dispatch.delay(drand48()) {
                 // get a more detailed Member object from the API and replace when possible
                 API.sharedInstance.getFetUser(self.member!.id, completion: { (userInfo, err) in
                     if err == nil && userInfo != nil {
@@ -269,6 +304,10 @@ class Message: Object {
 // MARK: - Story
 // MARK: - Util
 
+class RealmString: Object { // using this to be able to store arrays of strings
+    dynamic var stringValue = ""
+}
+
 // Convert from a JSON format datastring to an NSDate instance.
 private func dateStringToNSDate(_ jsonString: String!) -> Date? {
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -286,13 +325,14 @@ private func decodeHTML(_ htmlEncodedString: String) -> String {
         NSCharacterEncodingDocumentAttribute: NSNumber(value: String.Encoding.utf8.rawValue) as AnyObject
     ]
     
-    var attributedString:NSAttributedString?
+    var attributedString: NSAttributedString?
     
+    // FIXME: - This will fail if initiated from a background thread. We may want to consider a more robust option such as https://github.com/IBM-Swift/swift-html-entities
     do {
         attributedString = try NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil)
     } catch {
         print(error)
     }
     
-    return attributedString!.string.replacingOccurrences(of: "\\n", with: "\n") // replace placeholders with original linebreaks
+    return attributedString?.string.replacingOccurrences(of: "\\n", with: "\n") ?? es // replace placeholders with original linebreaks
 }

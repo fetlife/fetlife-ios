@@ -134,6 +134,11 @@ class MessagesTableViewController: SLKTextViewController {
                     case .initial(let messages):
                         if messages.count > 0 {
                             tableView.reloadData()
+                            let newMessageIds = messages.filter("isNew == true").map { $0.id }
+                            
+                            if !newMessageIds.isEmpty {
+                                API.sharedInstance.markMessagesAsRead(conversation.id, messageIds: Array(newMessageIds), completion: nil)
+                            }
                         }
                         break
                     case .update(let messages, let deletions, let insertions, let modifications):
