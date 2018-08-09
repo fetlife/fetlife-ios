@@ -6,6 +6,9 @@ Welcome to FetLife's open-source iOS app!
 
 - View a list of your conversations
 - Read and respond to conversations
+- Notifications of new messages*
+- Display a profile summary of the other user
+- Safe For Work (SFW) mode blurs all pictures until double-tapped (enable or disable in settings)
 
 
 ### Requirements to run the app on your iPhone
@@ -23,7 +26,7 @@ Welcome to FetLife's open-source iOS app!
 
 These instructions are written assuming you know very little about computers and to help get the app on your iPhone as quickly as possible:
 
-1. Install the latest version of [Xcode](https://itunes.apple.com/ca/app/xcode/id497799835?mt=12).
+1. Install the latest version of [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12).
 2. Open the `Terminal` application up on your Mac.
 3. Enter the following commands into your terminal window one by one and wait for them to finish:
   - `sudo gem install cocoapods` you will be prompted for your computers password
@@ -62,7 +65,8 @@ Woot woot! Please checkout our [Contributing Guidelines](https://github.com/fetl
 
 ### Frequently Asked Questions
 
-- **Is a Mac required to install the application?** Yes, a Mac computer with at least OS X 10.11 or later is required to run the app and install it on a device.
+- **Is a Mac required to install the application?** Yes, a Mac computer with at least OS X 10.11 or later is required to run the app and install it on a device. You can, however, install a precompiled `.ipa` file using [iTunes](https://www.apple.com/itunes/download/) on a Windows or Linux computer. Links to these files can usually be found in the latest closed pull request. Alternatively, you can ask someone who has a Mac to archive the app by going to "Product -> Archive", then clicking "Distribute" or "Export" and selecting "Distribute for Development". 
+- **Why aren't I getting notifications when the app is closed?** Because this app isn't installed from the App Store, it is not currently possible to send true push (server-initiated) notifications. Instead, the app periodically checks with the FetLife server for any new messages using a method called "background fetching". (When the app is open, it checks for new messages approximately every 10 seconds.) However, the frequency of these requests cannot be directly controlled by the app and is instead managed by iOS. _In general_, the more frequently you get new messages the more often the app will check for new messages. In practice, however, the delay between a message being sent and receiving a notification can be up to 30 minutes or more.
 
 
 ### License
