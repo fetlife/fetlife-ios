@@ -46,6 +46,7 @@ class LoginViewController: UIViewController {
     func didAuthorizeWith(_ parameters: OAuth2JSON) {
         if let window = UIApplication.shared.delegate?.window! {
             window.rootViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "chatSplitView")
+            self.dismiss(animated: false, completion: nil)
         }
     }
     

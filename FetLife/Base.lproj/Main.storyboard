@@ -106,7 +106,7 @@
         <!--Conversations-->
         <scene sceneID="6pD-Fd-qzg">
             <objects>
-                <navigationController storyboardIdentifier="conversationsView" title="Conversations" id="G86-Si-xHC" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="conversationsView" title="Conversations" useStoryboardIdentifierAsRestorationIdentifier="YES" id="G86-Si-xHC" sceneMemberID="viewController">
                     <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="UEO-kq-2Aw">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -118,7 +118,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="myJ-gr-96S" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1588" y="-1080"/>
+            <point key="canvasLocation" x="-1588" y="-1263"/>
         </scene>
         <!--Messages-->
         <scene sceneID="nqv-yB-6Nt">
@@ -132,8 +132,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gG7-oK-7xK">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="gG7-oK-7xK">
+                                <rect key="frame" x="0.0" y="64" width="375" height="601"/>
                                 <subviews>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connected!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.75" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="huY-UI-ov6">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
@@ -143,7 +143,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="pIP-ay-St8">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="588.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="583.5"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
@@ -281,7 +281,7 @@
                                         <sections/>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last updated 01/01/18 1:23:45 AM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ljC-oB-SnU">
-                                        <rect key="frame" x="0.0" y="588.5" width="375" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="586.5" width="375" height="14.5"/>
                                         <color key="backgroundColor" red="0.16468328239999999" green="0.16471883649999999" blue="0.16468104720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -290,22 +290,16 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.1019607843" blue="0.1019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="zsv-9z-8JO" firstAttribute="top" secondItem="gG7-oK-7xK" secondAttribute="bottom" constant="2" id="2In-xR-SZA"/>
                             <constraint firstAttribute="trailing" secondItem="gG7-oK-7xK" secondAttribute="trailing" id="8IH-Z7-OtS"/>
                             <constraint firstItem="gG7-oK-7xK" firstAttribute="leading" secondItem="Ljf-9J-V1e" secondAttribute="leading" id="VcA-15-zjB"/>
                             <constraint firstItem="gG7-oK-7xK" firstAttribute="top" secondItem="A7z-bb-m4a" secondAttribute="bottom" id="aJN-Ju-ccm"/>
-                            <constraint firstItem="zsv-9z-8JO" firstAttribute="top" secondItem="gG7-oK-7xK" secondAttribute="bottom" id="gS2-K5-KIM"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" leftItemsSupplementBackButton="YES" id="Sja-KD-1vD" userLabel="Conversations">
-                        <nil key="title"/>
+                    <navigationItem key="navigationItem" title="Conversations" leftItemsSupplementBackButton="YES" id="Sja-KD-1vD" userLabel="Conversations">
                         <barButtonItem key="backBarButtonItem" title="Back" id="82d-nf-4Ep"/>
-                        <barButtonItem key="leftBarButtonItem" title="Settings" id="CeU-tj-SFO">
-                            <connections>
-                                <action selector="settingsButtonPressed:" destination="sF5-6I-wQh" id="ria-Q1-p02"/>
-                            </connections>
-                        </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" restorationIdentifier="InboxSelectorControl" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Ph8-NX-oRQ">
                             <rect key="frame" x="119" y="7" width="137" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -317,9 +311,9 @@
                                 <action selector="inboxSelectionChanged:" destination="sF5-6I-wQh" eventType="valueChanged" id="opx-0U-kLq"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" title="Logout" id="6zd-iL-Ahl">
+                        <barButtonItem key="rightBarButtonItem" title="Settings" image="SettingsIcon" id="CeU-tj-SFO">
                             <connections>
-                                <action selector="logoutButtonPressed:" destination="sF5-6I-wQh" id="kyc-YT-kFv"/>
+                                <action selector="settingsButtonPressed:" destination="sF5-6I-wQh" id="ria-Q1-p02"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -334,7 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XKq-5R-Uy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-868" y="-1080.8095952023989"/>
+            <point key="canvasLocation" x="-868" y="-1263"/>
         </scene>
         <!--Settings-->
         <scene sceneID="5Xv-RW-d1B">
@@ -372,6 +366,12 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.16468328239999999" green="0.16471883649999999" blue="0.16468104720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <segue destination="Pqg-aA-dZ6" kind="show" identifier="segShowCurrentUser" id="xy9-LR-zxR">
+                                                <segue key="commit" inheritsFrom="parent" id="m7T-nY-O42"/>
+                                                <segue key="preview" inheritsFrom="commit" id="ZC4-o9-u6c"/>
+                                            </segue>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -514,15 +514,15 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.16468328239999999" green="0.16471883649999999" blue="0.16468104720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellOpenFetLife" textLabel="tb6-vV-Cjs" style="IBUITableViewCellStyleDefault" id="GSs-8F-riu">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cellOpenFetLife" textLabel="tb6-vV-Cjs" style="IBUITableViewCellStyleDefault" id="GSs-8F-riu">
                                         <rect key="frame" x="0.0" y="546.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GSs-8F-riu" id="CoH-li-o8C">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="View FetLife in Browser" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="tb6-vV-Cjs">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
+                                                    <rect key="frame" x="16" y="0.0" width="324" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" white="0.6420758929" alpha="1" colorSpace="calibratedWhite"/>
@@ -622,7 +622,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.16468328239999999" green="0.16471883649999999" blue="0.16468104720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <segue destination="Ces-Jj-Ih2" kind="show" id="YxG-Ss-KbV">
+                                            <segue destination="Ces-Jj-Ih2" kind="show" identifier="" id="YxG-Ss-KbV">
                                                 <segue key="commit" inheritsFrom="parent" id="DgW-U1-yyy"/>
                                                 <segue key="preview" inheritsFrom="commit" id="xGo-CD-1hC"/>
                                             </segue>
@@ -657,11 +657,30 @@
                         <outlet property="lblBuildNumber" destination="26M-ko-BKC" id="eXv-x9-7yF"/>
                         <outlet property="lblCurrentUser" destination="Odd-no-2d7" id="lTe-nF-PDW"/>
                         <outlet property="swchSFWMode" destination="oJG-O5-ahh" id="6IF-rm-0Xv"/>
+                        <segue destination="k9Z-eR-wvg" kind="show" identifier="segTLSettings" id="aVA-2y-Vw2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qs6-0d-dMN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-74.400000000000006" y="-1081.7091454272863"/>
+            <point key="canvasLocation" x="-28" y="-1263"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="WXT-mB-UY1">
+            <objects>
+                <viewController storyboardIdentifier="vcTLSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="k9Z-eR-wvg" customClass="TLViewController" customModule="FetLife" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyB-jd-oEb"/>
+                        <viewControllerLayoutGuide type="bottom" id="YU1-cV-KIP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" restorationIdentifier="viewTLSettings" id="T85-ft-rIG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FFR-0k-y6B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="830" y="-1631"/>
         </scene>
         <!--Credits-->
         <scene sceneID="Ine-WX-iYT">
@@ -703,7 +722,7 @@ GitHub:
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YA-yh-ayx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="-1082.608695652174"/>
+            <point key="canvasLocation" x="830" y="-946"/>
         </scene>
         <!--Messages View-->
         <scene sceneID="GMh-0m-Geb">
@@ -959,9 +978,11 @@ GitHub:
                         <outlet property="genderText" destination="SxM-2U-hVy" id="N4V-Rw-KC9"/>
                         <outlet property="imageLoadProgress" destination="rOc-jP-zXA" id="gZf-Nl-qcu"/>
                         <outlet property="locationText" destination="Szu-zm-V3o" id="1P9-rL-994"/>
+                        <outlet property="logoutButton" destination="6zd-iL-Ahl" id="MdU-lT-0in"/>
                         <outlet property="mainStackHeightConstraint" destination="U1U-Qy-f22" id="V56-gy-qpZ"/>
                         <outlet property="metaInfo" destination="8XV-x8-S9f" id="sZH-Jc-BcP"/>
                         <outlet property="nick" destination="PIm-WT-VvU" id="TaS-X5-Hh1"/>
+                        <outlet property="openInSafariButton" destination="Aan-fv-keY" id="dkm-Sd-3Pc"/>
                         <outlet property="orientationText" destination="kbF-Gl-AHr" id="wsr-tz-hfM"/>
                         <outlet property="profilePicTapGesture" destination="ThF-XV-fji" id="EXH-6g-hxu"/>
                         <outlet property="profilePicture" destination="4ze-As-1bH" id="Wzg-YV-uvw"/>
@@ -978,6 +999,16 @@ GitHub:
                         <outlet property="delegate" destination="Pqg-aA-dZ6" id="PsP-e2-n1E"/>
                     </connections>
                 </tapGestureRecognizer>
+                <barButtonItem image="OpenInSafari" id="Aan-fv-keY">
+                    <connections>
+                        <action selector="openInSafari:" destination="Pqg-aA-dZ6" id="ZWv-Rh-SyF"/>
+                    </connections>
+                </barButtonItem>
+                <barButtonItem title="Logout" id="6zd-iL-Ahl">
+                    <connections>
+                        <action selector="logoutButtonPressed:" destination="Pqg-aA-dZ6" id="wsz-Qr-Es7"/>
+                    </connections>
+                </barButtonItem>
             </objects>
             <point key="canvasLocation" x="-28" y="-255.02248875562222"/>
         </scene>
@@ -1066,11 +1097,13 @@ GitHub:
         <image name="DefaultAvatar" width="200" height="200"/>
         <image name="DevilHeart" width="109" height="123"/>
         <image name="IncomingMessage" width="24" height="24"/>
+        <image name="OpenInSafari" width="23" height="23"/>
+        <image name="SettingsIcon" width="24" height="24"/>
         <image name="SupporterIcon" width="109" height="123"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="baG-5J-Czw"/>
-        <segue reference="OL6-g2-eSZ"/>
+        <segue reference="ib0-IR-G0Q"/>
+        <segue reference="xy9-LR-zxR"/>
         <segue reference="YxG-Ss-KbV"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.70999999999999996" green="0.114" blue="0.114" alpha="1" colorSpace="calibratedRGB"/>

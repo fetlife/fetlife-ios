@@ -90,8 +90,9 @@ final class API {
         ] as OAuth2JSON)
         
         oauthSession.authConfig.ui.useSafariView = true
-		oauthSession.authConfig.authorizeEmbeddedAutoDismiss = true
-		
+        oauthSession.authConfig.authorizeEmbedded = false
+        oauthSession.authConfig.authorizeEmbeddedAutoDismiss = true
+        
         if let accessToken = oauthSession.accessToken {
             do {
                 let jwt = try decode(jwt: accessToken)
@@ -113,7 +114,6 @@ final class API {
     // MARK: - Conversation API
     
     fileprivate var conversationLoadAttempts: Int = 0
-    
     /// Loads all the conversations for the current user.
     ///
     /// - Parameter completion: Optional completion with error
@@ -162,6 +162,7 @@ final class API {
         }
     }
     
+    fileprivate var archiveAttempts: Int = 0
     /// Archives the specified conversation.
     ///
     /// - Parameters:
@@ -171,6 +172,7 @@ final class API {
         let parameters = ["is_archived": true]
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
         
+        archiveAttempts += 1
         oauthSession.request(.put, url, parameters: parameters).responseData { response -> Void in
             switch response.result {
             case .success(let value):
@@ -180,25 +182,44 @@ final class API {
                     let conversation = try Conversation.init(json: json)
                     
                     let realm = try Realm()
-                    realm.refresh() // make sure Realm instance is the most recent version
-                    try realm.write {
-                        realm.add(conversation, update: true)
+                    if !realm.isInWriteTransaction {
+                        try realm.write {
+                            realm.add(conversation, update: true)
+                        }
+                        self.archiveAttempts = 0
+                        completion?(nil)
+                    } else if self.archiveAttempts <= 10 {
+                        print("Realm in write transaction! Will retry in \(self.archiveAttempts)s...")
+                        Dispatch.delay(Double(self.archiveAttempts), closure: {
+                            self.archiveConversation(conversationId, completion: completion)
+                        })
+                    } else {
+                        print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        self.archiveAttempts = 0
+                        completion?(RLMError.fail as? Error)
                     }
-                    
-                    completion?(nil)
                 } catch(let error) {
+                    self.archiveAttempts = 0
                     completion?(error)
                 }
             case .failure(let error):
+                self.archiveAttempts = 0
                 completion?(error)
             }
         }
     }
     
+    fileprivate var unarchiveAttempts: Int = 0
+    /// Unarchives the specified conversation.
+    ///
+    /// - Parameters:
+    ///   - conversationId: ID of conversation to unarchive
+    ///   - completion: Optional completion with error
     func unarchiveConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["is_archived": false]
         let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
         
+        unarchiveAttempts += 1
         oauthSession.request(.put, url, parameters: parameters).responseData { response -> Void in
             switch response.result {
             case .success(let value):
@@ -208,23 +229,79 @@ final class API {
                     let conversation = try Conversation.init(json: json)
                     
                     let realm = try Realm()
-                    realm.refresh() // make sure Realm instance is the most recent version
-                    try realm.write {
-                        realm.add(conversation, update: true)
+                    if !realm.isInWriteTransaction {
+                        try realm.write {
+                            realm.add(conversation, update: true)
+                        }
+                        self.unarchiveAttempts = 0
+                        completion?(nil)
+                    } else if self.unarchiveAttempts <= 10 {
+                        print("Realm in write transaction! Will retry in \(self.unarchiveAttempts)s...")
+                        Dispatch.delay(Double(self.unarchiveAttempts), closure: {
+                            self.unarchiveConversation(conversationId, completion: completion)
+                        })
+                    } else {
+                        print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        self.unarchiveAttempts = 0
+                        completion?(RLMError.fail as? Error)
                     }
-                    
-                    completion?(nil)
                 } catch(let error) {
+                    self.unarchiveAttempts = 0
                     completion?(error)
                 }
             case .failure(let error):
+                self.unarchiveAttempts = 0
+                completion?(error)
+            }
+        }
+    }
+    
+    fileprivate var deleteAttempts: Int = 0
+    /// Deletes the specified conversation permanently.
+    ///
+    /// - Parameters:
+    ///   - conversationId: ID of conversation to delete
+    ///   - completion: Optional completion with error
+    func deleteConversation(_ conversationId: String, completion: ((_ error: Error?) -> Void)?) {
+        let url = "\(baseURL)/v2/me/conversations/\(conversationId)"
+        
+        deleteAttempts += 1
+        oauthSession.request(.delete, url, parameters: [:]).responseData { response -> Void in
+            switch response.result {
+            case .success(let value):
+                do {
+                    print(value)
+                    let realm = try Realm()
+                    let conversation = realm.objects(Conversation.self).filter("id == %@", conversationId).first!
+                    if !realm.isInWriteTransaction {
+                        realm.beginWrite()
+                        realm.delete(conversation)
+                        try realm.commitWrite()
+                        self.deleteAttempts = 0
+                        
+                        completion?(nil)
+                    } else if self.deleteAttempts <= 10 {
+                        print("Realm in write transaction! Will retry in \(self.deleteAttempts)s...")
+                        Dispatch.delay(Double(self.deleteAttempts), closure: {
+                            self.deleteConversation(conversationId, completion: completion)
+                        })
+                    } else {
+                        print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        self.deleteAttempts = 0
+                        completion?(RLMError.fail as? Error)
+                    }
+                } catch(let error) {
+                    self.deleteAttempts = 0
+                    completion?(error)
+                }
+            case .failure(let error):
+                self.deleteAttempts = 0
                 completion?(error)
             }
         }
     }
     
     fileprivate var messagesLoadAttempts: Int = 0
-    
     /// Gets the messages in a conversation.
     ///
     /// - Parameters:
@@ -270,6 +347,7 @@ final class API {
                         })
                     } else {
                         print("Too many consecutive failures! Perhaps Realm is stuck in a write transaction?")
+                        self.messagesLoadAttempts = 0
                         completion?(RLMError.fail as? Error)
                     }
                 } catch(let error) {

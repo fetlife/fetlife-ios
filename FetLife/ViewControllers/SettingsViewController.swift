@@ -8,6 +8,8 @@
 
 import UIKit
 import SafariServices
+import WebKit
+import Turbolinks
 
 class SettingsViewController: UITableViewController {
 
@@ -26,6 +28,9 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var cellContactUs: UITableViewCell!
     @IBOutlet weak var cellGitHub: UITableViewCell!
     @IBOutlet weak var cellOpenFetLife: UITableViewCell!
+    
+    let navTLBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "vcTLSettings") as! TLViewController
+    var navCon = UINavigationController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +61,7 @@ class SettingsViewController: UITableViewController {
         
         tableView.backgroundColor = .backgroundColor()
         configureCellActions()
+        navCon = self.navigationController ?? UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "conversationsView") as! UINavigationController
     }
     
     // MARK: - User Information
@@ -72,44 +78,33 @@ class SettingsViewController: UITableViewController {
     // MARK: - Configuration
     
     func presentPrivacy() {
-        let svc = SFSafariViewController(url: URL(string: "https://fetlife.com/privacy")!)
-        if #available(iOS 10.0, *) {
-            svc.preferredBarTintColor = .backgroundColor()
-            svc.preferredControlTintColor = .brickColor()
-        }
-        self.present(svc, animated: true, completion: nil)
+        navTLBrowser.url = URL(string: "https://fetlife.com/privacy")!
+        navTLBrowser.navCon = navCon
+        navCon.pushViewController(navTLBrowser, animated: true)
     }
     func presentTerms() {
-        let svc = SFSafariViewController(url: URL(string: "https://fetlife.com/legalese/tou")!)
-        if #available(iOS 10.0, *) {
-            svc.preferredBarTintColor = .backgroundColor()
-            svc.preferredControlTintColor = .brickColor()
-        }
-        self.present(svc, animated: true, completion: nil)
+        navTLBrowser.url = URL(string: "https://fetlife.com/legalese/tou")!
+        navTLBrowser.baseURL = navTLBrowser.url
+        navTLBrowser.navCon = navCon
+        navCon.pushViewController(navTLBrowser, animated: true)
     }
     func presentGuidelines() {
-        let svc = SFSafariViewController(url: URL(string: "https://fetlife.com/guidelines")!)
-        if #available(iOS 10.0, *) {
-            svc.preferredBarTintColor = .backgroundColor()
-            svc.preferredControlTintColor = .brickColor()
-        }
-        self.present(svc, animated: true, completion: nil)
+        navTLBrowser.url = URL(string: "https://fetlife.com/guidelines")!
+        navTLBrowser.baseURL = navTLBrowser.url
+        navTLBrowser.navCon = navCon
+        navCon.pushViewController(navTLBrowser, animated: true)
     }
     func presentFAQs() {
-        let svc = SFSafariViewController(url: URL(string: "https://fetlife.com/help")!)
-        if #available(iOS 10.0, *) {
-            svc.preferredBarTintColor = .backgroundColor()
-            svc.preferredControlTintColor = .brickColor()
-        }
-        self.present(svc, animated: true, completion: nil)
+        navTLBrowser.url = URL(string: "https://fetlife.com/help")!
+        navTLBrowser.baseURL = navTLBrowser.url
+        navTLBrowser.navCon = navCon
+        navCon.pushViewController(navTLBrowser, animated: true)
     }
     func presentContactUs() {
-        let svc = SFSafariViewController(url: URL(string: "https://fetlife.com/contact")!)
-        if #available(iOS 10.0, *) {
-            svc.preferredBarTintColor = .backgroundColor()
-            svc.preferredControlTintColor = .brickColor()
-        }
-        self.present(svc, animated: true, completion: nil)
+        navTLBrowser.url = URL(string: "https://fetlife.com/contact")!
+        navTLBrowser.baseURL = navTLBrowser.url
+        navTLBrowser.navCon = navCon
+        navCon.pushViewController(navTLBrowser, animated: true)
     }
     func presentGitHub() {
         let svc = SFSafariViewController(url: URL(string: "https://github.com/fetlife/ios")!)
@@ -125,15 +120,11 @@ class SettingsViewController: UITableViewController {
     }
     
     func configureCellActions() {
-        if API.sharedInstance.currentMember != nil {
-            cellUsername.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentUserInBrowser)))
-        } else {
+        if API.sharedInstance.currentMember == nil {
             API.sharedInstance.getMe { (me, error) in
-                if me != nil && error == nil {
-                    self.cellUsername.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.presentUserInBrowser)))
-                } else if error != nil && me == nil {
+                if error != nil && me == nil {
                     print("Error getting current user: \(error!.localizedDescription)")
-                } else {
+                } else if error == nil && me == nil {
                     print("Error getting current user")
                 }
             }
@@ -167,10 +158,13 @@ class SettingsViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        // Get the new view controller using segue.destination.
-//        // Pass the selected object to the new view controller.
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "segShowCurrentUser" {
+            (segue.destination as! FriendProfileViewController).isMe = true
+            (segue.destination as! FriendProfileViewController).friend = API.sharedInstance.currentMember!
+        }
+    }
 
 }

@@ -18,4 +18,5 @@ target 'FetLife' do
   pod 'Crashlytics'
   pod 'JSQMessagesViewController'
   pod 'DynamicBlurView'
+  pod 'Turbolinks', :git => 'https://github.com/turbolinks/turbolinks-ios.git'
 end

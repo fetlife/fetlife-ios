@@ -23,7 +23,9 @@ class ErrorView: UIView {
     }()
     
     lazy var coneImage: UIImageView = {
-        return UIImageView(image: UIImage(named: "Cone")!)
+        let image = UIImageView(image: UIImage(named: "Cone")!)
+        image.tintColor = UIColor.supporterIconTintColor()
+        return image
     }()
     
     lazy var textLabel: UILabel = {

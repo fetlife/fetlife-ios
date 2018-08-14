@@ -66,6 +66,10 @@
 		82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FDD1C6D5BBC000E782B /* MessagesTableViewCellIOutgoing.swift */; };
 		82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
 		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
+		C907895D211BED3E00C16E7A /* TLVisitableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C907895C211BED3E00C16E7A /* TLVisitableViewController.swift */; };
+		C9078961211BEEAC00C16E7A /* TLErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9078960211BEEAC00C16E7A /* TLErrorView.xib */; };
+		C9078963211BEEBF00C16E7A /* TLErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9078962211BEEBF00C16E7A /* TLErrorView.swift */; };
+		C9078965211BF6BB00C16E7A /* TLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9078964211BF6BB00C16E7A /* TLViewController.swift */; };
 		C92EDCE2211413EC004A1776 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EDCE0211413EB004A1776 /* MessageTextView.swift */; };
 		C92EDCE3211413EC004A1776 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EDCE1211413EC004A1776 /* BlurImageView.swift */; };
 		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
@@ -124,6 +128,10 @@
 		82F505FF1C7E57B400DDDDDF /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Models.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82F6D1041C8DF067002DF881 /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Dispatch.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C5F91E287CD5A59A24785001 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
+		C907895C211BED3E00C16E7A /* TLVisitableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLVisitableViewController.swift; sourceTree = "<group>"; };
+		C9078960211BEEAC00C16E7A /* TLErrorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TLErrorView.xib; path = ../../../../../../.Trash/TLErrorView.xib; sourceTree = "<group>"; };
+		C9078962211BEEBF00C16E7A /* TLErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TLErrorView.swift; path = Views/TLErrorView.swift; sourceTree = "<group>"; };
+		C9078964211BF6BB00C16E7A /* TLViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLViewController.swift; sourceTree = "<group>"; };
 		C92EDCE0211413EB004A1776 /* MessageTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTextView.swift; path = Views/MessageTextView.swift; sourceTree = "<group>"; };
 		C92EDCE1211413EC004A1776 /* BlurImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlurImageView.swift; path = Views/BlurImageView.swift; sourceTree = "<group>"; };
 		C9968A0B20B9505B00653283 /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,6 +225,8 @@
 				C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */,
 				C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */,
 				C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */,
+				C907895C211BED3E00C16E7A /* TLVisitableViewController.swift */,
+				C9078964211BF6BB00C16E7A /* TLViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -229,6 +239,8 @@
 				822989411C8742A400358EEF /* NoConversationsView.swift */,
 				829BAB1E1C87E74100176A9F /* LoadingView.swift */,
 				829BAB221C87E9EE00176A9F /* ErrorView.swift */,
+				C9078962211BEEBF00C16E7A /* TLErrorView.swift */,
+				C9078960211BEEAC00C16E7A /* TLErrorView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -411,6 +423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				828D663E1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.xib in Resources */,
+				C9078961211BEEAC00C16E7A /* TLErrorView.xib in Resources */,
 				828D66401CC1DD3200A6F1D2 /* MessagesTableViewCellOutgoing.xib in Resources */,
 				828D66421CC1DD3200A6F1D2 /* LaunchScreen.storyboard in Resources */,
 				828D66431CC1DD3200A6F1D2 /* Podfile in Resources */,
@@ -461,6 +474,7 @@
 				"${BUILT_PRODUCTS_DIR}/SlackTextViewController/SlackTextViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/StatefulViewController/StatefulViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/Turbolinks/Turbolinks.framework",
 				"${BUILT_PRODUCTS_DIR}/p2.OAuth2/p2_OAuth2.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -479,6 +493,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SlackTextViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StatefulViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Turbolinks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/p2_OAuth2.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,14 +548,17 @@
 				828D662E1CC1DD3200A6F1D2 /* ConversationCell.swift in Sources */,
 				828D662F1CC1DD3200A6F1D2 /* ConversationsViewController.swift in Sources */,
 				828D66301CC1DD3200A6F1D2 /* Dispatch.swift in Sources */,
+				C9078965211BF6BB00C16E7A /* TLViewController.swift in Sources */,
 				828D66311CC1DD3200A6F1D2 /* LoadingView.swift in Sources */,
 				828D66321CC1DD3200A6F1D2 /* API.swift in Sources */,
+				C9078963211BEEBF00C16E7A /* TLErrorView.swift in Sources */,
 				C92EDCE3211413EC004A1776 /* BlurImageView.swift in Sources */,
 				828D66331CC1DD3200A6F1D2 /* MessagesTableViewController.swift in Sources */,
 				828D66341CC1DD3200A6F1D2 /* AppDelegate.swift in Sources */,
 				828D66351CC1DD3200A6F1D2 /* OAuth2+Alamofire.swift in Sources */,
 				828D66361CC1DD3200A6F1D2 /* ErrorView.swift in Sources */,
 				C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */,
+				C907895D211BED3E00C16E7A /* TLVisitableViewController.swift in Sources */,
 				C92EDCE2211413EC004A1776 /* MessageTextView.swift in Sources */,
 				828D66371CC1DD3200A6F1D2 /* NoConversationsView.swift in Sources */,
 				828D66381CC1DD3200A6F1D2 /* Models.swift in Sources */,

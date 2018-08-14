@@ -23,6 +23,7 @@ PODS:
   - SlackTextViewController (1.9.6)
   - SnapKit (3.1.2)
   - StatefulViewController (3.0)
+  - Turbolinks (3.0.0)
 
 DEPENDENCIES:
   - Alamofire (~> 4.5)
@@ -40,6 +41,7 @@ DEPENDENCIES:
   - SlackTextViewController (~> 1.9.5)
   - SnapKit (~> 3.1.2)
   - StatefulViewController (~> 3.0)
+  - Turbolinks (from `https://github.com/turbolinks/turbolinks-ios.git`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -61,6 +63,15 @@ SPEC REPOS:
     - SnapKit
     - StatefulViewController
 
+EXTERNAL SOURCES:
+  Turbolinks:
+    :git: https://github.com/turbolinks/turbolinks-ios.git
+
+CHECKOUT OPTIONS:
+  Turbolinks:
+    :commit: 8b0ff2132ac00192c7869366b54fb3102ff9291e
+    :git: https://github.com/turbolinks/turbolinks-ios.git
+
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   AlamofireImage: 3b35b586853abaf94ca1250f4e94cff3c21a4c0d
@@ -79,7 +90,8 @@ SPEC CHECKSUMS:
   SlackTextViewController: b854e62c1c156336bc4fd409c6ca79b5773e8f9d
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   StatefulViewController: 4803bf900d44de26074344998e10e041113b5931
+  Turbolinks: 4e3a5ce8132e96019236ca7f8f274a0034de2a39
 
-PODFILE CHECKSUM: 4b6f74421f0c06e6f3a312226938b4a3eeadc892
+PODFILE CHECKSUM: 7a22685d06790c0beac73cbed8b9ed1f4767064a
 
 COCOAPODS: 1.5.2

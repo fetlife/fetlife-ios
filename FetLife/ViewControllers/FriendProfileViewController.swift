@@ -26,8 +26,11 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
     @IBOutlet var locationText: UILabel!
     @IBOutlet var mainStackHeightConstraint: NSLayoutConstraint!
     @IBOutlet var profilePicTapGesture: UITapGestureRecognizer!
+    @IBOutlet var logoutButton: UIBarButtonItem!
+    @IBOutlet var openInSafariButton: UIBarButtonItem!
     
     var friend: Member!
+    var isMe: Bool = false
     var messagesViewController: MessagesTableViewController!
     var avatarImageFilter: AspectScaledToFillSizeWithRoundedCornersFilter?
     
@@ -70,6 +73,11 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         }
         supporterIcon.tintColor = UIColor.darkGray
         profilePicture.awakeFromNib()
+        if isMe {
+            self.navigationItem.rightBarButtonItems = [logoutButton, openInSafariButton]
+        } else {
+            self.navigationItem.rightBarButtonItem = openInSafariButton
+        }
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -128,6 +136,27 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         ppvc.imageView = profilePicture
         let navCon = UINavigationController(rootViewController: ppvc)
         self.present(navCon, animated: true, completion: nil)
+    }
+    
+    @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "Are you sure?", message: "Do you really want to log out of FetLife? We'll be very sad... 😢", preferredStyle: .actionSheet)
+        let okAction = UIAlertAction(title: "Logout", style: .destructive) { (action) -> Void in
+            API.sharedInstance.logout()
+            self.navigationController?.viewControllers = [self.storyboard!.instantiateViewController(withIdentifier: "loginView"), self]
+            _ = self.navigationController?.popViewController(animated: false)
+            _ = self.navigationController?.popViewController(animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Never mind", style: .cancel, handler: nil)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func openInSafari(_ sender: UIBarButtonItem) {
+        dlgOKCancel(self, title: "Open external link?", message: "You are about to open an external link in Safari. Do you want to continue?", onOk: { (action) in
+            UIApplication.shared.openURL(URL(string: self.friend.fetProfileURL)!)
+        }, onCancel: nil)
     }
     
     @IBAction func showHideEssentialsTapped(_ sender: UIButton) {

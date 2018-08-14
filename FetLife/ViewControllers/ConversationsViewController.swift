@@ -137,16 +137,25 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         // creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
         // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
         if !updateTimer.isValid {
-            updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
-            updateTimer.tolerance = 5
+            updateTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+            updateTimer.tolerance = 10
+        } else if updateTimer.timeInterval != 15 {
+            updateTimer.invalidate()
+            updateTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+            updateTimer.tolerance = 10
         }
         tableView.reloadData()
         dateFormatter.dateStyle = (lastUpdated.hoursFromNow >= 24) ? .short : .none
         updateLabel.text = "Last updated: \(dateFormatter.string(from: lastUpdated))"
         Dispatch.delay(0.5) { // add a delay to allow network to initialize
             Connectivity.sharedInstance.startListening()
-//            Connectivity.apiReachabilityMgr.startListening()
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        updateTimer.invalidate()
+        updateTimer = Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+        updateTimer.tolerance = 20
     }
     
     deinit {
@@ -190,6 +199,10 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func fetchConversations() {
+        guard API.isAuthorized() else {
+            self.dismiss(animated: false, completion: nil)
+            return
+        }
         Dispatch.asyncOnUserInitiatedQueue() {
             API.sharedInstance.loadConversations() { error in
                 self.endLoading(error: error)
@@ -207,13 +220,16 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 if !self.hasContent() {
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                } else {
                 }
             }
         }
     }
     
     func fetchConversationsInBackground() {
+        guard API.isAuthorized() else {
+            self.dismiss(animated: false, completion: nil)
+            return
+        }
         let lastMessageDate: Date = (conversations[0]).lastMessageCreated
         Dispatch.asyncOnUserInitiatedQueue() {
             API.sharedInstance.loadConversations() { error in
@@ -236,13 +252,16 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 if !self.hasContent() {
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                } else {
                 }
             }
         }
     }
     
     func getUnreadCount() {
+        guard API.isAuthorized() else {
+            self.dismiss(animated: false, completion: nil)
+            return
+        }
         // FIXME: - If there is an existing notification, opening the app will show another notification once conversations are updated
         let unreadConversations: [Conversation] = conversations.filter({ (c: Conversation) -> Bool in
             return c.hasNewMessages
@@ -284,13 +303,13 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             .objects(Message.self)
             .filter("conversationId == \"\(convo.id)\"")
             .sorted(byKeyPath: "createdAt", ascending: false)
-        let lastMessage = messages[0]
         API.sharedInstance.loadMessages(convo.id, parameters: [:], completion: { (err2) in
             guard err2 == nil else {
                 print("Error loading messages: \(err2!.localizedDescription)")
                 UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
                 return
             }
+            let lastMessage = messages[0]
             if UIApplication.shared.applicationIconBadgeNumber != unreadConversationCount || lastMessage.createdAt != convo.lastMessageCreated {
                 if unreadConversationCount != 0 {
                     if #available(iOS 10.0, *) {
@@ -355,20 +374,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         self.errorView = ErrorView(frame: view.frame)
     }
     
-    @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "Are you sure?", message: "Do you really want to log out of FetLife? We'll be very sad... 😢", preferredStyle: .actionSheet)
-        let okAction = UIAlertAction(title: "Logout", style: .destructive) { (action) -> Void in
-            API.sharedInstance.logout()
-            self.navigationController?.viewControllers = [self.storyboard!.instantiateViewController(withIdentifier: "loginView"), self]
-            _ = self.navigationController?.popViewController(animated: true)
-        }
-        let cancelAction = UIAlertAction(title: "Never mind", style: .cancel, handler: nil)
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     @IBAction func settingsButtonPressed(_ sender: UIBarButtonItem) {
         let svc: SettingsViewController = storyboard?.instantiateViewController(withIdentifier: "vcSettings") as! SettingsViewController
         let navCon = UINavigationController(rootViewController: svc)
@@ -382,8 +387,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             havingConnectionIssue = false
             Dispatch.delay(2.0, closure: self.hideStatus)
         } else if Connectivity.isConnected && (firstConnection || havingConnectionIssue) {
-//            havingConnectionIssue = true
-//            self.updateStatus("Unable to connect to FetLife", withColor: UIColor.red)
             self.updateStatus(havingConnectionIssue ? "Connection restored!" : "Connected", withColor: UIColor.statusOKColor())
             havingConnectionIssue = false
             Dispatch.delay(2.0, closure: self.hideStatus)
@@ -462,28 +465,62 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        var action: UITableViewRowAction!
+        
+        var archiveAction: UITableViewRowAction!
         if conversations[indexPath.row].isArchived {
-            action = UITableViewRowAction(style: .normal, title: "Unarchive") { action, index in
+            archiveAction = UITableViewRowAction(style: .normal, title: "Unarchive") { action, index in
                 let conversationToUnarchive = self.conversations[indexPath.row]
                 let realm = try! Realm()
                 try! realm.write {
                     conversationToUnarchive.isArchived = false
                 }
-                API.sharedInstance.unarchiveConversation(conversationToUnarchive.id, completion: nil)
+                API.sharedInstance.unarchiveConversation(conversationToUnarchive.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
             }
         } else {
-            action = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
+            archiveAction = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
                 let conversationToArchive = self.conversations[indexPath.row]
                 let realm = try! Realm()
                 try! realm.write {
                     conversationToArchive.isArchived = true
                 }
-                API.sharedInstance.archiveConversation(conversationToArchive.id, completion: nil)
+                API.sharedInstance.archiveConversation(conversationToArchive.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
             }
         }
-        action.backgroundColor = UIColor.brickColor()
-        return [action]
+        archiveAction.backgroundColor = UIColor.brickColor()
+        
+        var deleteAction: UITableViewRowAction!
+        deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (_, index) in
+            let alertController = UIAlertController(title: "Are you sure?", message: "Are you sure you want to permanently delete this conversation? This cannot be undone!", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let deleteConfirmAction = UIAlertAction(title: "Delete", style: .destructive) { (action) -> Void in
+                let conversationToDelete = self.conversations[indexPath.row]
+                API.sharedInstance.deleteConversation(conversationToDelete.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
+            }
+            alertController.addAction(deleteConfirmAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+        })
+        deleteAction.backgroundColor = UIColor.red
+        
+        return [archiveAction, deleteAction]
     }
 
     @available(iOS 11.0, *)
@@ -501,14 +538,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 }
                 ca.backgroundColor = UIColor.unreadMarkerColor()
                 return UISwipeActionsConfiguration(actions: [ca])
-//            } else {
-//                let ca = UIContextualAction(style: .normal, title: "Mark as Unread", handler: { (action, view, completion) in
-//                    API.sharedInstance.markMessagesAsUnread(conversationToChange.id, messageIds: [m.id], completion:  { (err) in
-//                        if err != nil { print(err!) }
-//                    })
-//                })
-//                ca.backgroundColor = UIColor.unreadMarkerColor()
-//                return UISwipeActionsConfiguration(actions: [ca])
             }
         }
         return nil

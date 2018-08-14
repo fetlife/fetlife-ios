@@ -85,9 +85,8 @@ public struct AppSettings {
     static var notificationPermissionsGranted: Bool { get { return defaults.bool(forKey: "optNotificationPermissionsGranted") }
         set(val) { defaults.set(val, forKey: "optNotificationPermissionsGranted") } }
     /// Date indicating the last time the conversation list was updated
-    static var lastUpdated: Date { get {
-        let df = DateFormatter(); df.dateStyle = .full; return df.date(from: defaults.string(forKey: "optLastUpdatedConvos") ?? df.string(from: Date()))! }
-        set(val) { let df = DateFormatter(); df.dateStyle = .full; defaults.set(df.string(from: val), forKey: "optLastUpdatedConvos") } }
+    static var lastUpdated: Date { get { return defaults.object(forKey: "optLastUpdatedConvos") as? Date ?? Date() }
+        set(val) { defaults.set(val, forKey: "optLastUpdatedConvos") } }
 }
 
 /// Connectivity monitor
@@ -187,7 +186,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // the user gets new messages), and many other variables. This is determined entirely by iOS and cannot be explicitly
         // controlled by the app.
         UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
-        print(UIApplicationBackgroundFetchIntervalMinimum)
         
         return true
     }
@@ -230,6 +228,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        guard API.isAuthorized() else { return }
         checkForNewMessages(completionHandler)
     }
     
