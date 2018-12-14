@@ -24,6 +24,10 @@ struct Dispatch {
         executeAsynchronously(Queue.userInitiated, closure: asyncBlock)
     }
     
+    static func asyncOnUserInteractiveQueue(asyncBlock: @escaping ExecutionBlock) {
+        executeAsynchronously(Queue.userInteractive, closure: asyncBlock)
+    }
+    
     static func asyncOnUtilityQueue(asyncBlock: @escaping ExecutionBlock) {
         executeAsynchronously(Queue.utility, closure: asyncBlock)
     }
@@ -43,6 +47,10 @@ struct Dispatch {
         
         static var userInitiated: DispatchQueue {
             return getGlobalQueueById(qosLevel: DispatchQoS.userInitiated)
+        }
+        
+        static var userInteractive: DispatchQueue {
+            return getGlobalQueueById(qosLevel: DispatchQoS.userInteractive)
         }
         
         static var utility: DispatchQueue {

@@ -9,11 +9,13 @@
 import Foundation
 import UIKit
 import Alamofire
+import AlamofireImage
 import Freddy
 import p2_OAuth2
 import JWTDecode
 import RealmSwift
 import Realm
+import WebKit
 
 // MARK: - API Singleton
 
@@ -24,10 +26,23 @@ final class API {
     
     let baseURL: String
     let oauthSession: OAuth2CodeGrant
+    var webViewProcessPool = WKProcessPool()
     
     private var memberId: String?
     private var memberNickname: String?
-    var currentMember: Member?
+    var currentMember: Member? {
+        didSet {
+            if let m = currentMember {
+                memberId = m.id
+                memberNickname = m.nickname
+                AppSettings.currentUserID = m.id
+            } else {
+                memberId = nil
+                memberNickname = nil
+                AppSettings.currentUserID = ""
+            }
+        }
+    }
     
     class func isAuthorized() -> Bool {
         return sharedInstance.isAuthorized()
@@ -50,24 +65,20 @@ final class API {
         guard isAuthorized() else {
 //          sharedInstance.oauthSession.authorize(callback: onAuthorize)
 //          sharedInstance.oauthSession.failure(callback: onFailure)
-			let storage = HTTPCookieStorage.shared
-			storage.cookies?.forEach() { storage.deleteCookie($0) }
+            
+            // if we have a refresh token, try reauthorizing without having to log in again
+//            if sharedInstance.oauthSession.refreshToken != nil {
+//                sharedInstance.oauthSession.doRefreshToken(callback: onAuthorize)
+//            } else {
+            sharedInstance.oauthSession.authConfig.authorizeEmbeddedAutoDismiss = true
+            sharedInstance.oauthSession.authConfig.ui.modalPresentationStyle = UIModalPresentationStyle.pageSheet
+            sharedInstance.oauthSession.authConfig.ui.barTintColor = UIColor.backgroundColor()
+            sharedInstance.oauthSession.authConfig.ui.controlTintColor = UIColor.brickColor()
             sharedInstance.oauthSession.authorizeEmbedded(from: context, callback: onAuthorize)
+//            }
+            
+            
             return
-        }
-        sharedInstance.getMe { (me, error) in
-            if me != nil && error == nil {
-                AppSettings.currentUserID = me!.id
-                self.sharedInstance.currentMember = me
-            } else if error != nil && me == nil {
-                print("Error getting current user: \(String(describing: error))")
-                AppSettings.currentUserID = ""
-                self.sharedInstance.currentMember = nil
-            } else {
-                print("Error getting current user")
-                AppSettings.currentUserID = ""
-                self.sharedInstance.currentMember = nil
-            }
         }
     }
     
@@ -107,19 +118,43 @@ final class API {
         }
     }
     
+    /// Checks if the OAuth token is present and unexpired.
+    ///
+    /// - Returns: Boolean value indicating if the user is authorized
     func isAuthorized() -> Bool {
-        return oauthSession.hasUnexpiredAccessToken()
+        // FIXME: - There's currently an issue where the OAuth token seems to be expired but a restart of the app makes it valid again. Although not quite as secure, this should hopefully rectify this issue.
+        guard !oauthSession.hasUnexpiredAccessToken() else { return true }
+        if let id = memberId {
+            if AppSettings.currentUserID != "" && AppSettings.currentUserID == id { return true }
+        }
+        return false
+    }
+    
+    /// Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
+    func logout() {
+        oauthSession.forgetTokens();
+        let storage = HTTPCookieStorage.shared
+        storage.cookies?.forEach() { storage.deleteCookie($0) }
+        webViewProcessPool = WKProcessPool()
+        let realm: Realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
+        API.sharedInstance.webViewProcessPool = WKProcessPool() // reset process pool
+        API.sharedInstance.currentMember = nil
+        app.cancelAllLocalNotifications()
+        AppSettings.currentUserID = ""
     }
     
     // MARK: - Conversation API
     
-    fileprivate var conversationLoadAttempts: Int = 0
+    private var conversationLoadAttempts: Int = 0
     /// Loads all the conversations for the current user.
     ///
     /// - Parameter completion: Optional completion with error
     func loadConversations(_ completion: ((_ error: Error?) -> Void)?) {
         let parameters = ["limit": 100, "order": "-updated_at", "with_archived": true] as [String : Any]
-        let url = "\(baseURL)/v2/me/conversations"
+        let url = AppSettings.useAndroidAPI ? "https://app.fetlife.com/api/v2/me/conversations" : "\(baseURL)/v2/me/conversations"
         conversationLoadAttempts += 1
         oauthSession.request(.get, url, parameters: parameters).responseData { response -> Void in
             switch response.result {
@@ -132,18 +167,47 @@ final class API {
                         return
                     }
                     
+                    if let err: String = try? json[0].getString(at: "error") {
+                        if err == "Forbidden" {
+                            throw APIError.Forbidden
+                        } else if err == "The maximum number of requests per minute has been exceeded" {
+                            throw APIError.RateLimitExceeded
+                        } else {
+                            throw APIError.General(description: err)
+                        }
+                    }
+                    
                     let realm = try! Realm()
                     if !realm.isInWriteTransaction {
-                        realm.beginWrite()
+                        var convos: [Conversation] = []
                         for c in json {
-                            let conversation = try! Conversation.init(json: c)
-                            realm.add(conversation, update: true)
+                            if let conversation = try? Conversation.init(json: c) {
+                                let id = conversation.id
+                                if let rConvo = try! Realm().objects(Conversation.self).filter("id == %@", id).first {
+                                    if rConvo.updatedAt != conversation.updatedAt || rConvo.lastMessageCreated != conversation.lastMessageCreated || (rConvo.subject == "" && conversation.subject != "") {
+                                        convos.append(conversation)
+                                    } else {
+                                        convos.append(rConvo)
+                                    }
+                                } else {
+                                    convos.append(conversation)
+                                }
+                            }
                         }
-                        try realm.commitWrite()
-                        self.conversationLoadAttempts = 0
-                        completion?(nil)
+                        
+                            for c in convos {
+                                c.updateMember()
+                            }
+                            do {
+                                try realm.write { realm.add(convos, update: true) }
+                            } catch let e {
+                                print("Error writing conversations to Realm: \(e.localizedDescription)")
+                            }
+                            self.conversationLoadAttempts = 0
+                            completion?(nil)
+//                        }
                     } else if self.conversationLoadAttempts <= 10 {
-                        print("Realm in write transaction! Will retry in \(self.conversationLoadAttempts)s...")
+                        print("Realm in write transaction! Will retry loading convos in \(self.conversationLoadAttempts)s...")
                         Dispatch.delay(Double(self.conversationLoadAttempts), closure: {
                             self.loadConversations(completion)
                         })
@@ -156,13 +220,14 @@ final class API {
                     completion?(error)
                 }
             case .failure(let error):
+                print("Request error: \(error.localizedDescription)")
                 self.conversationLoadAttempts = 0
                 completion?(error)
             }
         }
     }
     
-    fileprivate var archiveAttempts: Int = 0
+    private var archiveAttempts: Int = 0
     /// Archives the specified conversation.
     ///
     /// - Parameters:
@@ -178,6 +243,16 @@ final class API {
             case .success(let value):
                 do {
                     let json = try JSON(data: value)
+                    
+                    if let err: String = try? json.getString(at: "error") {
+                        if err == "Forbidden" {
+                            throw APIError.Forbidden
+                        } else if err == "The maximum number of requests per minute has been exceeded" {
+                            throw APIError.RateLimitExceeded
+                        } else {
+                            throw APIError.General(description: err)
+                        }
+                    }
                     
                     let conversation = try Conversation.init(json: json)
                     
@@ -209,7 +284,7 @@ final class API {
         }
     }
     
-    fileprivate var unarchiveAttempts: Int = 0
+    private var unarchiveAttempts: Int = 0
     /// Unarchives the specified conversation.
     ///
     /// - Parameters:
@@ -256,7 +331,7 @@ final class API {
         }
     }
     
-    fileprivate var deleteAttempts: Int = 0
+    private var deleteAttempts: Int = 0
     /// Deletes the specified conversation permanently.
     ///
     /// - Parameters:
@@ -301,7 +376,7 @@ final class API {
         }
     }
     
-    fileprivate var messagesLoadAttempts: Int = 0
+    private var messagesLoadAttempts: Int = 0
     /// Gets the messages in a conversation.
     ///
     /// - Parameters:
@@ -328,20 +403,36 @@ final class API {
                         return
                     }
                     
+                    if let err: String = try? json[0].getString(at: "error") {
+                        if err == "Forbidden" {
+                            throw APIError.Forbidden
+                        } else if err == "The maximum number of requests per minute has been exceeded" {
+                            throw APIError.RateLimitExceeded
+                        } else {
+                            throw APIError.General(description: err)
+                        }
+                    }
+                    
                     let realm = try! Realm()
                     if !realm.isInWriteTransaction {
-                        realm.beginWrite()
-                        
+                        var messages: [Message] = []
                         for m in json {
-                            let message = try Message.init(json: m)
-                            message.conversationId = conversationId
-                            realm.add(message, update: true)
+                            do {
+                                let message = try Message.init(json: m)
+                                message.conversationId = conversationId
+                                messages.append(message)
+                            } catch(let err as APIError) {
+                                print(err)
+                                if err == APIError.Forbidden {
+                                    throw err
+                                }
+                            }
                         }
-                        try realm.commitWrite()
+                        try realm.write { realm.add(messages, update: true) }
                         self.messagesLoadAttempts = 0
                         completion?(nil)
                     } else if self.messagesLoadAttempts <= 10 {
-                        print("Realm in write transaction! Will retry in \(self.messagesLoadAttempts)s...")
+                        print("Realm in write transaction! Will retry loading messages in \(self.messagesLoadAttempts)s...")
                         Dispatch.delay(Double(self.messagesLoadAttempts), closure: {
                             self.loadMessages(conversationId, parameters: parameters, completion: completion)
                         })
@@ -413,10 +504,11 @@ final class API {
             case .success:
                 let realm = try! Realm()
                 realm.refresh() // make sure Realm instance is the most recent version
-                let conversation = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject)
-                
-                try! realm.write {
-                    conversation?.hasNewMessages = false
+                if let conversation = realm.object(ofType: Conversation.self, forPrimaryKey: conversationId as AnyObject) {
+                    try! realm.write {
+                        conversation.hasNewMessages = false
+                        realm.add(conversation, update: true)
+                    }
                 }
                 completion?(nil)
             case .failure(let error):
@@ -424,18 +516,6 @@ final class API {
                 completion?(error)
             }
         }
-    }
-    
-    /// Logs the user out of Fetlife by forgetting OAuth tokens and removing all fetlife cookies.
-    func logout() {
-        oauthSession.forgetTokens();
-        let storage = HTTPCookieStorage.shared
-        storage.cookies?.forEach() { storage.deleteCookie($0) }
-        let realm: Realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-        API.sharedInstance.currentMember = nil
     }
     
     // MARK: - Profile API
@@ -447,7 +527,8 @@ final class API {
     ///   - userID: ID of the user whose profile you wish to retrieve
     ///   - completion: Optional completion handler taking `JSON?` and `Error?` parameters
     func getFetUser(_ userID: String, completion: ((_ userInfo: JSON?, _ error: Error?) -> Void)?) {
-        let url = "\(baseURL)/v2/members/\(userID)"
+        
+        let url = AppSettings.useAndroidAPI ? "https://app.fetlife.com/api/v2/members/\(userID)" : "\(baseURL)/v2/members/\(userID)"
         
         oauthSession.request(.get, url, parameters: nil).responseData { response -> Void in
             switch response.result {
@@ -501,6 +582,46 @@ final class API {
             }
         }
     }
+    
+    // MARK: - Requests
+    
+    /// Gets any pending requests for the current user.
+    ///
+    /// - Parameters:
+    ///   - limit: Integer describing the maximum number of requests to fetch (defaults to 100)
+    ///   - page: Integer of the page requested (defaults to the first page)
+    ///   - completion: Completion returning an array of `FriendRequest`s and an error
+    func getRequests(_ limit: Int? = 100, page: Int? = 1, completion: ((_ requests: [FriendRequest], _ error: Error?) -> Void)?) {
+        let url = "\(baseURL)/v2/me/friendrequests"
+        let parameters: Dictionary<String, Any> = ["limit": limit as Any, "page": page as Any]
+        
+        oauthSession.request(.get, url, parameters: parameters).responseData { response -> Void in
+            switch response.result {
+            case .success(let value):
+                do {
+                    let json = try JSON(data: value).getArray()
+                    
+                    if json.isEmpty {
+                        completion?([], nil)
+                        return
+                    }
+                    
+                    var requests: [FriendRequest] = []
+                    for r in json {
+                        if let newRequest = try? FriendRequest(json: r) {
+                            requests.append(newRequest)
+                        }
+                    }
+                    completion?(requests, nil)
+                } catch(let error) {
+                    completion?([], error)
+                }
+            case .failure(let error):
+                completion?([], error)
+            }
+        }
+    }
+    
     
     // Extremely useful for making app store screenshots, keeping this around for now.
     func fakeConversations() -> JSON {

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14269.14" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14306.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14278.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="MessagesTableViewCellIncoming" rowHeight="57" id="w8c-WR-1A3" customClass="MessagesTableViewCellIncoming" customModule="FetLife" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
+        <tableViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="MessagesTableViewCellIncoming" rowHeight="83" id="w8c-WR-1A3" customClass="MessagesTableViewCellIncoming" customModule="FetLife" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" tableViewCell="w8c-WR-1A3" id="XN0-Xp-NPN">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="56.5"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="69.5"/>
+                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                 <subviews>
-                    <view clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
-                        <rect key="frame" x="16" y="11" width="169.5" height="25.5"/>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="jjj-Su-iWq" userLabel="Bubble">
+                        <rect key="frame" x="16" y="11" width="169.5" height="36.5"/>
                         <subviews>
                             <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Beu-bj-bRw" userLabel="Unread Marker">
-                                <rect key="frame" x="0.0" y="0.0" width="4" height="25.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="4" height="36.5"/>
                                 <color key="backgroundColor" red="0.46666666670000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="4" id="ehl-nH-yf8"/>
                                 </constraints>
                             </view>
-                            <textView opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" bouncesZoom="NO" keyboardDismissMode="interactive" editable="NO" text="Incoming Message" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body" customClass="MessageTextView" customModule="FetLife" customModuleProvider="target">
-                                <rect key="frame" x="8" y="4" width="153.5" height="17.5"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                            <textView opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" keyboardDismissMode="interactive" editable="NO" text="Incoming Message" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DvJ-iB-hF2" userLabel="Message Body" customClass="MessageTextView" customModule="FetLife" customModuleProvider="target">
+                                <rect key="frame" x="8" y="4" width="153.5" height="24.5"/>
+                                <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
@@ -45,32 +45,35 @@
                             <constraint firstAttribute="bottom" secondItem="Beu-bj-bRw" secondAttribute="bottom" id="bpR-0X-cMY"/>
                             <constraint firstItem="DvJ-iB-hF2" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="top" constant="4" id="eBg-B1-m3C"/>
                             <constraint firstItem="Beu-bj-bRw" firstAttribute="leading" secondItem="jjj-Su-iWq" secondAttribute="leading" id="gD2-MB-mkV"/>
-                            <constraint firstAttribute="bottom" secondItem="DvJ-iB-hF2" secondAttribute="bottom" constant="4" id="lDL-5y-JTx"/>
+                            <constraint firstAttribute="bottom" secondItem="DvJ-iB-hF2" secondAttribute="bottom" constant="8" id="lDL-5y-JTx"/>
                             <constraint firstAttribute="trailing" secondItem="DvJ-iB-hF2" secondAttribute="trailing" constant="8" id="t5P-I2-fpf"/>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="xNK-B9-dkg"/>
                             <constraint firstItem="DvJ-iB-hF2" firstAttribute="leading" secondItem="jjj-Su-iWq" secondAttribute="leading" constant="8" id="xnc-V2-ZM6"/>
                         </constraints>
                     </view>
-                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="HH:MM AM dd/mm/yy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4J-Gd-9er">
-                        <rect key="frame" x="16" y="39.5" width="169.5" height="14"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="14" identifier="timestampHeightConstraint" id="XIi-cU-xKX"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="gH7-2c-Txl">
+                        <rect key="frame" x="16" y="53.5" width="115.5" height="14"/>
+                        <subviews>
+                            <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" text="HH:MM AM dd/mm/yy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4J-Gd-9er">
+                                <rect key="frame" x="0.0" y="0.0" width="115.5" height="14"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" identifier="timestampHeightConstraint" id="XIi-cU-xKX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
                 </subviews>
                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
                     <constraint firstItem="jjj-Su-iWq" firstAttribute="top" secondItem="XN0-Xp-NPN" secondAttribute="topMargin" id="CR7-1Y-nlr"/>
-                    <constraint firstItem="n4J-Gd-9er" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="bottom" constant="3" id="FkI-fz-9lh"/>
                     <constraint firstItem="jjj-Su-iWq" firstAttribute="leading" secondItem="XN0-Xp-NPN" secondAttribute="leading" id="H5l-x0-s71"/>
-                    <constraint firstAttribute="bottom" secondItem="n4J-Gd-9er" secondAttribute="bottom" constant="3" id="Saq-j7-cNU"/>
-                    <constraint firstItem="n4J-Gd-9er" firstAttribute="trailing" secondItem="jjj-Su-iWq" secondAttribute="trailing" id="VlW-AY-CSE"/>
-                    <constraint firstItem="n4J-Gd-9er" firstAttribute="leading" secondItem="XN0-Xp-NPN" secondAttribute="leading" constant="16" id="llN-cg-eAM"/>
+                    <constraint firstItem="gH7-2c-Txl" firstAttribute="top" secondItem="jjj-Su-iWq" secondAttribute="bottom" constant="6" id="YwO-f5-Aia"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jjj-Su-iWq" secondAttribute="trailing" constant="75" id="daC-3H-KRS"/>
+                    <constraint firstItem="gH7-2c-Txl" firstAttribute="leading" secondItem="jjj-Su-iWq" secondAttribute="leading" id="fu1-vd-0Mp"/>
                     <constraint firstItem="jjj-Su-iWq" firstAttribute="leading" secondItem="XN0-Xp-NPN" secondAttribute="leadingMargin" id="mzu-cF-UiH"/>
-                    <constraint firstItem="n4J-Gd-9er" firstAttribute="leading" secondItem="jjj-Su-iWq" secondAttribute="leading" id="wbJ-Zf-o2O"/>
+                    <constraint firstAttribute="bottom" secondItem="gH7-2c-Txl" secondAttribute="bottom" constant="2" id="wbS-dj-6kZ"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
@@ -96,7 +99,7 @@
                 <outlet property="messageTimestamp" destination="n4J-Gd-9er" id="C2G-Zf-ale"/>
                 <outlet property="unreadMarkerView" destination="Beu-bj-bRw" id="k7z-Jr-hIh"/>
             </connections>
-            <point key="canvasLocation" x="407" y="382.5"/>
+            <point key="canvasLocation" x="407" y="398"/>
         </tableViewCell>
     </objects>
 </document>

@@ -10,13 +10,15 @@ import UIKit
 import SafariServices
 import WebKit
 import Turbolinks
+import RealmSwift
 
 class SettingsViewController: UITableViewController {
 
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
     @IBOutlet weak var cellUsername: UITableViewCell!
-    @IBOutlet weak var lblCurrentUser: UILabel!
-    @IBOutlet weak var lblAppVersion: UILabel!
-    @IBOutlet weak var lblBuildNumber: UILabel!
+    @IBOutlet weak var cellViewProfile: UITableViewCell!
+    @IBOutlet weak var cellAccountSettings: UITableViewCell!
+    @IBOutlet var lblCurrentUser: UILabel!
     
     @IBOutlet weak var swchSFWMode: UISwitch!
     @IBOutlet weak var cellSFWMode: UITableViewCell!
@@ -29,6 +31,13 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var cellGitHub: UITableViewCell!
     @IBOutlet weak var cellOpenFetLife: UITableViewCell!
     
+    @IBOutlet weak var lblAppVersion: UILabel!
+    @IBOutlet weak var lblBuildNumber: UILabel!
+    @IBOutlet weak var lblAppIdentifier: UILabel!
+    
+    @IBOutlet weak var cellPurgeRealm: UITableViewCell!
+    @IBOutlet weak var swchUseAndroidAPI: UISwitch!
+
     let navTLBrowser = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "vcTLSettings") as! TLViewController
     var navCon = UINavigationController()
     
@@ -54,14 +63,17 @@ class SettingsViewController: UITableViewController {
         
         // Settings
         swchSFWMode.isOn = AppSettings.sfwModeEnabled
+        swchUseAndroidAPI.isOn = AppSettings.useAndroidAPI
         
         // App Info
         lblAppVersion.text = APP_VERSION
         lblBuildNumber.text = BUILD_NUMBER
+        lblAppIdentifier.text = APP_IDENTIFIER
         
         tableView.backgroundColor = .backgroundColor()
         configureCellActions()
         navCon = self.navigationController ?? UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "conversationsView") as! UINavigationController
+        navTLBrowser.tab = .Settings
     }
     
     // MARK: - User Information
@@ -139,7 +151,13 @@ class SettingsViewController: UITableViewController {
         cellContactUs.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentContactUs)))
         cellGitHub.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentGitHub)))
         cellOpenFetLife.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentFetLife)))
-
+        
+        cellPurgeRealm.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(purgeRealmTapped)))
+    }
+    
+    override func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section == 2 && indexPath.row < 3 else { return false }
+        return true
     }
     
     // MARK: - Settings
@@ -147,16 +165,43 @@ class SettingsViewController: UITableViewController {
     @IBAction func sfwModeToggled(_ sender: UISwitch) {
         AppSettings.sfwModeEnabled = sender.isOn
     }
+    @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: "Are you sure?", message: "Do you really want to log out of FetLife? We'll be very sad... 😢", preferredStyle: .actionSheet)
+        let okAction = UIAlertAction(title: "Logout", style: .destructive) { (action) -> Void in
+            API.sharedInstance.logout()
+            if let window = UIApplication.shared.delegate?.window! {
+                window.rootViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "loginView")
+                self.dismiss(animated: false, completion: nil)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Never mind", style: .cancel, handler: nil)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     func sfwModeTapped() {
-        dlgOK(self, title: "Safe For Work Mode", message: "Turning this option on will blur all images. To temporarily unblur images, double-tap on the image.", onOk: nil)
+        dlgOK(self, title: "Safe For Work Mode", message: "Turning this option on will blur images. To temporarily unblur images, double-tap on the image. Note: this setting may not take effect everywhere.", onOk: nil)
+    }
+    
+    func purgeRealmTapped() {
+        let ac = UIAlertController(title: "Purge Realm Database?", message: "Are you sure you want to purge the Realm database? This can cause undesired behavior and/or cause the app to be unusable.", preferredStyle: .actionSheet)
+        let purgeAction = UIAlertAction(title: "Yes, purge", style: .destructive) { (action) in
+            let realm = try! Realm()
+            realm.deleteAll()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        ac.addAction(purgeAction)
+        ac.addAction(cancelAction)
+        
+        self.present(ac, animated: true, completion: nil)
+    }
+    @IBAction func useAndroidAPIToggled(_ sender: UISwitch) {
+        AppSettings.useAndroidAPI = sender.isOn
     }
 
     // MARK: - Navigation
-
-    @IBAction func closeButtonPressed(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
@@ -166,5 +211,4 @@ class SettingsViewController: UITableViewController {
             (segue.destination as! FriendProfileViewController).friend = API.sharedInstance.currentMember!
         }
     }
-
 }

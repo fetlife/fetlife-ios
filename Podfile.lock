@@ -1,15 +1,16 @@
 PODS:
   - Alamofire (4.7.3)
-  - AlamofireImage (3.3.1):
-    - Alamofire (~> 4.5)
-  - AlamofireNetworkActivityIndicator (2.2.1):
+  - AlamofireImage (3.4.1):
     - Alamofire (~> 4.7)
-  - Crashlytics (3.10.5):
-    - Fabric (~> 1.7.9)
+  - AlamofireNetworkActivityIndicator (2.3.0):
+    - Alamofire (~> 4.7)
+  - Crashlytics (3.10.7):
+    - Fabric (~> 1.7.11)
   - DateTools (1.7.0)
-  - DynamicBlurView (2.0.2)
-  - Fabric (1.7.9)
+  - DynamicBlurView (3.0.1)
+  - Fabric (1.7.11)
   - Freddy (3.0.3)
+  - HTMLEntities (3.0.10)
   - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - DynamicBlurView
   - Fabric
   - Freddy (~> 3.0.0)
+  - HTMLEntities (from `https://github.com/IBM-Swift/swift-html-entities.git`)
   - JSQMessagesViewController
   - JWTDecode (~> 2.0)
   - p2.OAuth2 (~> 3.0.1)
@@ -64,23 +66,29 @@ SPEC REPOS:
     - StatefulViewController
 
 EXTERNAL SOURCES:
+  HTMLEntities:
+    :git: https://github.com/IBM-Swift/swift-html-entities.git
   Turbolinks:
     :git: https://github.com/turbolinks/turbolinks-ios.git
 
 CHECKOUT OPTIONS:
+  HTMLEntities:
+    :commit: 2f582d1f927824045cbbcc5d72614799a8e7f35a
+    :git: https://github.com/IBM-Swift/swift-html-entities.git
   Turbolinks:
     :commit: 8b0ff2132ac00192c7869366b54fb3102ff9291e
     :git: https://github.com/turbolinks/turbolinks-ios.git
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  AlamofireImage: 3b35b586853abaf94ca1250f4e94cff3c21a4c0d
-  AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
-  Crashlytics: 7f2e38d302d9da96475b3d64d86fb29e31a542b7
+  AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
+  AlamofireNetworkActivityIndicator: 18346ff6d770d9513d0ac6f2d99706f40f93dbaa
+  Crashlytics: ccaac42660eb9351b9960c0d66106b0bcf99f4fa
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
-  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
-  Fabric: a2917d3895e4c1569b9c3170de7320ea1b1e6661
+  DynamicBlurView: b1df5415f9bd31897549e5d7077e5ec120a4d636
+  Fabric: f233c9492b3bbc1f04e3882986740f7988a58edb
   Freddy: 7c62db262a0d0e3b3e2b8b40f2c0cc51e122fbc4
+  HTMLEntities: 3d89d72a9aa3b6ad095c584bc2f1383bbed4581c
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JWTDecode: 83e8b381aafe27158d9f692cbdca2b12d61d460c
@@ -92,6 +100,6 @@ SPEC CHECKSUMS:
   StatefulViewController: 4803bf900d44de26074344998e10e041113b5931
   Turbolinks: 4e3a5ce8132e96019236ca7f8f274a0034de2a39
 
-PODFILE CHECKSUM: 7a22685d06790c0beac73cbed8b9ed1f4767064a
+PODFILE CHECKSUM: 54f0852d7ae46d5dcf211ad29f11ea11504e951a
 
 COCOAPODS: 1.5.2

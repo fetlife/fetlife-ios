@@ -19,6 +19,7 @@ class MessagesTableViewController: SLKTextViewController {
     let incomingCellIdentifier = "MessagesTableViewCellIncoming"
     let outgoingCellIdentifier = "MessagesTableViewCellOutgoing"
     var updateTimer: Timer = Timer()
+    var navCon: UIViewController!
     
     @IBOutlet weak var titleButton: UIButton!
     
@@ -29,7 +30,6 @@ class MessagesTableViewController: SLKTextViewController {
             lv.isHidden = true
             lv.alpha = 0
         }
-        
         return lv
     }()
     lazy var noConvoSelectedView: NoConversationsView = {
@@ -54,7 +54,7 @@ class MessagesTableViewController: SLKTextViewController {
     var memberId: String!
     var member: Member!
     var conversationId: String = ""
-    fileprivate var attempts: Int = 0
+    private var attempts: Int = 0
     
     // MARK: - Lifecycle
     
@@ -94,9 +94,8 @@ class MessagesTableViewController: SLKTextViewController {
         textInputbar.tintColor = UIColor.brickColor()
         
         titleButton.tintColor = UIColor.brickColor()
-        titleButton.setTitle("\(conversation.member!.nickname) ‣", for: UIControlState.normal)
-        if let navcon = navigationController {
-            navcon.title = "\(conversation.member!.nickname) ‣"
+        if let conversation = conversation {
+            titleButton.setTitle("\(conversation.member?.nickname ?? "") ‣", for: UIControlState.normal)
         }
         
         textView.placeholder = "What say you?"
@@ -164,9 +163,9 @@ class MessagesTableViewController: SLKTextViewController {
                     self?.hideNoConvoSelectedView()
                 })
                 attempts = 0
-                print("Successfully registered for updates")
             } else {
                 print("No conversation")
+                attempts = 0
             }
         }
     }
@@ -177,12 +176,14 @@ class MessagesTableViewController: SLKTextViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        notificationToken?.invalidate()
         updateTimer.invalidate()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.fetchMessages()
+        if !updateTimer.isValid { createTimer() }
     }
     
     override func didReceiveMemoryWarning() {
@@ -253,6 +254,8 @@ class MessagesTableViewController: SLKTextViewController {
         cell.transform = self.tableView!.transform // 😬
         
         cell.message = message
+        cell.navCon = navCon
+        cell.tableView = tableView
         
         // Remove margins from the table cell.
         if cell.responds(to: #selector(setter: UIView.preservesSuperviewLayoutMargins)) {
@@ -276,7 +279,7 @@ class MessagesTableViewController: SLKTextViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50.0
+        return 60.0
     }
     
     // MARK: - Methods
@@ -293,7 +296,7 @@ class MessagesTableViewController: SLKTextViewController {
                 Dispatch.asyncOnUserInitiatedQueue() {
                     API.sharedInstance.loadMessages(conversationId, parameters: parameters) { error in
                         if let e = error {
-                            print(e)
+                            print("error fetching messages: \(e.localizedDescription)")
                         }
                         self.hideLoadingView()
                     }

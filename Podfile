@@ -19,4 +19,5 @@ target 'FetLife' do
   pod 'JSQMessagesViewController'
   pod 'DynamicBlurView'
   pod 'Turbolinks', :git => 'https://github.com/turbolinks/turbolinks-ios.git'
+  pod 'HTMLEntities', :git => 'https://github.com/IBM-Swift/swift-html-entities.git'
 end
