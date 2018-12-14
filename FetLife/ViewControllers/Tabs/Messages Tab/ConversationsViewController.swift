@@ -230,6 +230,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         guard API.isAuthorized() else {
             self.dismiss(animated: false, completion: nil)
 //            self.dismiss(animated: false, completion: nil)
+            refreshControl.endRefreshing()
             return
         }
                     // TODO: show empty view if in split screen
