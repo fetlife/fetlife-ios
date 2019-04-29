@@ -89,7 +89,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         return false
     }
     
-    func reload(_ sender: AnyObject) {
+    @objc func reload(_ sender: AnyObject) {
         loadInfo(false)
         Member.getAdditionalUserInfo(friend) { (success, m) in
             if success {
@@ -104,7 +104,7 @@ class FriendProfileViewController: UIViewController, UIPopoverPresentationContro
         }
     }
     
-    func checkIfLoaded() {
+    @objc func checkIfLoaded() {
         print("checking for info")
         loadAttempts += 1
         friend = messagesViewController.member

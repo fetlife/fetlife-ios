@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6054D8D9E3CFEDE427EE19AA /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D177BBE4B33A450B02A3DC /* Pods_FetLife.framework */; };
 		828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A991C656BD900DADA23 /* LoginViewController.swift */; };
 		828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FD51C6D514F000E782B /* MessagesTableViewCellIncoming.swift */; };
 		828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3661C63A630004253FE /* UIColor+FetLife.swift */; };
@@ -28,43 +29,7 @@
 		828D66421CC1DD3200A6F1D2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82B55AC81C60FB060035D45E /* LaunchScreen.storyboard */; };
 		828D66431CC1DD3200A6F1D2 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 82016BA21C722A6600E05F10 /* Podfile */; };
 		828D66451CC1DD3200A6F1D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82B55AC31C60FB060035D45E /* Main.storyboard */; };
-		82B355971CC52A6400CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FD51C6D514F000E782B /* MessagesTableViewCellIncoming.swift */; };
-		82B355981CC52A6400CBDAB3 /* UIColor+FetLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3661C63A630004253FE /* UIColor+FetLife.swift */; };
-		82B355991CC52A6400CBDAB3 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3581C63A600004253FE /* ConversationCell.swift */; };
-		82B3559A1CC52A6400CBDAB3 /* OAuth2+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A9B1C65AFDA00DADA23 /* OAuth2+Alamofire.swift */; };
-		82B3559B1CC52A6400CBDAB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A991C656BD900DADA23 /* LoginViewController.swift */; };
-		82B3559C1CC52A6400CBDAB3 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829BAB1E1C87E74100176A9F /* LoadingView.swift */; };
-		82B3559D1CC52A6400CBDAB3 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FCD1C6D4D17000E782B /* MessagesTableViewController.swift */; };
-		82B3559E1CC52A6400CBDAB3 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F35E1C63A619004253FE /* ConversationsViewController.swift */; };
-		82B3559F1CC52A6400CBDAB3 /* FetLifeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B55AD41C60FB060035D45E /* FetLifeTests.swift */; };
-		82B355A01CC52A6400CBDAB3 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F6D1041C8DF067002DF881 /* Dispatch.swift */; };
-		82B355A11CC52A6400CBDAB3 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821DC66B1C626F8600B9C25E /* API.swift */; };
-		82B355A21CC52A6400CBDAB3 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829BAB221C87E9EE00176A9F /* ErrorView.swift */; };
-		82B355A31CC52A6400CBDAB3 /* NoConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822989411C8742A400358EEF /* NoConversationsView.swift */; };
-		82B355A41CC52A6400CBDAB3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F505FF1C7E57B400DDDDDF /* Models.swift */; };
-		82B355A51CC52A6400CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FE51C6D6F5A000E782B /* BaseMessagesTableViewCell.swift */; };
-		82B355A61CC52A6400CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FDD1C6D5BBC000E782B /* MessagesTableViewCellIOutgoing.swift */; };
-		82B355A81CC52A6400CBDAB3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 821DC66E1C62761C00B9C25E /* Alamofire.framework */; };
-		82B355AA1CC52A6400CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
-		82B355AB1CC52A6400CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
-		82B355B21CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FD51C6D514F000E782B /* MessagesTableViewCellIncoming.swift */; };
-		82B355B31CC52AC800CBDAB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A991C656BD900DADA23 /* LoginViewController.swift */; };
-		82B355B41CC52AC800CBDAB3 /* FetChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B55ADF1C60FB060035D45E /* FetChatUITests.swift */; };
-		82B355B51CC52AC800CBDAB3 /* OAuth2+Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A9B1C65AFDA00DADA23 /* OAuth2+Alamofire.swift */; };
-		82B355B61CC52AC800CBDAB3 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F35E1C63A619004253FE /* ConversationsViewController.swift */; };
-		82B355B71CC52AC800CBDAB3 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829BAB1E1C87E74100176A9F /* LoadingView.swift */; };
-		82B355B81CC52AC800CBDAB3 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821DC66B1C626F8600B9C25E /* API.swift */; };
-		82B355B91CC52AC800CBDAB3 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FCD1C6D4D17000E782B /* MessagesTableViewController.swift */; };
-		82B355BA1CC52AC800CBDAB3 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3581C63A600004253FE /* ConversationCell.swift */; };
-		82B355BB1CC52AC800CBDAB3 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F6D1041C8DF067002DF881 /* Dispatch.swift */; };
-		82B355BC1CC52AC800CBDAB3 /* UIColor+FetLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3661C63A630004253FE /* UIColor+FetLife.swift */; };
-		82B355BD1CC52AC800CBDAB3 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829BAB221C87E9EE00176A9F /* ErrorView.swift */; };
-		82B355BE1CC52AC800CBDAB3 /* NoConversationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822989411C8742A400358EEF /* NoConversationsView.swift */; };
-		82B355BF1CC52AC800CBDAB3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F505FF1C7E57B400DDDDDF /* Models.swift */; };
-		82B355C01CC52AC800CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FE51C6D6F5A000E782B /* BaseMessagesTableViewCell.swift */; };
-		82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FDD1C6D5BBC000E782B /* MessagesTableViewCellIOutgoing.swift */; };
-		82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
-		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
+		C901E04A2241A97700EEF0D6 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C901E0492241A97700EEF0D6 /* Realm.framework */; };
 		C907895D211BED3E00C16E7A /* TLVisitableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C907895C211BED3E00C16E7A /* TLVisitableViewController.swift */; };
 		C9078963211BEEBF00C16E7A /* TLErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9078962211BEEBF00C16E7A /* TLErrorView.swift */; };
 		C91FE74B212BD1010027CEEA /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91FE74A212BD1010027CEEA /* RequestsViewController.swift */; };
@@ -90,22 +55,10 @@
 		C9E9ABEB212759A600E41582 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E9ABEA212759A600E41582 /* CreditsViewController.swift */; };
 		C9E9ABF021275D3900E41582 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C9E9ABEF21275D3800E41582 /* Credits.rtf */; };
 		C9FB1BB9213479AC00ACEB21 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9FB1BB8213479AB00ACEB21 /* Globals.swift */; };
-		ECB64189BDACA3B83B0DD58A /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6697F3B73EB8DFE2F3439F20 /* Pods_FetLife.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		C9CEBA8D20D1E42D009BD594 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 82B55AB21C60FB060035D45E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 828D66281CC1DD3200A6F1D2;
-			remoteInfo = FetLife;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		50834538E6C9604C4EE432B0 /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
-		6697F3B73EB8DFE2F3439F20 /* Pods_FetLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FetLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		134E36DAC43F868B36F39605 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
 		82016BA21C722A6600E05F10 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; name = Podfile; path = ../Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		821DC66B1C626F8600B9C25E /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = API.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		821DC66E1C62761C00B9C25E /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
@@ -127,8 +80,6 @@
 		829412C71C6BABBA006E6DCB /* FetLife-Swift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FetLife-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		829BAB1E1C87E74100176A9F /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = LoadingView.swift; path = Views/LoadingView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		829BAB221C87E9EE00176A9F /* ErrorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = ErrorView.swift; path = Views/ErrorView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		82B355AF1CC52A6400CBDAB3 /* FetLifeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetLifeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		82B355C91CC52AC800CBDAB3 /* FetLifeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetLifeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82B55ABD1C60FB060035D45E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82B55AC41C60FB060035D45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		82B55AC91C60FB060035D45E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -142,7 +93,7 @@
 		82CE55731C630FF000E12101 /* Freddy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Freddy.framework; path = Carthage/Build/iOS/Freddy.framework; sourceTree = "<group>"; };
 		82F505FF1C7E57B400DDDDDF /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Models.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82F6D1041C8DF067002DF881 /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Dispatch.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		87DF06C21B61ECF65ACEEBD7 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
+		C901E0492241A97700EEF0D6 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C907895C211BED3E00C16E7A /* TLVisitableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TLVisitableViewController.swift; sourceTree = "<group>"; };
 		C9078962211BEEBF00C16E7A /* TLErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TLErrorView.swift; path = Views/TLErrorView.swift; sourceTree = "<group>"; };
 		C91FE74A212BD1010027CEEA /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +121,8 @@
 		C9E9ABEA212759A600E41582 /* CreditsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
 		C9E9ABEF21275D3800E41582 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		C9FB1BB8213479AB00ACEB21 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		CD2930992257CAE517CD1064 /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
+		D9D177BBE4B33A450B02A3DC /* Pods_FetLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FetLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,34 +130,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C901E04A2241A97700EEF0D6 /* Realm.framework in Frameworks */,
 				C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */,
-				ECB64189BDACA3B83B0DD58A /* Pods_FetLife.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		82B355A71CC52A6400CBDAB3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82B355A81CC52A6400CBDAB3 /* Alamofire.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		82B355C21CC52AC800CBDAB3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				6054D8D9E3CFEDE427EE19AA /* Pods_FetLife.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		17768C8D17AB397C4CE41FEF /* Pods */ = {
+		6CB0AC49AD7BD3D79C2F2996 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				87DF06C21B61ECF65ACEEBD7 /* Pods-FetLife.debug.xcconfig */,
-				50834538E6C9604C4EE432B0 /* Pods-FetLife.release.xcconfig */,
+				134E36DAC43F868B36F39605 /* Pods-FetLife.debug.xcconfig */,
+				CD2930992257CAE517CD1064 /* Pods-FetLife.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -212,6 +151,7 @@
 		82329A941C65256A00DADA23 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C901E0492241A97700EEF0D6 /* Realm.framework */,
 				C9968A0B20B9505B00653283 /* AlamofireImage.framework */,
 				82329A971C656A6800DADA23 /* OAuth2.framework */,
 				82CE55711C6306C600E12101 /* DateTools.framework */,
@@ -219,7 +159,7 @@
 				82CE55731C630FF000E12101 /* Freddy.framework */,
 				821DC6711C6279EA00B9C25E /* Kingfisher.framework */,
 				821DC66E1C62761C00B9C25E /* Alamofire.framework */,
-				6697F3B73EB8DFE2F3439F20 /* Pods_FetLife.framework */,
+				D9D177BBE4B33A450B02A3DC /* Pods_FetLife.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -291,7 +231,8 @@
 				82B55ADE1C60FB060035D45E /* FetLifeUITests */,
 				82B55ABB1C60FB060035D45E /* Products */,
 				82329A941C65256A00DADA23 /* Frameworks */,
-				17768C8D17AB397C4CE41FEF /* Pods */,
+				C95D4E692138D8D5003DC3FD /* OptimizationProfiles */,
+				6CB0AC49AD7BD3D79C2F2996 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -299,8 +240,6 @@
 			isa = PBXGroup;
 			children = (
 				828D664D1CC1DD3200A6F1D2 /* FetLife.app */,
-				82B355AF1CC52A6400CBDAB3 /* FetLifeTests.xctest */,
-				82B355C91CC52AC800CBDAB3 /* FetLifeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -352,6 +291,14 @@
 				C91FE74A212BD1010027CEEA /* RequestsViewController.swift */,
 			);
 			path = "Requests Tab";
+			sourceTree = "<group>";
+		};
+		C95D4E692138D8D5003DC3FD /* OptimizationProfiles */ = {
+			isa = PBXGroup;
+			children = (
+				C95D4E6A2138D8D5003DC3FD /* FetLife.profdata */,
+			);
+			path = OptimizationProfiles;
 			sourceTree = "<group>";
 		};
 		C9659041212A04E1008F5CE1 /* Home Tab */ = {
@@ -430,12 +377,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 828D664A1CC1DD3200A6F1D2 /* Build configuration list for PBXNativeTarget "FetLife" */;
 			buildPhases = (
-				9B08893638A7C295CD719937 /* [CP] Check Pods Manifest.lock */,
+				8B086C776DAD8ED6FD76F1DD /* [CP] Check Pods Manifest.lock */,
 				828D662A1CC1DD3200A6F1D2 /* Sources */,
 				828D663B1CC1DD3200A6F1D2 /* Frameworks */,
 				828D663D1CC1DD3200A6F1D2 /* Resources */,
 				828D66491CC1DD3200A6F1D2 /* Setup Fabric */,
-				69AE22CB32BAAEF9106C3DDB /* [CP] Embed Pods Frameworks */,
+				86D78D26DD487AB3B37B7B2A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -446,41 +393,6 @@
 			productReference = 828D664D1CC1DD3200A6F1D2 /* FetLife.app */;
 			productType = "com.apple.product-type.application";
 		};
-		82B355951CC52A6400CBDAB3 /* FetLifeTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 82B355AC1CC52A6400CBDAB3 /* Build configuration list for PBXNativeTarget "FetLifeTests" */;
-			buildPhases = (
-				82B355961CC52A6400CBDAB3 /* Sources */,
-				82B355A71CC52A6400CBDAB3 /* Frameworks */,
-				82B355A91CC52A6400CBDAB3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C9CEBA8E20D1E42D009BD594 /* PBXTargetDependency */,
-			);
-			name = FetLifeTests;
-			productName = FetChatTests;
-			productReference = 82B355AF1CC52A6400CBDAB3 /* FetLifeTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		82B355B01CC52AC800CBDAB3 /* FetLifeUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 82B355C61CC52AC800CBDAB3 /* Build configuration list for PBXNativeTarget "FetLifeUITests" */;
-			buildPhases = (
-				82B355B11CC52AC800CBDAB3 /* Sources */,
-				82B355C21CC52AC800CBDAB3 /* Frameworks */,
-				82B355C31CC52AC800CBDAB3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FetLifeUITests;
-			productName = FetChatUITests;
-			productReference = 82B355C91CC52AC800CBDAB3 /* FetLifeUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -488,10 +400,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "BitLove Inc.";
 				TargetAttributes = {
 					828D66281CC1DD3200A6F1D2 = {
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -508,7 +421,7 @@
 			};
 			buildConfigurationList = 82B55AB51C60FB060035D45E /* Build configuration list for PBXProject "FetLife" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -520,8 +433,6 @@
 			projectRoot = "";
 			targets = (
 				828D66281CC1DD3200A6F1D2 /* FetLife */,
-				82B355951CC52A6400CBDAB3 /* FetLifeTests */,
-				82B355B01CC52AC800CBDAB3 /* FetLifeUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -542,28 +453,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		82B355A91CC52A6400CBDAB3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82B355AA1CC52A6400CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */,
-				82B355AB1CC52A6400CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		82B355C31CC52AC800CBDAB3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */,
-				82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		69AE22CB32BAAEF9106C3DDB /* [CP] Embed Pods Frameworks */ = {
+		828D66491CC1DD3200A6F1D2 /* Setup Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Fabric";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" c024375c301ff84ebfc74878f8f19fb6ea107da2 3d881bdbd637e8b95e537047904fc664392f6fbec0c0033470a7f3e733caf5d4";
+		};
+		86D78D26DD487AB3B37B7B2A /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -613,21 +520,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FetLife/Pods-FetLife-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		828D66491CC1DD3200A6F1D2 /* Setup Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Setup Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" c024375c301ff84ebfc74878f8f19fb6ea107da2 3d881bdbd637e8b95e537047904fc664392f6fbec0c0033470a7f3e733caf5d4";
-		};
-		9B08893638A7C295CD719937 /* [CP] Check Pods Manifest.lock */ = {
+		8B086C776DAD8ED6FD76F1DD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -692,61 +585,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		82B355961CC52A6400CBDAB3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82B355971CC52A6400CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */,
-				82B355981CC52A6400CBDAB3 /* UIColor+FetLife.swift in Sources */,
-				82B355991CC52A6400CBDAB3 /* ConversationCell.swift in Sources */,
-				82B3559A1CC52A6400CBDAB3 /* OAuth2+Alamofire.swift in Sources */,
-				82B3559B1CC52A6400CBDAB3 /* LoginViewController.swift in Sources */,
-				82B3559C1CC52A6400CBDAB3 /* LoadingView.swift in Sources */,
-				82B3559D1CC52A6400CBDAB3 /* MessagesTableViewController.swift in Sources */,
-				82B3559E1CC52A6400CBDAB3 /* ConversationsViewController.swift in Sources */,
-				82B3559F1CC52A6400CBDAB3 /* FetLifeTests.swift in Sources */,
-				82B355A01CC52A6400CBDAB3 /* Dispatch.swift in Sources */,
-				82B355A11CC52A6400CBDAB3 /* API.swift in Sources */,
-				82B355A21CC52A6400CBDAB3 /* ErrorView.swift in Sources */,
-				82B355A31CC52A6400CBDAB3 /* NoConversationsView.swift in Sources */,
-				82B355A41CC52A6400CBDAB3 /* Models.swift in Sources */,
-				82B355A51CC52A6400CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
-				82B355A61CC52A6400CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		82B355B11CC52AC800CBDAB3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				82B355B21CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.swift in Sources */,
-				82B355B31CC52AC800CBDAB3 /* LoginViewController.swift in Sources */,
-				82B355B41CC52AC800CBDAB3 /* FetChatUITests.swift in Sources */,
-				82B355B51CC52AC800CBDAB3 /* OAuth2+Alamofire.swift in Sources */,
-				82B355B61CC52AC800CBDAB3 /* ConversationsViewController.swift in Sources */,
-				82B355B71CC52AC800CBDAB3 /* LoadingView.swift in Sources */,
-				82B355B81CC52AC800CBDAB3 /* API.swift in Sources */,
-				82B355B91CC52AC800CBDAB3 /* MessagesTableViewController.swift in Sources */,
-				82B355BA1CC52AC800CBDAB3 /* ConversationCell.swift in Sources */,
-				82B355BB1CC52AC800CBDAB3 /* Dispatch.swift in Sources */,
-				82B355BC1CC52AC800CBDAB3 /* UIColor+FetLife.swift in Sources */,
-				82B355BD1CC52AC800CBDAB3 /* ErrorView.swift in Sources */,
-				82B355BE1CC52AC800CBDAB3 /* NoConversationsView.swift in Sources */,
-				82B355BF1CC52AC800CBDAB3 /* Models.swift in Sources */,
-				82B355C01CC52AC800CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
-				82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C9CEBA8E20D1E42D009BD594 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 828D66281CC1DD3200A6F1D2 /* FetLife */;
-			targetProxy = C9CEBA8D20D1E42D009BD594 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		82B55AC31C60FB060035D45E /* Main.storyboard */ = {
@@ -770,13 +609,14 @@
 /* Begin XCBuildConfiguration section */
 		828D664B1CC1DD3200A6F1D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87DF06C21B61ECF65ACEEBD7 /* Pods-FetLife.debug.xcconfig */;
+			baseConfigurationReference = 134E36DAC43F868B36F39605 /* Pods-FetLife.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -791,17 +631,20 @@
 				PROVISIONING_PROFILE = "";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SWIFT_OBJC_BRIDGING_HEADER = "FetLife/FetLife-Swift-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		828D664C1CC1DD3200A6F1D2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50834538E6C9604C4EE432B0 /* Pods-FetLife.release.xcconfig */;
+			baseConfigurationReference = CD2930992257CAE517CD1064 /* Pods-FetLife.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 3LXY9JQHFA;
@@ -817,72 +660,9 @@
 				PROVISIONING_PROFILE = "";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SWIFT_OBJC_BRIDGING_HEADER = "FetLife/FetLife-Swift-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		82B355AD1CC52A6400CBDAB3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 3LXY9JQHFA;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = FetLifeTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.FetLifeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FetLife.app/FetLife";
-			};
-			name = Debug;
-		};
-		82B355AE1CC52A6400CBDAB3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 3LXY9JQHFA;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = FetLifeTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.FetLifeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FetLife.app/FetLife";
-			};
-			name = Release;
-		};
-		82B355C71CC52AC800CBDAB3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = 3LXY9JQHFA;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = FetLifeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.FetLifeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = FetChat;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		82B355C81CC52AC800CBDAB3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = 3LXY9JQHFA;
-				INFOPLIST_FILE = FetLifeUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.FetLifeUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = FetChat;
-				USES_XCTRUNNER = YES;
 			};
 			name = Release;
 		};
@@ -890,6 +670,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -951,6 +732,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1008,24 +790,6 @@
 			buildConfigurations = (
 				828D664B1CC1DD3200A6F1D2 /* Debug */,
 				828D664C1CC1DD3200A6F1D2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		82B355AC1CC52A6400CBDAB3 /* Build configuration list for PBXNativeTarget "FetLifeTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				82B355AD1CC52A6400CBDAB3 /* Debug */,
-				82B355AE1CC52A6400CBDAB3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		82B355C61CC52AC800CBDAB3 /* Build configuration list for PBXNativeTarget "FetLifeUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				82B355C71CC52AC800CBDAB3 /* Debug */,
-				82B355C81CC52AC800CBDAB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

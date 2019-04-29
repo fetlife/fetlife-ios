@@ -18,26 +18,26 @@ private let dateFormatter: DateFormatter = DateFormatter()
 class Member: Object, JSONDecodable {
     static let defaultAvatarURL = "https://ass3.fetlife.com/images/avatar_missing_200x200.gif"
     
-    dynamic var id = ""
-    dynamic var nickname = ""
-    dynamic var metaLine = ""
-    dynamic var avatarURL = ""
-    dynamic var avatarImageData: Data?
-    dynamic var orientation = ""
-    dynamic var aboutMe = ""
-    dynamic var age: Int = 0
-    dynamic var city = ""
-    dynamic var state = ""
-    dynamic var country = ""
-    dynamic var genderName = ""
-    dynamic var canFollow = true
-    dynamic var contentType = ""
-    dynamic var fetProfileURL = ""
-    dynamic var isSupporter = false
-    dynamic var relationWithMe = ""
-    dynamic var friendCount: Int = 0
-    dynamic var blocked = false
-    dynamic var lookingFor: [String] { // we're using this complicated mess because Realm doesn't support primitive arrays 😑
+    @objc dynamic var id = ""
+    @objc dynamic var nickname = ""
+    @objc dynamic var metaLine = ""
+    @objc dynamic var avatarURL = ""
+    @objc dynamic var avatarImageData: Data?
+    @objc dynamic var orientation = ""
+    @objc dynamic var aboutMe = ""
+    @objc dynamic var age: Int = 0
+    @objc dynamic var city = ""
+    @objc dynamic var state = ""
+    @objc dynamic var country = ""
+    @objc dynamic var genderName = ""
+    @objc dynamic var canFollow = true
+    @objc dynamic var contentType = ""
+    @objc dynamic var fetProfileURL = ""
+    @objc dynamic var isSupporter = false
+    @objc dynamic var relationWithMe = ""
+    @objc dynamic var friendCount: Int = 0
+    @objc dynamic var blocked = false
+    @objc dynamic var lookingFor: [String] { // we're using this complicated mess because Realm doesn't support primitive arrays 😑
         get {
             return _lookingFor.map { $0.stringValue }
         }
@@ -47,9 +47,9 @@ class Member: Object, JSONDecodable {
         }
     }
     private let _lookingFor = List<RealmString>()
-    dynamic var notificationToken = ""
+    @objc dynamic var notificationToken = ""
     var additionalInfoRetrieved: Bool { get { guard orientation != "" && contentType != "" && country != "" else { return false }; return true } }
-    var lastUpdated: Date = Date()
+    @objc var lastUpdated: Date = Date()
     
     override static func ignoredProperties() -> [String] {
         return ["lookingFor", "additionalInfoRetrieved", "blocked"]
@@ -268,16 +268,16 @@ class Member: Object, JSONDecodable {
 // MARK: - Conversation
 
 class Conversation: Object, JSONDecodable {
-    dynamic var id = ""
-    dynamic var updatedAt = Date()
-    dynamic var member: Member?
-    dynamic var hasNewMessages = false
-    dynamic var isArchived = false
-    dynamic var subject = ""
+    @objc dynamic var id = ""
+    @objc dynamic var updatedAt = Date()
+    @objc dynamic var member: Member?
+    @objc dynamic var hasNewMessages = false
+    @objc dynamic var isArchived = false
+    @objc dynamic var subject = ""
     
-    dynamic var lastMessageBody = ""
-    dynamic var lastMessageCreated = Date()
-    dynamic var lastMessageIsIncoming = false
+    @objc dynamic var lastMessageBody = ""
+    @objc dynamic var lastMessageCreated = Date()
+    @objc dynamic var lastMessageIsIncoming = false
     
     private var json: JSON!
     
@@ -380,14 +380,14 @@ class Conversation: Object, JSONDecodable {
 // MARK: - Message
 
 class Message: Object {
-    dynamic var id = ""
-    dynamic var body = ""
-    dynamic var createdAt = Date()
-    dynamic var memberId = ""
-    dynamic var memberNickname = ""
-    dynamic var isNew = false
-    dynamic var isSending = false
-    dynamic var conversationId = ""
+    @objc dynamic var id = ""
+    @objc dynamic var body = ""
+    @objc dynamic var createdAt = Date()
+    @objc dynamic var memberId = ""
+    @objc dynamic var memberNickname = ""
+    @objc dynamic var isNew = false
+    @objc dynamic var isSending = false
+    @objc dynamic var conversationId = ""
     
     override static func primaryKey() -> String? {
         return "id"
@@ -423,9 +423,9 @@ class Message: Object {
 // MARK: - Requests
 
 class FriendRequest: Object {
-    dynamic var id = ""
-    dynamic var createdAt = Date()
-    dynamic var member: Member?
+    @objc dynamic var id = ""
+    @objc dynamic var createdAt = Date()
+    @objc dynamic var member: Member?
     
     override static func primaryKey() -> String? {
         return "id"
@@ -443,7 +443,7 @@ class FriendRequest: Object {
 // MARK: - Util
 
 class RealmString: Object { // using this to be able to store arrays of strings
-    dynamic var stringValue = ""
+    @objc dynamic var stringValue = ""
 }
 
 // Convert from a JSON format datastring to an NSDate instance.

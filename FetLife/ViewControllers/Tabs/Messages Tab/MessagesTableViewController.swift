@@ -95,7 +95,7 @@ class MessagesTableViewController: SLKTextViewController {
         
         titleButton.tintColor = UIColor.brickColor()
         if let conversation = conversation {
-            titleButton.setTitle("\(conversation.member?.nickname ?? "") ‣", for: UIControlState.normal)
+            titleButton.setTitle("\(conversation.member?.nickname ?? "") ‣", for: UIControl.State.normal)
         }
         
         textView.placeholder = "What say you?"
@@ -207,8 +207,8 @@ class MessagesTableViewController: SLKTextViewController {
     
     // MARK: - SlackTextViewController
     
-    func tableViewStyleForCoder(_ decoder: NSCoder) -> UITableViewStyle {
-        return UITableViewStyle.plain
+    func tableViewStyleForCoder(_ decoder: NSCoder) -> UITableView.Style {
+        return UITableView.Style.plain
     }
     
     override func didPressRightButton(_ sender: Any!) {
@@ -284,7 +284,7 @@ class MessagesTableViewController: SLKTextViewController {
     
     // MARK: - Methods
     
-    func fetchMessages() {
+    @objc func fetchMessages() {
         if let conversation = conversation, let messages = messages {
             let conversationId = conversation.id
             if let lastMessage = messages.first {

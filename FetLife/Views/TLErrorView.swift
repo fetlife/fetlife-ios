@@ -37,7 +37,7 @@ class TLErrorView: UIView, MFMailComposeViewControllerDelegate {
         vcMailComposer.setToRecipients(["support@fetlife.com"])
         vcMailComposer.setSubject("[iOS App]")
         vcMailComposer.setMessageBody("\n\n\n\nUser Nickname: \(API.currentMemberNickname()!)\nUser ID: \(AppSettings.currentUserID)\nApp Version: \(APP_VERSION), build \(BUILD_NUMBER)\niOS Version: \(device.systemName) \(device.systemVersion)\nDevice Model: \(device.localizedModel)\nDevice ID: \(device.identifierForVendor?.uuidString ?? "Unknown Device ID")", isHTML: false)
-        vcMailComposer.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.brickColor()]
+        vcMailComposer.navigationBar.titleTextAttributes = convertToOptionalNSAttributedStringKeyDictionary([NSAttributedString.Key.foregroundColor.rawValue: UIColor.brickColor()])
         vcMailComposer.navigationBar.tintColor = UIColor.brickColor()
         return vcMailComposer
     }
@@ -55,4 +55,10 @@ class TLErrorView: UIView, MFMailComposeViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

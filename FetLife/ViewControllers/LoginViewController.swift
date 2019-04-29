@@ -39,12 +39,13 @@ class LoginViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func login(_ sender: UIButton) {
-        sender.setTitle("Authorizing...", for: UIControlState())
+        sender.setTitle("Authorizing...", for: UIControl.State())
         
-        API.sharedInstance.oauthSession.tryToObtainAccessTokenIfNeeded(params: AppSettings.authParams) { (authResults) in
-            if let authResults = authResults {
+		
+        API.sharedInstance.oauthSession.tryToObtainAccessTokenIfNeeded(params: AppSettings.authParams) { (authResults, err) in
+            if let authResults = authResults, err == nil {
                 self.didAuthorizeWith(authResults)
-            } else {
+            } else if authResults == nil && err == nil {
                 API.authorizeInContext(self, onAuthorize: { (parameters, error) -> Void in
                     if let params = parameters {
                         self.didAuthorizeWith(params)
@@ -53,7 +54,9 @@ class LoginViewController: UIViewController {
                         self.didCancelOrFail(err)
                     }
                 })
-            }
+			} else if let err = err {
+				dlgOK(self, title: "Error trying to reauthorize", message: err.localizedDescription, onOk: nil)
+			}
         }
     }
     
@@ -86,7 +89,7 @@ class LoginViewController: UIViewController {
             print("Failed to auth with error: \(error)")
         }
         Dispatch.asyncOnMainQueue {
-            self.loginButton.setTitle("Login to Fetlife", for: UIControlState())
+            self.loginButton.setTitle("Login to Fetlife", for: UIControl.State())
             self.loginButton.isEnabled = true
         }
     }

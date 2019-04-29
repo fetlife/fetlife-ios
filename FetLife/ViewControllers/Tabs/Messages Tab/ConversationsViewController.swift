@@ -102,7 +102,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             self.networkStatusChanged()
         }
         
-        self.refreshControl.addTarget(self, action: #selector(ConversationsViewController.refresh(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl.addTarget(self, action: #selector(ConversationsViewController.refresh(_:)), for: UIControl.Event.valueChanged)
         
         self.splitViewController?.delegate = self
         
@@ -203,7 +203,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             if let s = sender {
                 if let _ = s as? UITableViewCell {
                     let indexPath = self.tableView.indexPathForSelectedRow ?? IndexPath(row: (sender as! ConversationCell).index, section: 0)
-                    if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
+                    if self.splitViewController?.displayMode == UISplitViewController.DisplayMode.primaryHidden {
                         self.tableView.deselectRow(at: indexPath, animated: true)
                     }
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -222,20 +222,16 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
     }
     
-    func refresh(_ refreshControl: UIRefreshControl) {
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
         fetchConversations()
     }
     
     func fetchConversations() {
         guard API.isAuthorized() else {
-            self.dismiss(animated: false, completion: nil)
 //            self.dismiss(animated: false, completion: nil)
             refreshControl.endRefreshing()
             return
         }
-                    // TODO: show empty view if in split screen
-                    UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                }
         
 //        let lastMessageDate: Date = ((conversations ?? inbox)[0]).lastMessageCreated
         API.sharedInstance.loadConversations() { error in
@@ -262,13 +258,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
     }
     
-    func fetchConversationsInBackground() {
-                if let e = error {
-                    print("Error loading conversations: \(e)")
-                if !self.hasContent() {
-                    // TODO: show empty view if in split screen
-                    UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                }
+    @objc func fetchConversationsInBackground() {
         guard API.isAuthorized() else { print("Not authorized!"); return }
         print("Fetching conversations in the background...")
 //        guard (conversations ?? inbox).count > 0 else { return }
@@ -530,7 +520,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         
         var deleteAction: UITableViewRowAction!
         deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (_, index) in
-            let alertController = UIAlertController(title: "Are you sure?", message: "Are you sure you want to permanently delete this conversation? This cannot be undone!", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "Are you sure?", message: "Are you sure you want to permanently delete this conversation? This cannot be undone!", preferredStyle: UIAlertController.Style.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             let deleteConfirmAction = UIAlertAction(title: "Delete", style: .destructive) { (action) -> Void in
                 let conversationToDelete = self.conversations[indexPath.row]

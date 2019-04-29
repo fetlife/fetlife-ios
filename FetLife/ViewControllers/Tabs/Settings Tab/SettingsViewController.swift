@@ -89,36 +89,36 @@ class SettingsViewController: UITableViewController {
     
     // MARK: - Configuration
     
-    func presentPrivacy() {
+    @objc func presentPrivacy() {
         navTLBrowser.url = URL(string: "https://fetlife.com/privacy")!
         navTLBrowser.navCon = navCon
         navCon.pushViewController(navTLBrowser, animated: true)
     }
-    func presentTerms() {
+    @objc func presentTerms() {
         navTLBrowser.url = URL(string: "https://fetlife.com/legalese/tou")!
         navTLBrowser.baseURL = navTLBrowser.url
         navTLBrowser.navCon = navCon
         navCon.pushViewController(navTLBrowser, animated: true)
     }
-    func presentGuidelines() {
+    @objc func presentGuidelines() {
         navTLBrowser.url = URL(string: "https://fetlife.com/guidelines")!
         navTLBrowser.baseURL = navTLBrowser.url
         navTLBrowser.navCon = navCon
         navCon.pushViewController(navTLBrowser, animated: true)
     }
-    func presentFAQs() {
+    @objc func presentFAQs() {
         navTLBrowser.url = URL(string: "https://fetlife.com/help")!
         navTLBrowser.baseURL = navTLBrowser.url
         navTLBrowser.navCon = navCon
         navCon.pushViewController(navTLBrowser, animated: true)
     }
-    func presentContactUs() {
+    @objc func presentContactUs() {
         navTLBrowser.url = URL(string: "https://fetlife.com/contact")!
         navTLBrowser.baseURL = navTLBrowser.url
         navTLBrowser.navCon = navCon
         navCon.pushViewController(navTLBrowser, animated: true)
     }
-    func presentGitHub() {
+    @objc func presentGitHub() {
         let svc = SFSafariViewController(url: URL(string: "https://github.com/fetlife/ios")!)
         if #available(iOS 10.0, *) {
             svc.preferredBarTintColor = .backgroundColor()
@@ -126,7 +126,7 @@ class SettingsViewController: UITableViewController {
         }
         self.present(svc, animated: true, completion: nil)
     }
-    func presentFetLife() {
+    @objc func presentFetLife() {
         let fetURL = URL(string: "https://fetlife.com")!
         UIApplication.shared.openURL(fetURL)
     }
@@ -181,11 +181,11 @@ class SettingsViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func sfwModeTapped() {
+    @objc func sfwModeTapped() {
         dlgOK(self, title: "Safe For Work Mode", message: "Turning this option on will blur images. To temporarily unblur images, double-tap on the image. Note: this setting may not take effect everywhere.", onOk: nil)
     }
     
-    func purgeRealmTapped() {
+    @objc func purgeRealmTapped() {
         let ac = UIAlertController(title: "Purge Realm Database?", message: "Are you sure you want to purge the Realm database? This can cause undesired behavior and/or cause the app to be unusable.", preferredStyle: .actionSheet)
         let purgeAction = UIAlertAction(title: "Yes, purge", style: .destructive) { (action) in
             let realm = try! Realm()

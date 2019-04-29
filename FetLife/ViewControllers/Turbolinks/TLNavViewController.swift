@@ -60,7 +60,7 @@ class TLNavViewController: UINavigationController {
         (currentSession.topmostVisitable as? TLVisitableViewController)?.watchdogTimer?.invalidate()
     }
     
-    func checkForReload() {
+    @objc func checkForReload() {
         
         if tabTitle() == "Home" && !API.sharedInstance.currentMember!.isSupporter {
             presentError(.TLHomepageDisabledNonSupporter)
@@ -104,6 +104,7 @@ class TLNavViewController: UINavigationController {
                 pushViewController(visitable, animated: false)
             }
         } else if action == .Restore {
+			for vc in self.viewControllers { vc.removeFromParent() }
             self.viewControllers = []
             pushViewController(visitable, animated: true)
         }
@@ -185,7 +186,19 @@ extension TLNavViewController: SessionDelegate {
     func session(_ session: Session, didProposeVisitToURL URL: Foundation.URL, withAction action: Action) {
         checkForRedirects(session, forTab: tab(), forURL: URL, withAction: action)
     }
-    
+	
+	func sessionDidStartRequest(_ session: Session) {
+		print("session request started")
+	}
+	
+	func sessionDidLoadWebView(_ session: Session) {
+		print("session web view loaded")
+	}
+	
+	func sessionDidFinishRequest(_ session: Session) {
+		print("session finished request")
+	}
+	
     func session(_ session: Session, didFailRequestForVisitable visitable: Visitable, withError error: NSError) {
         print("ERROR: %@", error)
         guard let vcVisitable = visitable as? TLVisitableViewController, let errorCode = ErrorCode(rawValue: error.code) else { return }

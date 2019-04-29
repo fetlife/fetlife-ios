@@ -50,7 +50,7 @@ class TLAuthViewController: UIViewController {
         
     }
     
-    func userDidCancel() {
+    @objc func userDidCancel() {
         delegate?.authenticationControllerDidCancel(self)
     }
 }

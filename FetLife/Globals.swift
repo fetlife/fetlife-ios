@@ -34,7 +34,7 @@ var latestNotifications: [String] = []
 ///   - onOk: Optional completion handler for when "Ok" is pressed
 ///   - onCancel: Optional completion handler for when "Cancel" is pressed
 func dlgOKCancel(_ sender: UIViewController, title: String, message: String, onOk: ((UIAlertAction) -> Void)?, onCancel: ((UIAlertAction) -> Void)?) {
-    let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
     let okAction = UIAlertAction(title: "OK", style: .default) { (action) -> Void in
         onOk?(action)
     }
@@ -54,7 +54,7 @@ func dlgOKCancel(_ sender: UIViewController, title: String, message: String, onO
 ///   - message: Main body of the dialog box
 ///   - onOk: Optional completion handler for when "Ok" is pressed
 func dlgOK(_ sender: UIViewController, title: String, message: String, onOk: ((UIAlertAction) -> Void)?) {
-    let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
     let okAction = UIAlertAction(title: "Ok", style: .default) { (action) -> Void in
         onOk?(action)
     }
@@ -81,7 +81,7 @@ func sendNotification(_ title: String, body: String, category: String, userInfo:
         if let userInfo = userInfo {
             content.userInfo = userInfo
         }
-        content.sound = .default()
+        content.sound = .default
         if let threadID = threadID {
             content.threadIdentifier = threadID
         }

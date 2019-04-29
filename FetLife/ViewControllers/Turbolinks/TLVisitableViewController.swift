@@ -79,7 +79,7 @@ class TLVisitableViewController: Turbolinks.VisitableViewController {
         return nil
     }
     
-    func timeoutError() {
+    @objc func timeoutError() {
         navigationItem.title = formatTitle(visitableView.webView?.title)
         presentError(.TimeoutError)
     }
@@ -100,7 +100,7 @@ class TLVisitableViewController: Turbolinks.VisitableViewController {
         installErrorViewConstraints()
     }
     
-    func presentAuthentication(_ sender: AnyObject) {
+    @objc func presentAuthentication(_ sender: AnyObject) {
         let authCon = TLAuthViewController()
         authCon.delegate = self
         authCon.url = URL(string: "https://fetlife.com/users/sign_in")!
@@ -125,7 +125,7 @@ class TLVisitableViewController: Turbolinks.VisitableViewController {
         watchdogTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(timeoutError), userInfo: nil, repeats: false)
     }
     
-    func openInSafari() {
+    @objc func openInSafari() {
         dlgOKCancel(self, title: "Open external link?", message: "You are about to open an external link in Safari. Do you want to continue?", onOk: { (_) in
             app.openURL(self.visitableURL)
         }, onCancel: nil)

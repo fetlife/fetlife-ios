@@ -56,6 +56,10 @@ final class API {
         return sharedInstance.memberNickname
     }
     
+    class func tryGettingAccessTokenIfNeeded(_ parameters: OAuth2StringDict?, withCallback callback: @escaping ((OAuth2JSON?) -> Void)) {
+        
+    }
+    
     /// Authorizes the current user.
     ///
     /// - Parameters:

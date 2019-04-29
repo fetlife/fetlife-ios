@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    func application(_ app: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ app: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
         NetworkActivityIndicatorManager.shared.isEnabled = true
         
@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // including connection strength, connnection type, battery level, user settings, frequency of new data (how often
         // the user gets new messages), and many other variables. This is determined entirely by iOS and cannot be explicitly
         // controlled by the app.
-        app.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
+        app.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
         
         if APP_IDENTIFIER != "co.bitlove.opensource.FetLife" && AppSettings.appVersion != APP_VERSION {
             dlgOK(self.window!.rootViewController!, title: "Non-standard app version detected!", message: "You appear to be running a version of the FetLife app that has been modified from the official version on GitHub. If you have compiled the app yourself, are testing a beta version of the app, or know the person who installed the app, you can ignore this message.\n\nOriginal App ID: co.bitlove.opensource.FetLife\nYour App ID: \(APP_IDENTIFIER)", onOk: nil)
@@ -114,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         
         if "fetlifeapp" == url.scheme {
             print("Received redirect: \(url)")
@@ -129,7 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupAppearance(_ app: UIApplication) {
         
         UINavigationBar.appearance().tintColor = UIColor.brickColor()
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.brickColor()]
+        UINavigationBar.appearance().titleTextAttributes = convertToOptionalNSAttributedStringKeyDictionary([NSAttributedString.Key.foregroundColor.rawValue: UIColor.brickColor()])
         UINavigationBar.appearance().barTintColor = UIColor.backgroundColor()
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().isTranslucent = false
@@ -303,7 +303,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func notificationCheckExpired(_ completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    @objc func notificationCheckExpired(_ completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         completionHandler(.failed)
     }
     
@@ -340,3 +340,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}

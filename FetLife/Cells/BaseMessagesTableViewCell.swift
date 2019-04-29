@@ -118,7 +118,7 @@ class BaseMessagesTableViewCell: UITableViewCell, UITextViewDelegate {
         return true
     }
     
-    func bodyWasTapped(_ sender: AnyObject) {
+    @objc func bodyWasTapped(_ sender: AnyObject) {
         UIView.animate(withDuration: 0.25) {
             self.messageTimestamp.isHidden = !self.messageTimestamp.isHidden
             self.clipsToBounds = false

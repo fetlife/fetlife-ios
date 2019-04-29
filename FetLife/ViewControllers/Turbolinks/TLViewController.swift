@@ -15,7 +15,7 @@ class TLViewController: UIViewController {
     
     var url: URL!
     var baseURL: URL!
-    var tab: TabIndex!
+    var tab: TabIndex = .None
     var navCon: UINavigationController!
     var mainTabView: MainTabViewController = MainTabViewController()
 
@@ -73,14 +73,14 @@ class TLViewController: UIViewController {
         
         switch lastPathComponent {
         case "home", "/":
-            if tab == .Home {
+            if tab == .Home || self.tab == .Home {
                 presentVisitableForSession(session, url: url, action: .Restore)
             } else {
                 mainTabView.setTab(.Home)
                 (mainTabView.getViewController(.Home) as! HomeViewController).loadBaseURL()
             }
         case "requests":
-            if tab == .Requests {
+            if tab == .Requests || self.tab == .Requests {
                 presentVisitableForSession(session, url: url, action: .Restore)
             } else {
                 mainTabView.setTab(.Requests)
@@ -90,7 +90,7 @@ class TLViewController: UIViewController {
             mainTabView.setTab(.Messages)
         default:
             if trimmedURLPath.hasPrefix("/settings") {
-                if tab == .Settings {
+                if tab == .Settings || self.tab == .Settings {
                     presentVisitableForSession(session, url: url, action: .Replace)
                 } else {
                     mainTabView.setTab(.Settings)
@@ -162,7 +162,7 @@ extension TLViewController: SessionDelegate {
                 app.openURL(URL)
             }, onCancel: nil)
         } else {
-            checkForRedirects(session, forTab: .None, forURL: URL, withAction: .Advance)
+            checkForRedirects(session, forTab: self.tab, forURL: URL, withAction: .Advance)
         }
     }
 }

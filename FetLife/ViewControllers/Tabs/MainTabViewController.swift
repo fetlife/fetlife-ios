@@ -50,13 +50,13 @@ class MainTabViewController: UITabBarController {
         case .Requests:
             return viewControllers![TabIndex.Requests.rawValue] as! RequestsViewController
         case .Messages:
-            return (viewControllers![TabIndex.Messages.rawValue].childViewControllers[0] as! UINavigationController).topViewController! as! ConversationsViewController
+            return (viewControllers![TabIndex.Messages.rawValue].children[0] as! UINavigationController).topViewController! as! ConversationsViewController
         case .Notifications:
             return viewControllers![TabIndex.Notifications.rawValue] as! NotificationViewController
         case .Settings:
-            return viewControllers![TabIndex.Settings.rawValue] as! SettingsViewController
+            return viewControllers![TabIndex.Settings.rawValue] as? SettingsViewController ?? viewControllers![TabIndex.Settings.rawValue].children[0] as! SettingsViewController
         default:
-            return viewControllers![TabIndex.Messages.rawValue].childViewControllers[0] as! ConversationsViewController
+            return viewControllers![TabIndex.Messages.rawValue].children[0] as! ConversationsViewController
         }
     }
     
