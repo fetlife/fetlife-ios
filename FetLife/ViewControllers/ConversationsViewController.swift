@@ -8,6 +8,7 @@
 
 import UIKit
 import StatefulViewController
+import UserNotifications
 import RealmSwift
 
 class ConversationsViewController: UIViewController, StatefulViewController, UITableViewDataSource, UITableViewDelegate, UISplitViewControllerDelegate {
@@ -15,10 +16,26 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     @IBOutlet var containerView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inboxSelector: UISegmentedControl!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var updateLabel: UILabel!
     
     var detailViewController: MessagesTableViewController?
     var refreshControl = UIRefreshControl()
     var updateTimer: Timer = Timer()
+    var lastUpdated: Date {
+        get {
+            return AppSettings.lastUpdated
+        }
+        set(val) {
+            AppSettings.lastUpdated = val
+            if let ul = updateLabel {
+                dateFormatter.dateStyle = (val.hoursFromNow >= 24) ? .short : .none
+                ul.text = "Last updated: \(dateFormatter.string(from: val))"
+            }
+        }
+    }
+    let dateFormatter = DateFormatter()
+    var havingConnectionIssue = false
     
     var inbox: Results<Conversation> {
         get {
@@ -49,6 +66,10 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         
         inboxSelector.selectedSegmentIndex = AppSettings.lastSelectedMailbox
         
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+        }
+        
         // setting conversation value here (rather than in file declaration) to allow time for Realm setup and migration if necessary
         let filter = inboxSelector.selectedSegmentIndex == 0 ? "isArchived == false" : "isArchived == true"
         conversations = try! Realm()
@@ -57,6 +78,20 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             .sorted(byKeyPath: "lastMessageCreated", ascending: false)
         
         setupStateViews()
+        
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
+        dateFormatter.locale = .current
+        
+        updateLabel.backgroundColor = UIColor.backgroundColor()
+        Connectivity.sharedInstance.listener = { status in
+            print("Network status changed: \(status)")
+            self.networkStatusChanged()
+        }
+        Connectivity.apiReachabilityMgr.listener = { status in
+            print("API network status changed: \(status)")
+            self.networkStatusChanged()
+        }
         
         self.refreshControl.addTarget(self, action: #selector(ConversationsViewController.refresh(_:)), for: UIControlEvents.valueChanged)
         
@@ -101,18 +136,24 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     override func viewDidAppear(_ animated: Bool) {
         // creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
         // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
-        updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
-        updateTimer.tolerance = 5
+        if !updateTimer.isValid {
+            updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+            updateTimer.tolerance = 5
+        }
         tableView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        updateTimer.invalidate()
+        dateFormatter.dateStyle = (lastUpdated.hoursFromNow >= 24) ? .short : .none
+        updateLabel.text = "Last updated: \(dateFormatter.string(from: lastUpdated))"
+        Dispatch.delay(0.5) { // add a delay to allow network to initialize
+            Connectivity.sharedInstance.startListening()
+//            Connectivity.apiReachabilityMgr.startListening()
+        }
     }
     
     deinit {
         notificationToken?.invalidate()
         updateTimer.invalidate()
+        Connectivity.sharedInstance.stopListening()
+        Connectivity.apiReachabilityMgr.stopListening()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,12 +163,19 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
-            let indexPath = self.tableView.indexPathForSelectedRow ?? IndexPath(row: (sender as! ConversationCell).index, section: 0)
-            if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
-                self.tableView.deselectRow(at: indexPath, animated: true)
+            var conversation: Conversation!
+            if let s = sender {
+                if let _ = s as? UITableViewCell {
+                    let indexPath = self.tableView.indexPathForSelectedRow ?? IndexPath(row: (sender as! ConversationCell).index, section: 0)
+                    if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
+                        self.tableView.deselectRow(at: indexPath, animated: true)
+                    }
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    conversation = conversations[indexPath.row]
+                } else if let c = s as? Conversation {
+                    conversation = c
+                }
             }
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            let conversation = conversations[indexPath.row]
             let controller: MessagesTableViewController = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
             controller.conversation = conversation
             controller.navigationItem.title = "\(conversation.member!.nickname) ‣"
@@ -145,12 +193,21 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         Dispatch.asyncOnUserInitiatedQueue() {
             API.sharedInstance.loadConversations() { error in
                 self.endLoading(error: error)
+                if error != nil && Connectivity.canReachAPI {
+                    self.updateStatus("Error updating conversations", withColor: UIColor.red)
+                    self.havingConnectionIssue = true
+                } else if self.havingConnectionIssue {
+                    self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
+                    self.havingConnectionIssue = false
+                    self.lastUpdated = Date()
+                } else {
+                    self.lastUpdated = Date()
+                }
                 self.refreshControl.endRefreshing()
                 if !self.hasContent() {
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
                 } else {
-                    self.getUnreadCount()
                 }
             }
         }
@@ -161,7 +218,16 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         Dispatch.asyncOnUserInitiatedQueue() {
             API.sharedInstance.loadConversations() { error in
                 if let e = error {
+                    guard Connectivity.canReachAPI else { return }
                     print("Error loading conversations: \(e)")
+                    self.updateStatus("Error updating conversations", withColor: UIColor.red)
+                    self.havingConnectionIssue = true
+                } else if self.havingConnectionIssue {
+                    self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
+                    self.havingConnectionIssue = false
+                    self.lastUpdated = Date()
+                } else {
+                    self.lastUpdated = Date()
                 }
                 let newLastDate: Date = (self.conversations[0]).lastMessageCreated
                 if lastMessageDate != newLastDate {
@@ -171,17 +237,29 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                     // TODO: show empty view if in split screen
                     UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
                 } else {
-                    self.getUnreadCount()
                 }
             }
         }
     }
     
     func getUnreadCount() {
-        let unreadConversationCount: Int = self.conversations.filter({ (c: Conversation) -> Bool in
+        // FIXME: - If there is an existing notification, opening the app will show another notification once conversations are updated
+        let unreadConversations: [Conversation] = conversations.filter({ (c: Conversation) -> Bool in
             return c.hasNewMessages
-        }).count
-        UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+        }).sorted(by: { (a, b) -> Bool in
+            return a.lastMessageCreated < b.lastMessageCreated
+        })
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .long
+        let unreadConversationCount = unreadConversations.count
+        if unreadConversationCount != 0 {
+            let backItem = UIBarButtonItem()
+            backItem.title = "Back (\(unreadConversationCount))"
+            navigationItem.backBarButtonItem = backItem
+        } else {
+            navigationItem.backBarButtonItem = nil
+        }
         if unreadConversationCount > 0 {
             inboxSelector.setTitle("Inbox (\(unreadConversationCount))", forSegmentAt: 0)
         } else {
@@ -196,6 +274,73 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             inboxSelector.setTitle("Archived", forSegmentAt: 1)
         }
         inboxSelector.layoutIfNeeded()
+        guard unreadConversationCount != 0 else {
+            UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+            return
+        }
+        let convo = unreadConversations[0]
+        let user = convo.member!.nickname
+        let messages: Results<Message> = try! Realm()
+            .objects(Message.self)
+            .filter("conversationId == \"\(convo.id)\"")
+            .sorted(byKeyPath: "createdAt", ascending: false)
+        let lastMessage = messages[0]
+        API.sharedInstance.loadMessages(convo.id, parameters: [:], completion: { (err2) in
+            guard err2 == nil else {
+                print("Error loading messages: \(err2!.localizedDescription)")
+                UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+                return
+            }
+            if UIApplication.shared.applicationIconBadgeNumber != unreadConversationCount || lastMessage.createdAt != convo.lastMessageCreated {
+                if unreadConversationCount != 0 {
+                    if #available(iOS 10.0, *) {
+                        let content = UNMutableNotificationContent()
+                        content.title = "New message from \(user)"
+                        content.body = convo.lastMessageBody
+                        content.categoryIdentifier = "newMessage"
+                        content.userInfo = [
+                            "conversationId": convo.id,
+                            "messageId": messages[0].id,
+                            "user": user,
+                            "userId": convo.member!.id,
+                            "createdAt": df.string(from: convo.lastMessageCreated)
+                        ]
+                        var dc = DateComponents()
+                        dc.calendar = Calendar.current
+                        // schedule notification for 10 seconds from now
+                        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        // Create the request
+                        let uuidString = "\(convo.id)-\(messages[0].id)"
+                        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+                        // Schedule the request with the system.
+                        let notificationCenter = UNUserNotificationCenter.current()
+                        notificationCenter.add(request) { (error) in
+                            if error != nil {
+                                // Handle any errors.
+                                print("Error scheduling local notification: \(error!.localizedDescription)")
+                            }
+                        }
+                    } else {
+                        // Fallback on earlier versions
+                        let notification = UILocalNotification()
+                        notification.fireDate = Date(timeIntervalSinceNow: 10)
+                        notification.alertTitle = "New message from \(user)"
+                        notification.alertBody = convo.lastMessageBody
+                        notification.category = "newMessage"
+                        notification.userInfo = [
+                            "conversationId": convo.id,
+                            "messageId": messages[0].id,
+                            "user": user,
+                            "userId": convo.member!.id,
+                            "createdAt": df.string(from: convo.lastMessageCreated)
+                        ]
+                        notification.soundName = UILocalNotificationDefaultSoundName
+                        UIApplication.shared.scheduleLocalNotification(notification)
+                    }
+                }
+            }
+        })
+        UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
     }
     
     func setupStateViews() {
@@ -228,6 +373,42 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         let svc: SettingsViewController = storyboard?.instantiateViewController(withIdentifier: "vcSettings") as! SettingsViewController
         let navCon = UINavigationController(rootViewController: svc)
         self.present(navCon, animated: true, completion: nil)
+    }
+    
+    var firstConnection = true
+    func networkStatusChanged() {
+        if Connectivity.canReachAPI && (firstConnection || havingConnectionIssue) {
+            self.updateStatus(havingConnectionIssue ? "Connection restored!" : "Connected", withColor: UIColor.statusOKColor())
+            havingConnectionIssue = false
+            Dispatch.delay(2.0, closure: self.hideStatus)
+        } else if Connectivity.isConnected && (firstConnection || havingConnectionIssue) {
+//            havingConnectionIssue = true
+//            self.updateStatus("Unable to connect to FetLife", withColor: UIColor.red)
+            self.updateStatus(havingConnectionIssue ? "Connection restored!" : "Connected", withColor: UIColor.statusOKColor())
+            havingConnectionIssue = false
+            Dispatch.delay(2.0, closure: self.hideStatus)
+        } else if firstConnection {
+            havingConnectionIssue = true
+            self.updateStatus("Your internet connection appears to be offline.", withColor: UIColor.red)
+        }
+        firstConnection = false
+    }
+    
+    func updateStatus(_ status: String, withColor color: UIColor?) {
+        statusLabel.text = status
+        statusLabel.backgroundColor = color ?? UIColor.backgroundColor()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.statusLabel.isHidden = false
+        }) { (_) in
+            Dispatch.delay(2.0, closure: self.hideStatus)
+        }
+    }
+    
+    private func hideStatus() {
+        guard !havingConnectionIssue else { return }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.statusLabel.isHidden = true
+        })
     }
     
     // MARK: - StatefulViewController
@@ -341,5 +522,32 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     
     func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         return collapseDetailViewController
+    }
+}
+
+@available(iOS 10.0, *)
+extension ConversationsViewController: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print(response.notification.request.content.userInfo)
+        let content = response.notification.request.content
+        if content.categoryIdentifier == "newMessage" {
+            // FIXME: - Tapping on the notification will present message view from current view controller instead of from conversation view controller
+            let convoId = content.userInfo["conversationId"] as! String
+            let conversation: Conversation = try! Realm().objects(Conversation.self).filter("id == \"\(convoId)\"").first!
+            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+            let controller: MessagesTableViewController = storyboard.instantiateViewController(withIdentifier: "vcMessagesTable") as! MessagesTableViewController
+            controller.conversation = conversation
+            controller.navigationItem.title = "\(conversation.member!.nickname) ‣"
+            controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
+            controller.navigationItem.leftItemsSupplementBackButton = true
+            controller.conversationId = conversation.id
+            self.performSegue(withIdentifier: "showDetail", sender: conversation)
+        }
+        completionHandler()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
     }
 }

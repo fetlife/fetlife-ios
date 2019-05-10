@@ -11,6 +11,7 @@ import SafariServices
 
 class SettingsViewController: UITableViewController {
 
+    @IBOutlet weak var cellUsername: UITableViewCell!
     @IBOutlet weak var lblCurrentUser: UILabel!
     @IBOutlet weak var lblAppVersion: UILabel!
     @IBOutlet weak var lblBuildNumber: UILabel!
@@ -24,6 +25,7 @@ class SettingsViewController: UITableViewController {
     @IBOutlet weak var cellFAQs: UITableViewCell!
     @IBOutlet weak var cellContactUs: UITableViewCell!
     @IBOutlet weak var cellGitHub: UITableViewCell!
+    @IBOutlet weak var cellOpenFetLife: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +56,17 @@ class SettingsViewController: UITableViewController {
         
         tableView.backgroundColor = .backgroundColor()
         configureCellActions()
+    }
+    
+    // MARK: - User Information
+    
+    func presentUserInBrowser() {
+        let svc = SFSafariViewController(url: URL(string: API.sharedInstance.currentMember!.fetProfileURL)!)
+        if #available(iOS 10.0, *) {
+            svc.preferredBarTintColor = .backgroundColor()
+            svc.preferredControlTintColor = .brickColor()
+        }
+        self.present(svc, animated: true, completion: nil)
     }
     
     // MARK: - Configuration
@@ -106,8 +119,26 @@ class SettingsViewController: UITableViewController {
         }
         self.present(svc, animated: true, completion: nil)
     }
+    func presentFetLife() {
+        let fetURL = URL(string: "https://fetlife.com")!
+        UIApplication.shared.openURL(fetURL)
+    }
     
     func configureCellActions() {
+        if API.sharedInstance.currentMember != nil {
+            cellUsername.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentUserInBrowser)))
+        } else {
+            API.sharedInstance.getMe { (me, error) in
+                if me != nil && error == nil {
+                    self.cellUsername.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.presentUserInBrowser)))
+                } else if error != nil && me == nil {
+                    print("Error getting current user: \(error!.localizedDescription)")
+                } else {
+                    print("Error getting current user")
+                }
+            }
+        }
+        
         cellSFWMode.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(sfwModeTapped)))
 
         cellPrivacy.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentPrivacy)))
@@ -116,6 +147,7 @@ class SettingsViewController: UITableViewController {
         cellFAQs.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentFAQs)))
         cellContactUs.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentContactUs)))
         cellGitHub.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentGitHub)))
+        cellOpenFetLife.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentFetLife)))
 
     }
     

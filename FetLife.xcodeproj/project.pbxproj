@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0724F54344BD8E965EB0D907 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDF7A15F65205C10A199B78D /* Pods_FetLife.framework */; };
 		828D662B1CC1DD3200A6F1D2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82329A991C656BD900DADA23 /* LoginViewController.swift */; };
 		828D662C1CC1DD3200A6F1D2 /* MessagesTableViewCellIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FD51C6D514F000E782B /* MessagesTableViewCellIncoming.swift */; };
 		828D662D1CC1DD3200A6F1D2 /* UIColor+FetLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8256F3661C63A630004253FE /* UIColor+FetLife.swift */; };
@@ -65,16 +66,13 @@
 		82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826C5FDD1C6D5BBC000E782B /* MessagesTableViewCellIOutgoing.swift */; };
 		82B355C41CC52AC800CBDAB3 /* MessagesTableViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FD11C6D50E7000E782B /* MessagesTableViewCellIncoming.xib */; };
 		82B355C51CC52AC800CBDAB3 /* MessagesTableViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 826C5FE11C6D5BDE000E782B /* MessagesTableViewCellOutgoing.xib */; };
-		C957EE7120F2C11300EBD061 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
-		C957EE7220F2C11300EBD061 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
-		C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9968A0820B8CD9800653283 /* MessageTextView.swift */; };
+		C92EDCE2211413EC004A1776 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EDCE0211413EB004A1776 /* MessageTextView.swift */; };
+		C92EDCE3211413EC004A1776 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92EDCE1211413EC004A1776 /* BlurImageView.swift */; };
 		C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9968A0B20B9505B00653283 /* AlamofireImage.framework */; };
 		C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */; };
 		C9C2BD5520F036B200A4C454 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C9C2BD5420F036B200A4C454 /* Assets.xcassets */; };
 		C9CEBA9020D21173009BD594 /* ProfilePictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */; };
 		C9D129F220F2BA8A00FD1B53 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */; };
-		C9D129F420F2BC5600FD1B53 /* BlurImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */; };
-		DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,7 +86,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FetLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0466A83A08640C1EB420B96E /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
 		82016BA21C722A6600E05F10 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; name = Podfile; path = ../Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		821DC66B1C626F8600B9C25E /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = API.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		821DC66E1C62761C00B9C25E /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
@@ -125,16 +123,15 @@
 		82CE55731C630FF000E12101 /* Freddy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Freddy.framework; path = Carthage/Build/iOS/Freddy.framework; sourceTree = "<group>"; };
 		82F505FF1C7E57B400DDDDDF /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Models.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		82F6D1041C8DF067002DF881 /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Dispatch.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		907CB49BDF4A4BD580D53BDB /* Pods-FetLife.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.release.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.release.xcconfig"; sourceTree = "<group>"; };
-		C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
-		C9968A0720B74FB200653283 /* FetLife.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FetLife.entitlements; sourceTree = "<group>"; };
-		C9968A0820B8CD9800653283 /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
+		C5F91E287CD5A59A24785001 /* Pods-FetLife.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FetLife.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FetLife/Pods-FetLife.debug.xcconfig"; sourceTree = "<group>"; };
+		C92EDCE0211413EB004A1776 /* MessageTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTextView.swift; path = Views/MessageTextView.swift; sourceTree = "<group>"; };
+		C92EDCE1211413EC004A1776 /* BlurImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlurImageView.swift; path = Views/BlurImageView.swift; sourceTree = "<group>"; };
 		C9968A0B20B9505B00653283 /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FriendProfileViewController.swift; path = FetLife/ViewControllers/FriendProfileViewController.swift; sourceTree = SOURCE_ROOT; };
 		C9C2BD5420F036B200A4C454 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureViewController.swift; sourceTree = "<group>"; };
 		C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurImageView.swift; sourceTree = "<group>"; };
+		CDF7A15F65205C10A199B78D /* Pods_FetLife.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FetLife.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA63C7E73879B894B2C5A119 /* Pods_FetLife.framework in Frameworks */,
+				0724F54344BD8E965EB0D907 /* Pods_FetLife.framework in Frameworks */,
 				C9968A0C20B9505B00653283 /* AlamofireImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -165,15 +162,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		795BE8528BF59DB4881E1962 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */,
-				907CB49BDF4A4BD580D53BDB /* Pods-FetLife.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		82329A941C65256A00DADA23 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,7 +172,7 @@
 				82CE55731C630FF000E12101 /* Freddy.framework */,
 				821DC6711C6279EA00B9C25E /* Kingfisher.framework */,
 				821DC66E1C62761C00B9C25E /* Alamofire.framework */,
-				0CE852F4E26B59B2E2DDF3FA /* Pods_FetLife.framework */,
+				CDF7A15F65205C10A199B78D /* Pods_FetLife.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -226,7 +214,6 @@
 				8256F35E1C63A619004253FE /* ConversationsViewController.swift */,
 				826C5FCD1C6D4D17000E782B /* MessagesTableViewController.swift */,
 				82329A991C656BD900DADA23 /* LoginViewController.swift */,
-				C9968A0820B8CD9800653283 /* MessageTextView.swift */,
 				C9B27E7C20BF24FE0005C837 /* FriendProfileViewController.swift */,
 				C9CEBA8F20D21173009BD594 /* ProfilePictureViewController.swift */,
 				C9D129F120F2BA8A00FD1B53 /* SettingsViewController.swift */,
@@ -237,7 +224,8 @@
 		827439361C6E575A0086D13D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C9D129F320F2BC5600FD1B53 /* BlurImageView.swift */,
+				C92EDCE1211413EC004A1776 /* BlurImageView.swift */,
+				C92EDCE0211413EB004A1776 /* MessageTextView.swift */,
 				822989411C8742A400358EEF /* NoConversationsView.swift */,
 				829BAB1E1C87E74100176A9F /* LoadingView.swift */,
 				829BAB221C87E9EE00176A9F /* ErrorView.swift */,
@@ -253,7 +241,7 @@
 				82B55ADE1C60FB060035D45E /* FetLifeUITests */,
 				82B55ABB1C60FB060035D45E /* Products */,
 				82329A941C65256A00DADA23 /* Frameworks */,
-				795BE8528BF59DB4881E1962 /* Pods */,
+				E108C7D007BF9EE7F2E4518E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -270,7 +258,6 @@
 		82B55ABC1C60FB060035D45E /* FetLife */ = {
 			isa = PBXGroup;
 			children = (
-				C9968A0720B74FB200653283 /* FetLife.entitlements */,
 				82B55ABD1C60FB060035D45E /* AppDelegate.swift */,
 				82F6D1041C8DF067002DF881 /* Dispatch.swift */,
 				821DC66B1C626F8600B9C25E /* API.swift */,
@@ -306,6 +293,15 @@
 			path = FetLifeUITests;
 			sourceTree = "<group>";
 		};
+		E108C7D007BF9EE7F2E4518E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C5F91E287CD5A59A24785001 /* Pods-FetLife.debug.xcconfig */,
+				0466A83A08640C1EB420B96E /* Pods-FetLife.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -313,12 +309,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 828D664A1CC1DD3200A6F1D2 /* Build configuration list for PBXNativeTarget "FetLife" */;
 			buildPhases = (
-				385B6A29173E947FEEED4F71 /* [CP] Check Pods Manifest.lock */,
+				88579E2012E78411E177C953 /* [CP] Check Pods Manifest.lock */,
 				828D662A1CC1DD3200A6F1D2 /* Sources */,
 				828D663B1CC1DD3200A6F1D2 /* Frameworks */,
 				828D663D1CC1DD3200A6F1D2 /* Resources */,
 				828D66491CC1DD3200A6F1D2 /* Setup Fabric */,
-				005B4C2228F32F704DB450CF /* [CP] Embed Pods Frameworks */,
+				13CDE2301998F9D036EE3E25 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -375,7 +371,6 @@
 				ORGANIZATIONNAME = "BitLove Inc.";
 				TargetAttributes = {
 					828D66281CC1DD3200A6F1D2 = {
-						DevelopmentTeam = 3LXY9JQHFA;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -445,7 +440,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		005B4C2228F32F704DB450CF /* [CP] Embed Pods Frameworks */ = {
+		13CDE2301998F9D036EE3E25 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -491,7 +486,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FetLife/Pods-FetLife-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		385B6A29173E947FEEED4F71 /* [CP] Check Pods Manifest.lock */ = {
+		828D66491CC1DD3200A6F1D2 /* Setup Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Fabric";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" c024375c301ff84ebfc74878f8f19fb6ea107da2 3d881bdbd637e8b95e537047904fc664392f6fbec0c0033470a7f3e733caf5d4";
+		};
+		88579E2012E78411E177C953 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -508,20 +517,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		828D66491CC1DD3200A6F1D2 /* Setup Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Setup Fabric";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" c024375c301ff84ebfc74878f8f19fb6ea107da2 3d881bdbd637e8b95e537047904fc664392f6fbec0c0033470a7f3e733caf5d4";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -540,14 +535,14 @@
 				828D66301CC1DD3200A6F1D2 /* Dispatch.swift in Sources */,
 				828D66311CC1DD3200A6F1D2 /* LoadingView.swift in Sources */,
 				828D66321CC1DD3200A6F1D2 /* API.swift in Sources */,
+				C92EDCE3211413EC004A1776 /* BlurImageView.swift in Sources */,
 				828D66331CC1DD3200A6F1D2 /* MessagesTableViewController.swift in Sources */,
 				828D66341CC1DD3200A6F1D2 /* AppDelegate.swift in Sources */,
 				828D66351CC1DD3200A6F1D2 /* OAuth2+Alamofire.swift in Sources */,
 				828D66361CC1DD3200A6F1D2 /* ErrorView.swift in Sources */,
 				C9B27E7D20BF24FE0005C837 /* FriendProfileViewController.swift in Sources */,
+				C92EDCE2211413EC004A1776 /* MessageTextView.swift in Sources */,
 				828D66371CC1DD3200A6F1D2 /* NoConversationsView.swift in Sources */,
-				C9968A0920B8CD9800653283 /* MessageTextView.swift in Sources */,
-				C9D129F420F2BC5600FD1B53 /* BlurImageView.swift in Sources */,
 				828D66381CC1DD3200A6F1D2 /* Models.swift in Sources */,
 				828D66391CC1DD3200A6F1D2 /* BaseMessagesTableViewCell.swift in Sources */,
 				828D663A1CC1DD3200A6F1D2 /* MessagesTableViewCellIOutgoing.swift in Sources */,
@@ -571,7 +566,6 @@
 				82B355A11CC52A6400CBDAB3 /* API.swift in Sources */,
 				82B355A21CC52A6400CBDAB3 /* ErrorView.swift in Sources */,
 				82B355A31CC52A6400CBDAB3 /* NoConversationsView.swift in Sources */,
-				C957EE7120F2C11300EBD061 /* BlurImageView.swift in Sources */,
 				82B355A41CC52A6400CBDAB3 /* Models.swift in Sources */,
 				82B355A51CC52A6400CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
 				82B355A61CC52A6400CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,
@@ -595,7 +589,6 @@
 				82B355BC1CC52AC800CBDAB3 /* UIColor+FetLife.swift in Sources */,
 				82B355BD1CC52AC800CBDAB3 /* ErrorView.swift in Sources */,
 				82B355BE1CC52AC800CBDAB3 /* NoConversationsView.swift in Sources */,
-				C957EE7220F2C11300EBD061 /* BlurImageView.swift in Sources */,
 				82B355BF1CC52AC800CBDAB3 /* Models.swift in Sources */,
 				82B355C01CC52AC800CBDAB3 /* BaseMessagesTableViewCell.swift in Sources */,
 				82B355C11CC52AC800CBDAB3 /* MessagesTableViewCellIOutgoing.swift in Sources */,
@@ -634,7 +627,7 @@
 /* Begin XCBuildConfiguration section */
 		828D664B1CC1DD3200A6F1D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C738B7983B4D5C4728417245 /* Pods-FetLife.debug.xcconfig */;
+			baseConfigurationReference = C5F91E287CD5A59A24785001 /* Pods-FetLife.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -645,12 +638,15 @@
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = FetLife/Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PLIST_FILE_OUTPUT_FORMAT = XML;
 				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.opensource.FetLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SWIFT_OBJC_BRIDGING_HEADER = "FetLife/FetLife-Swift-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -659,7 +655,7 @@
 		};
 		828D664C1CC1DD3200A6F1D2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 907CB49BDF4A4BD580D53BDB /* Pods-FetLife.release.xcconfig */;
+			baseConfigurationReference = 0466A83A08640C1EB420B96E /* Pods-FetLife.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -668,12 +664,15 @@
 				DEVELOPMENT_TEAM = 3LXY9JQHFA;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = FetLife/Info.plist;
+				INFOPLIST_OUTPUT_FORMAT = XML;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PLIST_FILE_OUTPUT_FORMAT = XML;
 				PRODUCT_BUNDLE_IDENTIFIER = co.bitlove.opensource.FetLife;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				SWIFT_OBJC_BRIDGING_HEADER = "FetLife/FetLife-Swift-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

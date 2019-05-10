@@ -44,4 +44,8 @@ extension UIColor {
     public class func supporterIconTintColor() -> UIColor {
         return UIColor.darkGray
     }
+    
+    public class func statusOKColor() -> UIColor {
+        return UIColor(red: 0.175, green: 0.754, blue: 0.263, alpha: 1.0)
+    }
 }
