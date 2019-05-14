@@ -39,8 +39,8 @@ class NoConversationsView: UIView {
     lazy var refreshButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17.0)
-        button.setTitle("Refresh", for: UIControlState())
-        button.setTitleColor(UIColor.brickColor(), for: UIControlState())
+        button.setTitle("Refresh", for: UIControl.State())
+        button.setTitleColor(UIColor.brickColor(), for: UIControl.State())
         button.addTarget(self, action: #selector(NoConversationsView.tryRefresh), for: .touchUpInside)
         return button
     }()
@@ -81,7 +81,7 @@ class NoConversationsView: UIView {
     
     // MARK: - Actions
     
-    func tryRefresh() {
+    @objc func tryRefresh() {
         refreshAction?()
     }
 }

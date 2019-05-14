@@ -24,7 +24,7 @@ class LoadingView: UIView {
     }()
     
     lazy var activityIndicatorView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle:  UIActivityIndicatorViewStyle.whiteLarge)
+        let indicator = UIActivityIndicatorView(style:  UIActivityIndicatorView.Style.whiteLarge)
         indicator.startAnimating()
         return indicator
     }()
