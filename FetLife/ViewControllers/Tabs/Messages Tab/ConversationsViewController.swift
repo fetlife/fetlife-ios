@@ -21,7 +21,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     
     var detailViewController: MessagesTableViewController?
     var refreshControl = UIRefreshControl()
-    var updateTimer: Timer = Timer()
+    var mainTabController: MainTabViewController!
     var lastUpdated: Date {
         get {
             return AppSettings.lastUpdated
@@ -36,6 +36,10 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     let dateFormatter = DateFormatter()
     var havingConnectionIssue = false
+    var updateTimer = Timer()
+    
+    let UPDATE_INTERVAL: Double = 20
+    let BACKGROUND_UPDATE_INTERVAL: Double = 60
     
     var inbox: Results<Conversation> {
         get {
@@ -65,6 +69,11 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         super.viewDidLoad()
         
         inboxSelector.selectedSegmentIndex = AppSettings.lastSelectedMailbox
+        if let tbc = self.tabBarController {
+            mainTabController = tbc as? MainTabViewController
+        } else {
+            mainTabController = storyboard!.instantiateViewController(withIdentifier: "vcMain") as? MainTabViewController
+        }
         
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
@@ -93,7 +102,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             self.networkStatusChanged()
         }
         
-        self.refreshControl.addTarget(self, action: #selector(ConversationsViewController.refresh(_:)), for: UIControlEvents.valueChanged)
+        self.refreshControl.addTarget(self, action: #selector(ConversationsViewController.refresh(_:)), for: UIControl.Event.valueChanged)
         
         self.splitViewController?.delegate = self
         
@@ -116,8 +125,23 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                     tv.reloadData()
                 }
                 break
-            case .update(_, let deletions, let insertions, let modifications):
+            case .update(_, _, _, _):
+//                print("Deletions: \(deletions)")
+//                print("Insertions: \(insertions)")
+//                print("Modifications: \(modifications)")
+                //              tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                //				let d = (deletions.filter { $0 < tableView.numberOfRows(inSection: 0) }).map { IndexPath(row: $0, section: 0) }
+                //				print("deleting \(d.count) row(s)")
+                //				tableView.deleteRows(at: d, with: .automatic)
+                //				if deletions.count > 0 || insertions.count > 0 {
                 tv.reloadData()
+                //				} else if modifications.count > 0 {
+                //					tv.beginUpdates()
+                //					let m = (modifications.filter { $0 < tv.numberOfRows(inSection: 0) }).map { IndexPath(row: $0, section: 0) }
+                //					print("modifying \(m.count) row(s)")
+                //					tv.reloadRows(at: m, with: .none)
+                //					tv.endUpdates()
+                //				}
                 break
             case .error:
                 print("Error updating table")
@@ -134,19 +158,28 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // creates timer to check for new messages/conversations every 10 seconds ± 5 seconds
         // FIXME: - This is stupidly inefficient and should be fixed with push notifications as soon as possible!
         if !updateTimer.isValid {
-            updateTimer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
-            updateTimer.tolerance = 5
+            updateTimer = Timer.scheduledTimer(timeInterval: UPDATE_INTERVAL, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+            updateTimer.tolerance = 10
+        } else if updateTimer.timeInterval != UPDATE_INTERVAL {
+            updateTimer.invalidate()
+            updateTimer = Timer.scheduledTimer(timeInterval: UPDATE_INTERVAL, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+            updateTimer.tolerance = 10
         }
         tableView.reloadData()
-        dateFormatter.dateStyle = (lastUpdated.hoursFromNow >= 24) ? .short : .none
-        updateLabel.text = "Last updated: \(dateFormatter.string(from: lastUpdated))"
         Dispatch.delay(0.5) { // add a delay to allow network to initialize
             Connectivity.sharedInstance.startListening()
-//            Connectivity.apiReachabilityMgr.startListening()
         }
+        
+        // fix hung refresh animation
+        if refreshControl.isRefreshing { refreshControl.beginRefreshing() } else { refreshControl.endRefreshing() }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        updateTimer.invalidate()
+        updateTimer = Timer.scheduledTimer(timeInterval: BACKGROUND_UPDATE_INTERVAL, target: self, selector: #selector(fetchConversationsInBackground), userInfo: nil, repeats: true)
+        updateTimer.tolerance = 20
     }
     
     deinit {
@@ -159,6 +192,9 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupInitialViewState()
+        
+        dateFormatter.dateStyle = (lastUpdated.hoursFromNow >= 24) ? .short : .none
+        updateLabel.text = "Last updated: \(dateFormatter.string(from: lastUpdated))"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -167,7 +203,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             if let s = sender {
                 if let _ = s as? UITableViewCell {
                     let indexPath = self.tableView.indexPathForSelectedRow ?? IndexPath(row: (sender as! ConversationCell).index, section: 0)
-                    if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
+                    if self.splitViewController?.displayMode == UISplitViewController.DisplayMode.primaryHidden {
                         self.tableView.deselectRow(at: indexPath, animated: true)
                     }
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -178,6 +214,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             }
             let controller: MessagesTableViewController = (segue.destination as! UINavigationController).topViewController as! MessagesTableViewController
             controller.conversation = conversation
+            controller.navCon = controller
             controller.navigationItem.title = "\(conversation.member!.nickname) ‣"
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
             controller.navigationItem.leftItemsSupplementBackButton = true
@@ -185,73 +222,83 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         }
     }
     
-    func refresh(_ refreshControl: UIRefreshControl) {
+    @objc func refresh(_ refreshControl: UIRefreshControl) {
         fetchConversations()
     }
     
     func fetchConversations() {
-        Dispatch.asyncOnUserInitiatedQueue() {
-            API.sharedInstance.loadConversations() { error in
-                self.endLoading(error: error)
-                if error != nil && Connectivity.canReachAPI {
-                    self.updateStatus("Error updating conversations", withColor: UIColor.red)
-                    self.havingConnectionIssue = true
-                } else if self.havingConnectionIssue {
-                    self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
-                    self.havingConnectionIssue = false
-                    self.lastUpdated = Date()
-                } else {
-                    self.lastUpdated = Date()
-                }
-                self.refreshControl.endRefreshing()
-                if !self.hasContent() {
-                    // TODO: show empty view if in split screen
-                    UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                } else {
-                }
+        guard API.isAuthorized() else {
+//            self.dismiss(animated: false, completion: nil)
+            refreshControl.endRefreshing()
+            return
+        }
+        
+//        let lastMessageDate: Date = ((conversations ?? inbox)[0]).lastMessageCreated
+        API.sharedInstance.loadConversations() { error in
+            self.endLoading(error: error)
+            if error != nil && Connectivity.canReachAPI {
+                self.updateStatus("Error updating conversations", withColor: UIColor.red)
+                self.havingConnectionIssue = true
+            } else if self.havingConnectionIssue {
+                self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
+                self.havingConnectionIssue = false
+                self.lastUpdated = Date()
+            } else {
+                self.lastUpdated = Date()
             }
+            self.refreshControl.endRefreshing()
+            if !self.hasContent() {
+                // TODO: show empty view if in split screen
+                app.applicationIconBadgeNumber = 0 // no unread conversations
+            }
+//            let newLastDate: Date = ((self.conversations ?? self.inbox)[0]).lastMessageCreated
+//            if lastMessageDate != newLastDate {
+//                self.endLoading(error: error)
+//            }
         }
     }
     
-    func fetchConversationsInBackground() {
-        let lastMessageDate: Date = (conversations[0]).lastMessageCreated
-        Dispatch.asyncOnUserInitiatedQueue() {
-            API.sharedInstance.loadConversations() { error in
-                if let e = error {
-                    guard Connectivity.canReachAPI else { return }
-                    print("Error loading conversations: \(e)")
-                    self.updateStatus("Error updating conversations", withColor: UIColor.red)
-                    self.havingConnectionIssue = true
-                } else if self.havingConnectionIssue {
-                    self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
-                    self.havingConnectionIssue = false
-                    self.lastUpdated = Date()
-                } else {
-                    self.lastUpdated = Date()
-                }
-                let newLastDate: Date = (self.conversations[0]).lastMessageCreated
-                if lastMessageDate != newLastDate {
-                    self.endLoading(error: error)
-                }
-                if !self.hasContent() {
-                    // TODO: show empty view if in split screen
-                    UIApplication.shared.applicationIconBadgeNumber = 0 // no unread conversations
-                } else {
-                }
+    @objc func fetchConversationsInBackground() {
+        guard API.isAuthorized() else { print("Not authorized!"); return }
+        print("Fetching conversations in the background...")
+//        guard (conversations ?? inbox).count > 0 else { return }
+        
+//        let lastMessageDate: Date = ((conversations ?? inbox)[0]).lastMessageCreated
+        API.sharedInstance.loadConversations() { error in
+            if let e = error {
+                guard Connectivity.canReachAPI else { return }
+                print("Error loading conversations: \(e.localizedDescription)")
+                self.updateStatus("Error updating conversations", withColor: UIColor.red)
+                self.havingConnectionIssue = true
+            } else if self.havingConnectionIssue {
+                self.updateStatus("Successfully updated conversations", withColor: UIColor.statusOKColor())
+                self.havingConnectionIssue = false
+                self.lastUpdated = Date()
+            } else {
+                self.lastUpdated = Date()
+            }
+//            let newLastDate: Date = ((self.conversations ?? self.inbox)[0]).lastMessageCreated
+//            if lastMessageDate != newLastDate {
+//                self.endLoading(error: error)
+//            }
+            if !self.hasContent() {
+                // TODO: show empty view if in split screen
+                app.applicationIconBadgeNumber = 0 // no unread conversations
             }
         }
     }
     
     func getUnreadCount() {
+        guard API.isAuthorized() else {
+//            self.dismiss(animated: false, completion: nil)
+            return
+        }
         // FIXME: - If there is an existing notification, opening the app will show another notification once conversations are updated
-        let unreadConversations: [Conversation] = conversations.filter({ (c: Conversation) -> Bool in
+        let unreadConversations: [Conversation] = inbox.filter({ (c: Conversation) -> Bool in
             return c.hasNewMessages
         }).sorted(by: { (a, b) -> Bool in
             return a.lastMessageCreated < b.lastMessageCreated
         })
-        let df = DateFormatter()
-        df.dateStyle = .long
-        df.timeStyle = .long
         let unreadConversationCount = unreadConversations.count
         if unreadConversationCount != 0 {
             let backItem = UIBarButtonItem()
@@ -274,73 +321,65 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
             inboxSelector.setTitle("Archived", forSegmentAt: 1)
         }
         inboxSelector.layoutIfNeeded()
+        checkForMessages(mainTabController)
+    }
+    
+    func checkForMessages(_ mainTabController: MainTabViewController) {
+        let df = DateFormatter()
+        df.dateStyle = .long
+        df.timeStyle = .long
+        
+        let unreadConversations: [Conversation] = (self.conversations ?? self.inbox).filter({ (c: Conversation) -> Bool in
+            return c.hasNewMessages
+        }).sorted(by: { (a, b) -> Bool in
+            return a.lastMessageCreated < b.lastMessageCreated
+        })
+        let unreadConversationCount = unreadConversations.count
+        
+        API.sharedInstance.getRequests { (requests, err) in
+            guard err == nil else { return }
+            mainTabController.setBadge(requests.count, forTab: .Requests)
+        }
         guard unreadConversationCount != 0 else {
-            UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+            app.applicationIconBadgeNumber = unreadConversationCount
+            mainTabController.setBadge(unreadConversationCount, forTab: .Messages)
             return
         }
         let convo = unreadConversations[0]
+        guard convo.member != nil else { return }
         let user = convo.member!.nickname
         let messages: Results<Message> = try! Realm()
             .objects(Message.self)
-            .filter("conversationId == \"\(convo.id)\"")
+            .filter("conversationId == %@", convo.id)
             .sorted(byKeyPath: "createdAt", ascending: false)
-        let lastMessage = messages[0]
         API.sharedInstance.loadMessages(convo.id, parameters: [:], completion: { (err2) in
             guard err2 == nil else {
                 print("Error loading messages: \(err2!.localizedDescription)")
-                UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
+                app.applicationIconBadgeNumber = unreadConversationCount
+                mainTabController.setBadge(unreadConversationCount, forTab: .Messages)
                 return
             }
-            if UIApplication.shared.applicationIconBadgeNumber != unreadConversationCount || lastMessage.createdAt != convo.lastMessageCreated {
+            let lastMessage = messages[0]
+            if mainTabController.getBadge(.Messages) != unreadConversationCount || lastMessage.createdAt != convo.lastMessageCreated {
                 if unreadConversationCount != 0 {
-                    if #available(iOS 10.0, *) {
-                        let content = UNMutableNotificationContent()
-                        content.title = "New message from \(user)"
-                        content.body = convo.lastMessageBody
-                        content.categoryIdentifier = "newMessage"
-                        content.userInfo = [
-                            "conversationId": convo.id,
-                            "messageId": messages[0].id,
-                            "user": user,
-                            "userId": convo.member!.id,
-                            "createdAt": df.string(from: convo.lastMessageCreated)
-                        ]
-                        var dc = DateComponents()
-                        dc.calendar = Calendar.current
-                        // schedule notification for 10 seconds from now
-                        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        // Create the request
-                        let uuidString = "\(convo.id)-\(messages[0].id)"
-                        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-                        // Schedule the request with the system.
-                        let notificationCenter = UNUserNotificationCenter.current()
-                        notificationCenter.add(request) { (error) in
-                            if error != nil {
-                                // Handle any errors.
-                                print("Error scheduling local notification: \(error!.localizedDescription)")
-                            }
-                        }
-                    } else {
-                        // Fallback on earlier versions
-                        let notification = UILocalNotification()
-                        notification.fireDate = Date(timeIntervalSinceNow: 10)
-                        notification.alertTitle = "New message from \(user)"
-                        notification.alertBody = convo.lastMessageBody
-                        notification.category = "newMessage"
-                        notification.userInfo = [
-                            "conversationId": convo.id,
-                            "messageId": messages[0].id,
-                            "user": user,
-                            "userId": convo.member!.id,
-                            "createdAt": df.string(from: convo.lastMessageCreated)
-                        ]
-                        notification.soundName = UILocalNotificationDefaultSoundName
-                        UIApplication.shared.scheduleLocalNotification(notification)
-                    }
+                    let title = "New message from \(user)"
+                    let body = convo.lastMessageBody
+                    let category = "newMessage"
+                    let userInfo = [
+                        "conversationId": convo.id,
+                        "messageId": messages[0].id,
+                        "user": user,
+                        "userId": convo.member!.id,
+                        "createdAt": df.string(from: convo.lastMessageCreated)
+                    ]
+                    let uuidString = "\(convo.id)-\(messages[0].id)"
+                    let threadID = "\(category)-\(user)"
+                    sendNotification(title, body: body, category: category, userInfo: userInfo, uuid: uuidString, threadID: threadID)
                 }
+                app.applicationIconBadgeNumber = unreadConversationCount
+                mainTabController.setBadge(unreadConversationCount, forTab: .Messages)
             }
         })
-        UIApplication.shared.applicationIconBadgeNumber = unreadConversationCount
     }
     
     func setupStateViews() {
@@ -355,35 +394,13 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         self.errorView = ErrorView(frame: view.frame)
     }
     
-    @IBAction func logoutButtonPressed(_ sender: UIBarButtonItem) {
-        let alertController = UIAlertController(title: "Are you sure?", message: "Do you really want to log out of FetLife? We'll be very sad... 😢", preferredStyle: .actionSheet)
-        let okAction = UIAlertAction(title: "Logout", style: .destructive) { (action) -> Void in
-            API.sharedInstance.logout()
-            self.navigationController?.viewControllers = [self.storyboard!.instantiateViewController(withIdentifier: "loginView"), self]
-            _ = self.navigationController?.popViewController(animated: true)
-        }
-        let cancelAction = UIAlertAction(title: "Never mind", style: .cancel, handler: nil)
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
-    @IBAction func settingsButtonPressed(_ sender: UIBarButtonItem) {
-        let svc: SettingsViewController = storyboard?.instantiateViewController(withIdentifier: "vcSettings") as! SettingsViewController
-        let navCon = UINavigationController(rootViewController: svc)
-        self.present(navCon, animated: true, completion: nil)
-    }
-    
-    var firstConnection = true
+    private var firstConnection = true
     func networkStatusChanged() {
         if Connectivity.canReachAPI && (firstConnection || havingConnectionIssue) {
             self.updateStatus(havingConnectionIssue ? "Connection restored!" : "Connected", withColor: UIColor.statusOKColor())
             havingConnectionIssue = false
             Dispatch.delay(2.0, closure: self.hideStatus)
         } else if Connectivity.isConnected && (firstConnection || havingConnectionIssue) {
-//            havingConnectionIssue = true
-//            self.updateStatus("Unable to connect to FetLife", withColor: UIColor.red)
             self.updateStatus(havingConnectionIssue ? "Connection restored!" : "Connected", withColor: UIColor.statusOKColor())
             havingConnectionIssue = false
             Dispatch.delay(2.0, closure: self.hideStatus)
@@ -414,7 +431,7 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     // MARK: - StatefulViewController
     
     func hasContent() -> Bool {
-        return conversations.count > 0
+        return (conversations ?? inbox).count > 0
     }
     
     @IBAction func inboxSelectionChanged(_ sender: UISegmentedControl) {
@@ -443,13 +460,17 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
         let conversation = try! Realm().objects(Conversation.self).filter("id == %@", conversations[indexPath.row].id).first!
         
         cell.conversation = conversation
+        cell.tableView = self.tableView
         cell.index = indexPath.row
         
         if cell.responds(to: #selector(setter: UIView.preservesSuperviewLayoutMargins)) {
             cell.layoutMargins = UIEdgeInsets.zero
             cell.preservesSuperviewLayoutMargins = false
         }
-        cell.authorAvatarImage.awakeFromNib()
+        Dispatch.delay(0.1) {
+            cell.authorAvatarImage.awakeFromNib()
+            cell.awakeFromNib()
+        }
         return cell
     }
     
@@ -462,28 +483,62 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        var action: UITableViewRowAction!
+        
+        var archiveAction: UITableViewRowAction!
         if conversations[indexPath.row].isArchived {
-            action = UITableViewRowAction(style: .normal, title: "Unarchive") { action, index in
+            archiveAction = UITableViewRowAction(style: .normal, title: "Unarchive") { action, index in
                 let conversationToUnarchive = self.conversations[indexPath.row]
                 let realm = try! Realm()
                 try! realm.write {
                     conversationToUnarchive.isArchived = false
                 }
-                API.sharedInstance.unarchiveConversation(conversationToUnarchive.id, completion: nil)
+                API.sharedInstance.unarchiveConversation(conversationToUnarchive.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
             }
         } else {
-            action = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
+            archiveAction = UITableViewRowAction(style: .destructive, title: "Archive") { action, index in
                 let conversationToArchive = self.conversations[indexPath.row]
                 let realm = try! Realm()
                 try! realm.write {
                     conversationToArchive.isArchived = true
                 }
-                API.sharedInstance.archiveConversation(conversationToArchive.id, completion: nil)
+                API.sharedInstance.archiveConversation(conversationToArchive.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
             }
         }
-        action.backgroundColor = UIColor.brickColor()
-        return [action]
+        archiveAction.backgroundColor = UIColor.brickColor()
+        
+        var deleteAction: UITableViewRowAction!
+        deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: { (_, index) in
+            let alertController = UIAlertController(title: "Are you sure?", message: "Are you sure you want to permanently delete this conversation? This cannot be undone!", preferredStyle: UIAlertController.Style.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let deleteConfirmAction = UIAlertAction(title: "Delete", style: .destructive) { (action) -> Void in
+                let conversationToDelete = self.conversations[indexPath.row]
+                API.sharedInstance.deleteConversation(conversationToDelete.id, completion: { (err) in
+                    if err == nil {
+                        tableView.deleteRows(at: [indexPath], with: .left)
+                    } else {
+                        print(err!.localizedDescription)
+                    }
+                })
+            }
+            alertController.addAction(deleteConfirmAction)
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+        })
+        deleteAction.backgroundColor = UIColor.red
+        
+        return [archiveAction, deleteAction]
     }
 
     @available(iOS 11.0, *)
@@ -501,14 +556,6 @@ class ConversationsViewController: UIViewController, StatefulViewController, UIT
                 }
                 ca.backgroundColor = UIColor.unreadMarkerColor()
                 return UISwipeActionsConfiguration(actions: [ca])
-//            } else {
-//                let ca = UIContextualAction(style: .normal, title: "Mark as Unread", handler: { (action, view, completion) in
-//                    API.sharedInstance.markMessagesAsUnread(conversationToChange.id, messageIds: [m.id], completion:  { (err) in
-//                        if err != nil { print(err!) }
-//                    })
-//                })
-//                ca.backgroundColor = UIColor.unreadMarkerColor()
-//                return UISwipeActionsConfiguration(actions: [ca])
             }
         }
         return nil

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14306.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14278.2"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="viewTLError" id="iN0-l3-epB" customClass="TLErrorView" customModule="FetLife" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="NPK-na-nGX">
+                    <rect key="frame" x="12.5" y="254.5" width="350" height="158"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAr-Bo-H2X">
+                            <rect key="frame" x="0.0" y="0.0" width="350" height="31.5"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Messages" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="anK-ZM-yth">
+                            <rect key="frame" x="0.0" y="46.5" width="350" height="20.5"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                            <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="GgK-fa-ecd">
+                            <rect key="frame" x="0.0" y="82" width="350" height="76"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aIc-Fn-pJU">
+                                    <rect key="frame" x="0.0" y="0.0" width="350" height="33"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                    <state key="normal" title="Retry"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a0E-je-02H">
+                                    <rect key="frame" x="0.0" y="43" width="350" height="33"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                    <state key="normal" title="Contact Support"/>
+                                    <connections>
+                                        <action selector="contactSupport:" destination="iN0-l3-epB" eventType="touchUpInside" id="omx-HT-Igf"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="350" id="0gn-xk-twW"/>
+                    </constraints>
+                </stackView>
+                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Cone" highlightedImage="Cone" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3xC-3m-ZVc">
+                    <rect key="frame" x="162.5" y="189.5" width="50" height="50"/>
+                    <color key="tintColor" cocoaTouchSystemColor="lightTextColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="VWI-JK-ZLJ"/>
+                        <constraint firstAttribute="height" constant="50" id="jwl-pp-6KM"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="0.16468328239999999" green="0.16471883649999999" blue="0.16468104720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.70999999999999996" green="0.114" blue="0.114" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="NPK-na-nGX" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="3QB-OJ-i3E"/>
+                <constraint firstItem="NPK-na-nGX" firstAttribute="top" secondItem="3xC-3m-ZVc" secondAttribute="bottom" constant="15" id="7aW-TM-hzn"/>
+                <constraint firstItem="NPK-na-nGX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="O0S-LP-KSV"/>
+                <constraint firstItem="3xC-3m-ZVc" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="c0o-Kv-Zry"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="contactSupportButton" destination="a0E-je-02H" id="8EW-hY-VLq"/>
+                <outlet property="errorImage" destination="3xC-3m-ZVc" id="XY4-Yj-oNx"/>
+                <outlet property="messageLabel" destination="anK-ZM-yth" id="igu-Kj-0zW"/>
+                <outlet property="retryButton" destination="aIc-Fn-pJU" id="TGN-GT-ZiD"/>
+                <outlet property="titleLabel" destination="mAr-Bo-H2X" id="l6a-ga-NCT"/>
+            </connections>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Cone" width="59" height="61"/>
+    </resources>
+</document>

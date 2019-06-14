@@ -1,31 +1,33 @@
 PODS:
-  - Alamofire (4.7.3)
-  - AlamofireImage (3.3.1):
-    - Alamofire (~> 4.5)
-  - AlamofireNetworkActivityIndicator (2.2.1):
-    - Alamofire (~> 4.7)
-  - Crashlytics (3.10.5):
-    - Fabric (~> 1.7.9)
+  - Alamofire (4.8.2)
+  - AlamofireImage (3.5.2):
+    - Alamofire (~> 4.8)
+  - AlamofireNetworkActivityIndicator (2.4.0):
+    - Alamofire (~> 4.8)
+  - Crashlytics (3.12.0):
+    - Fabric (~> 1.9.0)
   - DateTools (1.7.0)
-  - DynamicBlurView (2.0.2)
-  - Fabric (1.7.9)
+  - DynamicBlurView (3.0.1)
+  - Fabric (1.9.0)
   - Freddy (3.0.3)
+  - HTMLEntities (3.0.11)
   - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - JWTDecode (2.1.1)
-  - p2.OAuth2 (3.0.3)
-  - Realm (3.2.0):
-    - Realm/Headers (= 3.2.0)
-  - Realm/Headers (3.2.0)
-  - RealmSwift (3.2.0):
-    - Realm (= 3.2.0)
+  - JWTDecode (2.2.0)
+  - p2.OAuth2 (4.2.0)
+  - Realm (3.14.1):
+    - Realm/Headers (= 3.14.1)
+  - Realm/Headers (3.14.1)
+  - RealmSwift (3.14.1):
+    - Realm (= 3.14.1)
   - SlackTextViewController (1.9.6)
   - SnapKit (3.1.2)
   - StatefulViewController (3.0)
+  - Turbolinks (3.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.5)
+  - Alamofire
   - AlamofireImage (~> 3.3)
   - AlamofireNetworkActivityIndicator (~> 2.1)
   - Crashlytics
@@ -33,13 +35,15 @@ DEPENDENCIES:
   - DynamicBlurView
   - Fabric
   - Freddy (~> 3.0.0)
+  - HTMLEntities (from `https://github.com/IBM-Swift/swift-html-entities.git`)
   - JSQMessagesViewController
   - JWTDecode (~> 2.0)
-  - p2.OAuth2 (~> 3.0.1)
-  - RealmSwift (~> 3.2.0)
+  - p2.OAuth2
+  - RealmSwift
   - SlackTextViewController (~> 1.9.5)
   - SnapKit (~> 3.1.2)
   - StatefulViewController (~> 3.0)
+  - Turbolinks (from `https://github.com/turbolinks/turbolinks-ios.git`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -61,25 +65,41 @@ SPEC REPOS:
     - SnapKit
     - StatefulViewController
 
+EXTERNAL SOURCES:
+  HTMLEntities:
+    :git: https://github.com/IBM-Swift/swift-html-entities.git
+  Turbolinks:
+    :git: https://github.com/turbolinks/turbolinks-ios.git
+
+CHECKOUT OPTIONS:
+  HTMLEntities:
+    :commit: dc15f4d8eba5be23280a561c698fc36ab4fb6c76
+    :git: https://github.com/IBM-Swift/swift-html-entities.git
+  Turbolinks:
+    :commit: bc5b78da1138903909062f14f384d2a56f73e994
+    :git: https://github.com/turbolinks/turbolinks-ios.git
+
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  AlamofireImage: 3b35b586853abaf94ca1250f4e94cff3c21a4c0d
-  AlamofireNetworkActivityIndicator: aeac50e6ecb78ec71a5f1f29098bcf4ec2962910
-  Crashlytics: 7f2e38d302d9da96475b3d64d86fb29e31a542b7
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  AlamofireImage: 63cfe3baf1370be6c498149687cf6db3e3b00999
+  AlamofireNetworkActivityIndicator: 9acc3de3ca6645bf0efed462396b0df13dd3e7b8
+  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
-  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
-  Fabric: a2917d3895e4c1569b9c3170de7320ea1b1e6661
+  DynamicBlurView: b1df5415f9bd31897549e5d7077e5ec120a4d636
+  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Freddy: 7c62db262a0d0e3b3e2b8b40f2c0cc51e122fbc4
+  HTMLEntities: 836c60f1aba711b99c7f2e0843debff454de75c3
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  JWTDecode: 83e8b381aafe27158d9f692cbdca2b12d61d460c
-  p2.OAuth2: 63d8d3e366ac2c43bfe8bfa13b42cfeb908c314e
-  Realm: ae552b9b9eca3a12374a589fa842f220e286a80a
-  RealmSwift: 05727129547dcab3fe828bd87bc30be903736b9c
+  JWTDecode: 85a405ab16d5473e99bd89ded1d535090ebd6a0e
+  p2.OAuth2: d5ea9b928fc5d10d088d419db6f3380578b6f866
+  Realm: e12c9c2387d05c5bba3a9c394838f5870e85763b
+  RealmSwift: a82eab9b04c3e1616082c7e17aa300740847769c
   SlackTextViewController: b854e62c1c156336bc4fd409c6ca79b5773e8f9d
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   StatefulViewController: 4803bf900d44de26074344998e10e041113b5931
+  Turbolinks: 4e3a5ce8132e96019236ca7f8f274a0034de2a39
 
-PODFILE CHECKSUM: 4b6f74421f0c06e6f3a312226938b4a3eeadc892
+PODFILE CHECKSUM: ed54847d800b0928cfc8d45fc061b5e28bd217ba
 
 COCOAPODS: 1.5.2
