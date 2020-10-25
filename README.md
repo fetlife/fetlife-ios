@@ -29,7 +29,7 @@ These instructions are written assuming you know very little about computers and
 1. Install the latest version of [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12).
 2. Open the `Terminal` application up on your Mac.
 3. Enter the following commands into your terminal window one by one and wait for them to finish:
-  - `sudo gem install cocoapods` you will be prompted for your computers password
+  - `sudo gem install -n /usr/local/bin cocoapods` you will be prompted for your computers password
   - `git clone git@github.com:fetlife/ios.git`
   - `cd ios`
   - `pod install`
